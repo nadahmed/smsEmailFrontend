@@ -13,21 +13,21 @@ export class ChartsComponent implements OnInit {
         { data: [72, 78, 75, 77, 75], label: 'Total SMS' },
     ];
 
-    lineChartLabels: Label[] = [ 'February', 'March', 'April', 'May', 'June'];
+    lineChartLabels: Label[] = ['February', 'March', 'April', 'May', 'June'];
 
     lineChartOptions = {
-       
+
         maintainAspectRatio: false,
     };
 
     lineChartColors: Color[] = [
         {
             borderColor: 'rgb(30,75,150)',
-            backgroundColor: 'rgba(15,50,150,0.28)',
+            backgroundColor: 'rgba(15,50,150,0.00)',
         },
     ];
 
-    lineChartLegend = true;
+    lineChartLegend = false;
     lineChartPlugins = [];
     lineChartType = 'line';
 

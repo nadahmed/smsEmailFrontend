@@ -1,36 +1,42 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols = "4" rowHeight="150px">
-    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card"  *ngIf="card.content !== 'chart'" >
-        <!-- <mat-card-header>
-          <mat-card-title >
-            {{card.title}}
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title >
-        </mat-card-header> -->
-        <mat-card-content class="dashboard-card-content">
-          <div>{{card.content}}</div>
-        </mat-card-content>
-        <mat-card-footer class="dashboard-card-footer">
-            <div>{{card.footer}}</div>
+  <mat-grid-list cols="4" rowHeight="200px">
+    <mat-grid-tile
+      *ngFor="let card of cards | async"
+      [colspan]="card.cols"
+      [rowspan]="card.rows"
+    >
+      <mat-card
+        class="dashboard-card text-center"
+        *ngIf="!(card.title === 'CHART' || card.title === 'RECENT TRANSACTIONS')"
+      >
+        <mat-card-title class="dashboard-card-content">
+          <div>{{ card.content }}</div>
+        </mat-card-title>
+        <mat-card-footer>
+          <mat-card-subtitle>{{ card.title }}</mat-card-subtitle>
         </mat-card-footer>
       </mat-card>
-      <mat-card class="dashboard-card" *ngIf="card.content === 'chart'">
-        <mat-card-content *ngIf="card.content === 'chart'">
-            <app-charts></app-charts>
-          </mat-card-content>
-    </mat-card>
+      <mat-card class="dashboard-card" *ngIf="card.title === 'CHART'">
+        <mat-card-content>
+          <app-charts></app-charts>
+        </mat-card-content>
+      </mat-card>
+      <mat-card
+        class="dashboard-card"
+        *ngIf="card.title === 'RECENT TRANSACTIONS'"
+      >
+        <mat-card-subtitle>
+          <div>{{ card.title }}</div>
+        </mat-card-subtitle>
+        <mat-card-content>
+        <app-recent-tranx [tranxData] ="card.content"></app-recent-tranx>
+        </mat-card-content>
+      </mat-card>
+
+      
+        <!-- <app-recent-tranx class="dashboard-card" [tranxData] ="card.content" *ngIf="card.title === 'RECENT TRANSACTIONS'"></app-recent-tranx> -->
+
+
     </mat-grid-tile>
-    
-        
- 
-    
   </mat-grid-list>
-</div>
