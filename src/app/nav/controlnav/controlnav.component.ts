@@ -14,7 +14,7 @@ export class ControlnavComponent {
         {label: 'Dashboard', path: '/dashboard'},
         {label: 'Send SMS', path: '/sendsms'},
         {label: 'Send Email', path: '/sendemail'},
-        {label: 'My Contacts', path: '/managecontacts'},
+        {label: 'Upload Contacts', path: '/managecontacts'},
         {label: 'Transaction', path: '/transactions'},
     ];
 

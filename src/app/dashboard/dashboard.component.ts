@@ -23,10 +23,10 @@ export class DashboardComponent {
             if (matches) {
                 return [
                     { title: 'AVAILABLE BALANCE', content: '120.00', cols: 4, rows: 1 },
-                    { title: 'SMS LAST WEEK', content: '1020', cols: 4, rows: 1 },
-                    { title: 'COST LAST WEEK', content: '201.25', cols: 4, rows: 1 },
-                    { title: 'SMS LAST MONTH', content: '55210', cols: 4, rows: 1 },
-                    { title: 'COST LAST MONTH', content: '5021.20', cols: 4, rows: 1 },
+                    { title: 'SMS LAST MONTH', content: '1020', cols: 4, rows: 1 },
+                    { title: 'EMAILS LAST MONTH', content: '2200', cols: 4, rows: 1 },
+                    { title: 'COST LAST MONTH', content: '5521.0', cols: 4, rows: 1 },
+                    { title: 'TOTAL CONTACTS', content: '5021', cols: 4, rows: 1 },
                     { title: 'CHART', content: '', cols: 4, rows: 1 },
                     { title: 'RECENT TRANSACTIONS', content: this.transactions, cols: 4, rows: 2 },
                 ];
@@ -34,11 +34,11 @@ export class DashboardComponent {
 
             return [
                 { title: 'AVAILABLE BALANCE', content: '120.0', cols: 1, rows: 1 },
-                { title: 'SMS LAST WEEK', content: '1020', cols: 1, rows: 1 },
-                { title: 'COST LAST WEEK', content: '201.25', cols: 1, rows: 1 },
-                { title: 'SMS LAST MONTH', content: '55210', cols: 1, rows: 1 },
+                { title: 'SMS LAST MONTH', content: '1020', cols: 1, rows: 1 },
+                { title: 'EMAILS LAST MONTH', content: '2200', cols: 1, rows: 1 },
+                { title: 'COST LAST MONTH', content: '5521.0', cols: 1, rows: 1 },
                 { title: 'CHART', content: '', cols: 3, rows: 3 },
-                { title: 'COST LAST MONTH', content: '5021.20', cols: 1, rows: 1 },
+                { title: 'TOTAL CONTACTS', content: '5021', cols: 1, rows: 1 },
                 { title: 'RECENT TRANSACTIONS', content: this.transactions, cols: 1, rows: 2 },
             ];
         })
