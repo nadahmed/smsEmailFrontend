@@ -11,6 +11,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ChartsModule } from 'ng2-charts';
 import { ChartsComponent } from './charts/charts.component';
 import { RecentTranxComponent } from './recent-tranx/recent-tranx.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,13 @@ import { RecentTranxComponent } from './recent-tranx/recent-tranx.component';
   ],
   imports: [
     CommonModule,
+
+    RouterModule.forChild(
+        [
+            { path: '', component: DashboardComponent},
+        ]
+        ),
+
     MatGridListModule,
     MatCardModule,
     MatMenuModule,

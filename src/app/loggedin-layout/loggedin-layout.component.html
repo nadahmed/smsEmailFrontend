@@ -1,0 +1,54 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row >
+      <span>EZText</span>
+      <span class="nav-spacer" (click) = 'sidenav.close()'></span>
+      <div fxShow="true" fxHide.lt-md>
+        <span style="margin-right: 50px;">Available balance: 120.00 ৳</span>
+        <button mat-raised-button style="margin-right: 50px;">RECHARGE</button>
+       
+        <button mat-button [matMenuTriggerFor]= "menu" aria-label="user-icon">
+          <mat-icon>person</mat-icon><span>Welcome {{ user.displayName }}</span>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item><mat-icon>person</mat-icon>My Account</button>
+            <button mat-menu-item (click)="auth.SignOut()"><mat-icon>exit_to_app</mat-icon>Sign out</button>
+        </mat-menu>
+      </div>
+      <button
+        mat-icon-button
+        (click) = 'sidenav.toggle()'
+        fxShow="true"
+        fxHide.gt-sm
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+<mat-sidenav-container >
+    <mat-sidenav #sidenav  position="end" mode="over">
+        <mat-nav-list >
+            <mat-list-item
+            >
+              <mat-icon matListIcon>account_balance</mat-icon> <span> 120.00 ৳</span></mat-list-item>
+          
+          <mat-list-item
+            >
+              <mat-icon matListIcon>person</mat-icon> <span > My Account</span></mat-list-item
+          >
+         
+          <mat-list-item
+            >
+              <mat-icon matListIcon>credit_card</mat-icon> <span> Recharge</span></mat-list-item
+          >
+          <mat-list-item (click)="auth.SignOut()" 
+            >
+              <mat-icon matListIcon>exit_to_app</mat-icon> <span> Sign Out</span></mat-list-item
+          >
+        </mat-nav-list>
+      </mat-sidenav>
+    <mat-sidenav-content hasBackdrop=true>
+        <app-controlnav></app-controlnav>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,7 +1,8 @@
+import { MatMenuModule } from '@angular/material/menu';
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlnavComponent } from './controlnav/controlnav.component';
-import { TopnavComponent } from './topnav/topnav.component';
+import { LoggedinLayoutComponent } from './loggedin-layout.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,17 +10,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AppRoutingModule } from '../app-routing.module';
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ControlnavComponent } from '../controlnav/controlnav.component';
+
+
 
 @NgModule({
   declarations: [
+      LoggedinLayoutComponent,
       ControlnavComponent,
-      TopnavComponent
   ],
   imports: [
     CommonModule,
-    AppRoutingModule,
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -27,11 +29,17 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatIconModule,
     MatListModule,
     MatTabsModule,
+    MatMenuModule,
     FlexLayoutModule,
-  ],
-  exports: [
-      ControlnavComponent,
-      TopnavComponent
+
+    RouterModule.forChild([
+        {path: '', component: LoggedinLayoutComponent, children: [
+            {path: 'sendsms', loadChildren: () => import('../sendsms/sendsms.module').then(m => m.SendsmsModule)},
+            {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)},
+        ]},
+
+    ]),
+
   ]
 })
-export class NavModule { }
+export class LoggedinLayoutModule { }

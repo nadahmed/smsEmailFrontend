@@ -1,0 +1,17 @@
+{
+  "hosting": {
+      "site": "smstest-hivecore-io",
+    "public": "dist/smsAppClient",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -8,13 +8,13 @@ import { map, shareReplay } from 'rxjs/operators';
   templateUrl: './controlnav.component.html',
   styleUrls: ['./controlnav.component.scss']
 })
-export class ControlnavComponent {
+export class ControlnavComponent implements OnInit {
 
     navLinks = [
         {label: 'Dashboard', path: '/dashboard'},
         {label: 'Send SMS', path: '/sendsms'},
         {label: 'Send Email', path: '/sendemail'},
-        {label: 'Upload Contacts', path: '/managecontacts'},
+        {label: 'Manage Groups', path: '/managegroups'},
         {label: 'Transaction', path: '/transactions'},
     ];
 
@@ -25,5 +25,9 @@ export class ControlnavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver) {}
+
+  ngOnInit(){
+
+  }
 
 }

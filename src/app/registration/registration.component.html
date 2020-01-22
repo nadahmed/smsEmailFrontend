@@ -1,0 +1,20 @@
+<div class="registration-container">
+  <mat-card class="card-container">
+    <mat-card-title>
+      <img mat-card-image class="login-brand" src="assets/brand-logo.png" />
+    </mat-card-title>
+
+    <mat-card-content>
+        <nav mat-tab-nav-bar mat-align-tabs="center">
+            <a mat-tab-link
+               *ngFor="let link of navLinks"
+               [routerLink]="link.path"
+               routerLinkActive #rla="routerLinkActive"
+               [active]="rla.isActive">
+              {{link.label}}
+            </a>
+          </nav>
+          <router-outlet></router-outlet>
+    </mat-card-content>
+  </mat-card>
+</div>

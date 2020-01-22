@@ -1,0 +1,45 @@
+
+    <mat-card>
+            <div class="example-container">
+                <form class="formGroup">
+                <mat-form-field class="expand" appearance="outline">
+                    <mat-label>Full Name</mat-label>
+                    <button mat-icon-button matSuffix slot="start">
+                        <mat-icon>account_circle</mat-icon>
+                        </button>
+                  <input matInput placeholder="Enter your Full Name" [formControl]="name"  required>
+                  <mat-error *ngIf="name.invalid">{{getErrorMessageName()}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="expand" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <button mat-icon-button matSuffix slot="start">
+                        <mat-icon>email</mat-icon>
+                        </button>
+                  <input matInput placeholder="Enter your email" [formControl]="email"  required>
+                  <mat-error *ngIf="name.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+                
+                <mat-form-field class="expand" appearance="outline">
+                    <mat-label>New Password</mat-label>
+                    <input matInput placeholder="Enter your password" [formControl]="password" autocomplete="off" [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="password.invalid">{{getErrorMessageP1()}}</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="expand" appearance="outline">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput placeholder="Re-enter your Password" [formControl]="password2" autocomplete="off" [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix >
+                        <mat-icon>{{matched ? 'done' : 'error'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="password2.invalid">{{getErrorMessageP2()}}</mat-error>
+                    
+                  </mat-form-field>
+                </form>
+              </div>
+            
+              <button mat-raised-button class= "expand login-button" (click)='createUser()'>SIGN UP</button>
+        </mat-card>
+      

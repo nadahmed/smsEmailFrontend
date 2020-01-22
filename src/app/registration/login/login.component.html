@@ -1,0 +1,32 @@
+
+    <mat-card>
+        <div class="example-container">
+            <form class="formGroup">
+            <mat-form-field class="expand" appearance="outline">
+                <mat-label>Email</mat-label>
+                <button mat-icon-button matSuffix slot="start">
+                    <mat-icon>account_circle</mat-icon>
+                    </button>
+              <input matInput placeholder="Enter your email" [formControl]="email"  required>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="expand" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Enter your password" [formControl]= "password" autocomplete= "off" [type]= "hide ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]= "'Hide password'" [attr.aria-pressed]= "hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            <mat-error>
+                {{ password.hasError('required') ? 'Password is required' :'' }}
+            </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="forgot-text">
+          <a href="/forgot-password"  >Forgot password?</a>
+          </div>
+          <button mat-raised-button class= "expand login-button" (click)="auth.SignIn(email.value, password.value)"  >LOG IN</button>
+    </mat-card>
+   
+   
