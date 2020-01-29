@@ -67,7 +67,7 @@ export class SignupComponent {
             .then(async (result) => {
                 /* Call the SendVerificaitonMail() function when new user sign
                 up and returns promise */
-                await result.user.updateProfile({displayName: this.name.value})
+                await result.user.updateProfile({displayName: this.name.value});
                 await this.afAuth.SendVerificationMail();
                 await this.afAuth.SetUserData(result.user);
             })
