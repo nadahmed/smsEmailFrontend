@@ -54,8 +54,10 @@
             formControlName="quantity"
               matInput
               placeholder="Quantity"
-              required
             />
+            <mat-error *ngIf="myGroup.invalid && !myGroup.hasError('min', 'quantity')">
+                Enter a valid number
+            </mat-error>
             <mat-error *ngIf="myGroup.getError('min','quantity')">
                 Minimum 50
             </mat-error>

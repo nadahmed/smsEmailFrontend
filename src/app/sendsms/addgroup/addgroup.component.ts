@@ -17,12 +17,10 @@ export interface CustomerGroup {
   templateUrl: './addgroup.component.html',
   styleUrls: ['./addgroup.component.scss']
 })
-export class AddgroupComponent implements OnDestroy{
+export class AddgroupComponent implements OnDestroy {
 
     @Output() formEvents = new EventEmitter<FormGroup>();
     myGroup: FormGroup;
-
-    cost = '0.00';
 
     selectedGroup: CustomerGroup = {groupName: '', available: 0};
 
@@ -54,20 +52,33 @@ export class AddgroupComponent implements OnDestroy{
     );
 
     myGroupSubscription: Subscription;
+    cost = '0.00';
 
     constructor(private breakpointObserver: BreakpointObserver) {
         this.myGroup = new FormGroup({
-            groupName : new FormControl(),
-            quantity : new FormControl('', Validators.min(50))
+            groupName : new FormControl('', [Validators.required]),
+            quantity : new FormControl({value: '', disabled: true }, [Validators.min(50), Validators.pattern('^[0-9]*$'), Validators.required])
         });
 
         this.myGroupSubscription = this.myGroup.valueChanges.subscribe(
             (value) => {
+                // console.log(value);
+                if (!!value.groupName) {
+                    this.myGroup.get(['quantity']).enable({onlySelf: true, emitEvent: true});
+                } else {
+                    // this.myGroup.disable();
+                }
                 if (value.quantity > this.selectedGroup.available) {
                     this.myGroup.patchValue({quantity: this.selectedGroup.available});
                 }
-                this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
-                // console.log(value);
+
+                if ( this.myGroup.get(['groupName']).valid && this.myGroup.get(['quantity']).valid) {
+                    this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
+                } else {
+                    this.cost = (0).toFixed(2);
+                }
+
+                
                 // console.log(this.selectedGroup);
             });
      }
