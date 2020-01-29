@@ -27,7 +27,7 @@ export class SignupComponent {
     hide = true;
     constructor(
         private afAuth: AuthService,
-        private _snackBar: MatSnackBar,
+        private snackBar: MatSnackBar,
         ) {
         this.formGroup.addControl('name', this.name);
         this.formGroup.addControl('email', this.email);
@@ -72,7 +72,7 @@ export class SignupComponent {
                 await this.afAuth.SetUserData(result.user);
             })
             .catch(err => {
-                this._snackBar.open(err, 'dismiss', {
+                this.snackBar.open(err, 'dismiss', {
                     duration: 2000,
                 });
                 // alert(err);
