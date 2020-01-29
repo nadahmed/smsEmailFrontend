@@ -51,11 +51,14 @@ export class SendsmsComponent implements OnInit {
     }
 
     addForm() {
-        const form = this.formBuilder.group({
-            secondCtrl: ['', Validators.required]
-        });
+        if (this.formGroups.length < 10 ) {
+            const form = this.formBuilder.group({
+                secondCtrl: ['', Validators.required]
+            });
 
-        this.formGroups.push(form);
+            this.formGroups.push(form);
+        }
+
     }
 
     removeForm(form: FormGroup) {

@@ -1,4 +1,6 @@
-
+.example-container{
+    margin: 15px;
+}
 
 .login-button {
     margin-top: 25px;
@@ -19,6 +21,10 @@ mat-form-field.mat-form-field {
     font-size: 16px;
   }
 
+  .mat-icon{
+      margin-left: 8px;
+      margin-right: 8px;
+  }
   .signup-text{
       margin-top: 25px;
   }

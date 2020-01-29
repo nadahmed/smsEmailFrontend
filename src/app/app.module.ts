@@ -1,3 +1,4 @@
+import { MatSnackBarModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -23,6 +24,7 @@ import { AuthService } from './api/auth/auth.service';
     AngularFirestoreModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

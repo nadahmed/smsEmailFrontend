@@ -1,8 +1,9 @@
-import { Observable } from 'rxjs';
+import { Observable, config } from 'rxjs';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
-import { FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormControl, Validators, ValidatorFn, AbstractControl, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { User } from 'firebase';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'app-signup',
@@ -11,6 +12,8 @@ import { User } from 'firebase';
 })
 export class SignupComponent {
     @ViewChild('scrollBottom', { static: false }) private scrollBottom: ElementRef;
+
+    formGroup = new FormGroup({});
 
     name = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*')]);
     email = new FormControl('', [Validators.required, Validators.email]);
@@ -22,7 +25,15 @@ export class SignupComponent {
         this.mismatchValidator(this.password)]);
 
     hide = true;
-    constructor(private afAuth: AuthService) { }
+    constructor(
+        private afAuth: AuthService,
+        private _snackBar: MatSnackBar,
+        ) {
+        this.formGroup.addControl('name', this.name);
+        this.formGroup.addControl('email', this.email);
+        this.formGroup.addControl('password', this.password);
+        this.formGroup.addControl('password2', this.password2);
+     }
 
     getErrorMessageName() {
         return this.name.invalid ? `Please enter a valid name` :
@@ -61,7 +72,10 @@ export class SignupComponent {
                 await this.afAuth.SetUserData(result.user);
             })
             .catch(err => {
-                alert(err);
+                this._snackBar.open(err, 'dismiss', {
+                    duration: 2000,
+                });
+                // alert(err);
             });
 
         }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/api/auth/auth.service';
 
 @Component({
@@ -9,8 +9,13 @@ import { AuthService } from 'src/app/api/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-    email = new FormControl('', [Validators.required, Validators.email]);
-    password = new FormControl('', [Validators.required]);
+    formGroup = new FormGroup(
+        {
+            email: new FormControl('', [Validators.required, Validators.email]),
+            password: new FormControl('', [Validators.required])
+        }
+    );
+
     hide = true;
   constructor(public auth: AuthService) { }
 
@@ -19,8 +24,8 @@ export class LoginComponent implements OnInit {
 
 
   getErrorMessage() {
-    return this.email.hasError('required') ? `Please enter your email` :
-        this.email.hasError('email') ? 'Not a valid email' :
+    return this.formGroup.get('email').hasError('required') ? `Please enter your email` :
+        this.formGroup.get('email').hasError('email') ? 'Not a valid email' :
             '';
   }
 

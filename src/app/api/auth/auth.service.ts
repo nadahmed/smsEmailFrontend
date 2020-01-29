@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material';
 import { Injectable, NgZone } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -16,7 +17,8 @@ export class AuthService {
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
+    public snackBar: MatSnackBar,
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -39,20 +41,29 @@ export class AuthService {
         this.ngZone.run(async () => {
             if ( result.user.emailVerified) {
                 await this.router.navigate(['dashboard']);
-            }else{
+            } else {
                 await this.router.navigate(['verify-email-address']);
             }
 
         });
         this.SetUserData(result.user);
       }).catch((error) => {
-        window.alert(error.message);
+        this.snackBar.open(error, 'dismiss', {
+            duration: 10000,
+        });
+        // window.alert(error.message);
       });
   }
 
   // Sign up with email/password
   SignUp(email, password) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    // .catch(
+    //     err => {
+    //         this._snackBar.open(err, 'Dismiss', {
+    //             duration: 2000,
+    //         })
+    //     });
   }
 
   // Send email verfificaiton when new user sign up
@@ -69,7 +80,9 @@ export class AuthService {
     .then(() => {
       window.alert('Password reset email has been sent. Please check your inbox.');
     }).catch((error) => {
-      window.alert(error);
+        this.snackBar.open(error, 'dismiss', {
+            duration: 10000,
+        });
     });
   }
 
@@ -93,7 +106,9 @@ export class AuthService {
         });
        this.SetUserData(result.user);
     }).catch((error) => {
-      window.alert(error);
+        this.snackBar.open(error, 'dismiss', {
+            duration: 10000,
+        });
     });
   }
 

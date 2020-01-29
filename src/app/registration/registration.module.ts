@@ -10,7 +10,7 @@ import { RegistrationComponent } from './registration.component';
 import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatSnackBarModule } from '@angular/material';
 import { LoginComponent } from './login/login.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
@@ -45,6 +45,7 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
     MatIconModule,
     MatAutocompleteModule,
     MatTabsModule,
+    MatSnackBarModule,
   ]
 })
 export class RegistrationModule { }
