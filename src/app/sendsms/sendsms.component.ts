@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormArray, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+
+
+export interface InputData  {
+    id: number;
+    cost: string;
+}
 
 @Component({
     selector: 'app-sendsms',
@@ -14,9 +20,20 @@ import { map } from 'rxjs/operators';
 })
 export class SendsmsComponent implements OnInit {
 
-    formGroups: FormGroup[] = [];
+
+    data: InputData[];
+
+    formIndex: FormGroup[];
+
+
+    formArray: FormArray;
+
+    myIndex: number;
+
+    totalCost: string;
+    totalQuantity: number;
     // firstFormGroup: FormGroup;
-    secondFormGroup: FormGroup;
+    // secondFormGroup: FormGroup;
 
     cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
         map(({ matches }) => {
@@ -36,39 +53,75 @@ export class SendsmsComponent implements OnInit {
         })
     );
 
-    constructor(private formBuilder: FormBuilder, private breakpointObserver: BreakpointObserver) { }
+    constructor(private breakpointObserver: BreakpointObserver) {
+        this.formArray = new FormArray([]);
+        this.formIndex = [];
+        this.data = [];
+        this.myIndex = 0;
+     }
 
     ngOnInit() {
-
-        // tslint:disable-next-line: prefer-const
-        let formGroup = this.formBuilder.group({
-            secondCtrl: ['', Validators.required]
-        });
-        this.formGroups.push(formGroup);
-        this.secondFormGroup = this.formBuilder.group({
-            secondCtrl: ['', Validators.required]
-        });
+        this.formIndex.push(new FormGroup({}));
     }
 
     addForm() {
-        if (this.formGroups.length < 10 ) {
-            const form = this.formBuilder.group({
-                secondCtrl: ['', Validators.required]
-            });
-
-            this.formGroups.push(form);
+        // if (this.formArray.length < 10 ) {
+        //     this.formArray.push(new FormGroup({}));
+        // }
+        if (this.formIndex.length < 10 ) {
+            this.formIndex.push(new FormGroup({}));
         }
 
     }
 
-    removeForm(form: FormGroup) {
-        const index = this.formGroups.indexOf(form);
+    removeForm(index) {
+
+        // this.formArray.removeAt(index);
+        // const index = this.formIndex.indexOf(i);
+        console.log(index);
         if (index > -1) {
-            this.formGroups.splice(index, 1);
+            this.formIndex.splice(index, 1);
         }
 
-        if (this.formGroups.length <= 0 ) {
+        if (this.formIndex.length <= 0 ) {
             this.addForm();
         }
+    }
+
+    myEvents(i, value) {
+
+        // console.log('[CHANGED]', i, value);
+        this.data[i] = {id: i, cost: value.cost};
+        let cost = 0.00;
+        this.data.forEach( (val) => {
+            cost = cost + parseFloat(val.cost);
+            // console.log(val.cost);
+        });
+        this.totalCost = cost.toFixed(2);
+
+        let quan = 0;
+        this.formArray.controls.forEach(val => {
+            if (val.valid) {
+                // console.log(val.value.quantity);
+                quan = quan + val.value.quantity;
+            }
+        });
+
+        this.totalQuantity = quan;
+
+    }
+
+    deletedEvent(i, value) {
+        // console.log('[DELETED]', i, value);
+        this.formArray.removeAt(i);
+        this.data.splice(i, 1);
+    }
+
+    createdEvent(i, value) {
+            // console.log('[CREATED]', i, value);
+            this.formArray.push(value.group);
+            this.data.push(value.cost);
+            // this.formArray.setControl(i, value.group);
+            // this.formArray.insert(value.index, value.group);
     }
 }

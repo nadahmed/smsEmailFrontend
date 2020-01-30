@@ -14,7 +14,7 @@
                 <mat-label>Choose Group</mat-label>
                 <mat-select
                 placeholder="Choose Group"
-                formControlName="groupName"
+                [formControl]= "groupName"
                 [(value)]="selectedGroup"
                 >
                     <mat-option *ngFor="let customerGroup of customerGroups" [value]="customerGroup">
@@ -51,7 +51,8 @@
           <mat-form-field>
             <input
             type = "number"
-            formControlName="quantity"
+            autocomplete="off"
+            [formControl]= "quantity"
               matInput
               placeholder="Quantity"
             />

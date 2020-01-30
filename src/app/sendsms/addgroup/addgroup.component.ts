@@ -1,5 +1,5 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnDestroy, OnInit } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -17,12 +17,29 @@ export interface CustomerGroup {
   templateUrl: './addgroup.component.html',
   styleUrls: ['./addgroup.component.scss']
 })
-export class AddgroupComponent implements OnDestroy {
+export class AddgroupComponent implements OnDestroy, OnInit {
 
-    @Output() formEvents = new EventEmitter<FormGroup>();
+    @Output() formEvents = new EventEmitter<any>();
+
+    @Output() init = new EventEmitter<any>();
+
+    @Output() del = new EventEmitter<any>();
+
     myGroup: FormGroup;
 
-    selectedGroup: CustomerGroup = {groupName: '', available: 0};
+    selectedGroup: CustomerGroup = {groupName: '', available: null};
+
+    groupName = new FormControl('', [Validators.required]);
+    quantity = new FormControl(
+        {
+            value: null,
+            disabled: true,
+        },
+        [
+            Validators.min(50),
+            Validators.pattern('^[0-9]*$'),
+            Validators.required,
+        ]);
 
     customerGroups: CustomerGroup[] = [
         {groupName: 'Engineers', available: 12000},
@@ -56,15 +73,18 @@ export class AddgroupComponent implements OnDestroy {
 
     constructor(private breakpointObserver: BreakpointObserver) {
         this.myGroup = new FormGroup({
-            groupName : new FormControl('', [Validators.required]),
-            quantity : new FormControl({value: '', disabled: true }, [Validators.min(50), Validators.pattern('^[0-9]*$'), Validators.required])
+            groupName: this.groupName,
+            quantity: this.quantity,
         });
+        // this.myGroup.addControl('groupName', this.groupName);
+        // this.myGroup.addControl('quantity', this.quantity);
+        // console.log(this.myGroup.controls);
 
         this.myGroupSubscription = this.myGroup.valueChanges.subscribe(
             (value) => {
                 // console.log(value);
                 if (!!value.groupName) {
-                    this.myGroup.get(['quantity']).enable({onlySelf: true, emitEvent: true});
+                    this.quantity.enable({onlySelf: false, emitEvent: false});
                 } else {
                     // this.myGroup.disable();
                 }
@@ -72,19 +92,25 @@ export class AddgroupComponent implements OnDestroy {
                     this.myGroup.patchValue({quantity: this.selectedGroup.available});
                 }
 
-                if ( this.myGroup.get(['groupName']).valid && this.myGroup.get(['quantity']).valid) {
+                if ( this.myGroup.valid) {
                     this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
                 } else {
                     this.cost = (0).toFixed(2);
                 }
 
-                
+                this.formEvents.emit({group: this.myGroup, cost: this.cost});
                 // console.log(this.selectedGroup);
             });
      }
 
+     ngOnInit() {
+        this.init.emit({group: this.myGroup, cost: this.cost});
+     }
+
      ngOnDestroy() {
-         this.myGroupSubscription.unsubscribe();
-         delete this.formEvents;
+        this.del.emit({group: this.myGroup, cost: this.cost});
+
+        this.myGroupSubscription.unsubscribe();
+        delete this.formEvents;
      }
 }

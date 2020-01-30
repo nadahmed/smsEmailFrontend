@@ -1,55 +1,75 @@
 <div class="my-container">
-    <h1 class="mat-h1">Send SMS</h1>
-<mat-horizontal-stepper linear #stepper >
-    <mat-step>
-        <div >
-      <!-- <form [formGroup]= "formGroup"> -->
+  <h1 class="mat-h1">Send SMS</h1>
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="formArray" errorMessage="Name is required.">
+      <div>
+        <!-- <form [formGroup]= "formGroup"> -->
         <ng-template matStepLabel>Groups</ng-template>
-        
-        <div class="add-group-container" *ngFor="let form of formGroups">
-            <button class="corner-button" mat-mini-fab color="warn" (click) = "removeForm(form)"> <mat-icon>clear</mat-icon></button>
-                <app-addgroup></app-addgroup>
+
+        <div
+          class="add-group-container"
+          *ngFor= "let form of formIndex; let i = index"
+        >
+          <button
+            class="corner-button"
+            mat-mini-fab
+            color="warn"
+            (click)="removeForm(i)"
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+          <!-- <app-addgroup
+            (formEvents)="myEvents($event)"
+          ></app-addgroup> -->
+          <app-addgroup
+            (init)= "createdEvent(i, $event)"
+            (del)= "deletedEvent(i, $event)"
+            (formEvents)= "myEvents(i, $event)"
+          ></app-addgroup>
         </div>
-        
+
         <div class="add-group-button">
-            <button mat-fab (click)="addForm()" matTooltip="Add more groups"><mat-icon>add</mat-icon></button>
-            <!-- <a> Add more groups</a> -->
+          <button mat-fab (click)="addForm()" matTooltip="Add more groups">
+            <mat-icon>add</mat-icon>
+          </button>
+          <!-- <a> Add more groups</a> -->
         </div>
 
         <div class="add-group-container">
-            <mat-card>
-                <mat-grid-list cols="16" rowHeight="50px">
-                    <mat-grid-tile
-                    *ngFor="let card of cards | async"       
-                    [colspan]= "card.cols"
-                    [rowspan]= "card.rows">
-                        <h4 *ngIf="card.name === 'total'" style="width: 100%;">TOTAL</h4>
-                        <h4 *ngIf="card.name === 'quantity'" >150<small>sms</small></h4>
-                        <h4 *ngIf="card.name === 'amount'" >1500<small>৳</small></h4>         
-                    </mat-grid-tile>
-                </mat-grid-list>
-
-            </mat-card>
+          <mat-card>
+            <mat-grid-list cols="16" rowHeight="50px">
+              <mat-grid-tile
+                *ngFor="let card of cards | async"
+                [colspan]="card.cols"
+                [rowspan]="card.rows"
+              >
+                <h4 *ngIf="card.name === 'total'" style="width: 100%;">
+                  TOTAL
+                </h4>
+                <h4 *ngIf="card.name === 'quantity'">{{!!totalQuantity? totalQuantity: 0}}<small> sms</small></h4>
+                <h4 *ngIf="card.name === 'amount'"><small>৳</small> {{!!totalCost? totalCost: '0.00'}}</h4>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-card>
         </div>
-        
-        
+
         <div style="text-align: center;">
           <button mat-raised-button color="primary" matStepperNext>Next</button>
         </div>
-      <!-- </form> -->
-    </div>
+        <!-- </form> -->
+      </div>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
-      <form [formGroup]="secondFormGroup">
+    <mat-step>
+      <!-- <form formGroupName="secondFormGroup"> -->
         <ng-template matStepLabel>SMS</ng-template>
         <mat-form-field>
-          <input matInput placeholder="Address" formControlName="secondCtrl" required>
+          <input matInput placeholder="Address" required />
         </mat-form-field>
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
         </div>
-      </form>
+      <!-- </form> -->
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
