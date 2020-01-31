@@ -1,0 +1,29 @@
+<div class="container expand">
+    <mat-form-field appearance="fill">
+        <mat-label>Message</mat-label>
+        <textarea
+        matTextareaAutosize
+        [matAutosizeMaxRows] = 12
+        [matAutosizeMinRows] = 12
+        autofocus
+        matInput
+        #input
+        placeholder="Type your message..."
+        maxlength="255"
+        value = "আমার সোনার বাংলা
+আমি তোমায় ভালবাসি
+চিরদিন তোমার আকাশ
+চিরদিন তোমার আকাশ
+তোমার বাতাস আমার প্রাণে
+ও মা
+আমার প্রাণে বাজায় বাঁশি
+সোনার বাংলা
+আমি তোমায় ভালবাসি"
+        ></textarea
+        >
+        <mat-hint align="end">{{(255 - input.value?.length) || 0}} Characters left</mat-hint>
+    </mat-form-field>
+    
+    <button mat-stroked-button color='accent' style="margin: 20px 0px;">Send me a test sms</button>
+
+</div>

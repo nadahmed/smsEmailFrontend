@@ -1,7 +1,8 @@
 <div class="my-container">
   <h1 class="mat-h1">Send SMS</h1>
   <mat-horizontal-stepper linear #stepper>
-    <mat-step [stepControl]="formArray" errorMessage="Name is required.">
+    <mat-step errorMessage="Name is required.">
+    <!-- <mat-step [stepControl]="formArray" errorMessage="Name is required."> -->
       <div>
         <!-- <form [formGroup]= "formGroup"> -->
         <ng-template matStepLabel>Groups</ng-template>
@@ -62,13 +63,15 @@
     <mat-step>
       <!-- <form formGroupName="secondFormGroup"> -->
         <ng-template matStepLabel>SMS</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Address" required />
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+        
+        <div class="add-group-container">
+            <app-sms></app-sms>
         </div>
+
+        <div class="stepperButtons">
+          <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div >
       <!-- </form> -->
     </mat-step>
     <mat-step>

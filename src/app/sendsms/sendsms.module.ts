@@ -11,11 +11,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule, MatSelectModule, MatAutocompleteModule, MatBadgeModule, MatTooltipModule } from '@angular/material';
 import { AddgroupComponent } from './addgroup/addgroup.component';
+import { SmsComponent } from './sms/sms.component';
 
 @NgModule({
   declarations: [
       SendsmsComponent,
       AddgroupComponent,
+      SmsComponent,
   ],
   imports: [
     CommonModule,

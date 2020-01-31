@@ -2,6 +2,15 @@
   min-height: 100vh;
 }
 
+.stepperButtons{
+    text-align: center;
+
+    button {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
 ::ng-deep .mat-horizontal-stepper-header-container {
   max-width: 800px;
   position: relative;
