@@ -38,4 +38,4 @@ import { SmsComponent } from './sms/sms.component';
     MatTooltipModule,
   ]
 })
-export class SendsmsModule { }
+export class SendsmsModule {}

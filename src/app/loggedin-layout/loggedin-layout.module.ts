@@ -42,4 +42,6 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
 
   ]
 })
-export class LoggedinLayoutModule { }
+export class LoggedinLayoutModule {
+   
+ }

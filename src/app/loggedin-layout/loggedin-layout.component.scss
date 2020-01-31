@@ -1,3 +1,15 @@
+@import "src/variables";
+
+.brand{
+    small{
+        color: $accent;
+    }
+
+    font-family: fantasy;
+    font-weight: 600;
+    font-size: xx-large;
+}
+
 .user-icon {
   padding: 0 14px;
   font-size: 30px;

@@ -1,6 +1,14 @@
-.mat-toolbar.mat-primary {
-    // overflow: hidden;
-//   position: unset;
-//   top: 0;
-//   z-index: 1;
+@import "src/variables.scss";
+
+.mat-tab-link{
+    opacity: 1;
 }
+.mat-tab-link:hover {
+text-decoration: none;
+color: $accent;
+}
+
+.mat-tab-label-active{
+    color: $accent;
+}
+

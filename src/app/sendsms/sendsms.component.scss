@@ -1,3 +1,5 @@
+@import "src/variables.scss";
+
 .my-container {
   min-height: 100vh;
 }
@@ -11,12 +13,21 @@
     }
 }
 
+.add-button{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+}
 ::ng-deep .mat-horizontal-stepper-header-container {
   max-width: 800px;
   position: relative;
   left: 50%;
   -webkit-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
+
+  .mat-step-icon.mat-step-icon-selected{
+      background-color: $accent;
+  }
 }
 
 .mat-h1 {
