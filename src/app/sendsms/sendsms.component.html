@@ -1,8 +1,8 @@
 <div class="my-container">
   <h1 class="mat-h1">Send SMS</h1>
   <mat-horizontal-stepper linear #stepper>
-    <mat-step errorMessage="Name is required.">
-    <!-- <mat-step [stepControl]="formArray" errorMessage="Name is required."> -->
+    <!-- <mat-step errorMessage="Name is required."> -->
+    <mat-step [stepControl]="formArray" errorMessage="Name is required.">
       <div>
         <!-- <form [formGroup]= "formGroup"> -->
         <ng-template matStepLabel>Groups</ng-template>

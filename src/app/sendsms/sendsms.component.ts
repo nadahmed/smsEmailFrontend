@@ -86,11 +86,18 @@ export class SendsmsComponent implements OnInit {
         if (this.formIndex.length <= 0 ) {
             this.addForm();
         }
+        
     }
 
     myEvents(i, value) {
 
         // console.log('[CHANGED]', i, value);
+        this.updateTotals(i, value);
+
+    }
+
+    private updateTotals(i, value) {
+
         this.data[i] = {id: i, cost: value.cost};
         let cost = 0.00;
         this.data.forEach( (val) => {
@@ -108,19 +115,22 @@ export class SendsmsComponent implements OnInit {
         });
 
         this.totalQuantity = quan;
-
     }
 
     deletedEvent(i, value) {
         // console.log('[DELETED]', i, value);
         this.formArray.removeAt(i);
+        this.updateTotals(i, {cost: '0.00'});
         this.data.splice(i, 1);
+
     }
 
     createdEvent(i, value) {
             // console.log('[CREATED]', i, value);
             this.formArray.push(value.group);
             this.data.push(value.cost);
+            this.updateTotals(i, {cost: '0.00'});
+            
             // this.formArray.setControl(i, value.group);
             // this.formArray.insert(value.index, value.group);
     }
