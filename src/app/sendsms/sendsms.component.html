@@ -2,7 +2,7 @@
   <h1 class="mat-h1">Send SMS</h1>
   <mat-horizontal-stepper linear #stepper color="accent">
     <!-- <mat-step errorMessage="Name is required."> -->
-    <mat-step [stepControl]="formArray" errorMessage="Name is required.">
+    <mat-step [stepControl]="formArray" errorMessage="Invalid">
       <div>
         <!-- <form [formGroup]= "formGroup"> -->
         <ng-template matStepLabel>Groups</ng-template>
@@ -60,26 +60,28 @@
         <!-- </form> -->
       </div>
     </mat-step>
-    <mat-step>
+    <mat-step [stepControl]="smsForm" errorMessage="Invalid">
       <!-- <form formGroupName="secondFormGroup"> -->
         <ng-template matStepLabel>SMS</ng-template>
         
         <div class="add-group-container">
-            <app-sms></app-sms>
+            <app-sms (smsChangeEvent) = "messageEvents($event)"></app-sms>
         </div>
 
         <div class="stepperButtons">
           <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
+          <button mat-raised-button color="primary" matStepperNext (click)="formComplete()">Next</button>
         </div >
       <!-- </form> -->
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+      <div class="add-group-container">
+        <app-done [details] ="details"></app-done>
+        <div  class="stepperButtons">
+          <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary">Send</button>
+        </div>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

@@ -65,9 +65,10 @@
 
       <mat-error *ngIf="password2.invalid">{{ getErrorMessageP2() }}</mat-error>
     </mat-form-field>
-  </form>
+
 
   <button mat-raised-button type="submit" [disabled]='formGroup.invalid' class="expand login-button" >
     SIGN UP
   </button>
+</form>
 </div>

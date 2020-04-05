@@ -59,9 +59,9 @@ export class SignupComponent {
                 '';
     }
 
-    async createUser() {
-
-        if (this.email.valid && this.password2.valid && this.name.valid) {
+    createUser() {
+// console.log('Works');
+        if (this.formGroup.valid) {
             // tslint:disable-next-line: max-line-length
             this.afAuth.SignUp(this.email.value, this.password2.value)
             .then(async (result) => {
@@ -72,8 +72,8 @@ export class SignupComponent {
                 await this.afAuth.SetUserData(result.user);
             })
             .catch(err => {
-                this.snackBar.open(err, 'dismiss', {
-                    duration: 2000,
+                this.snackBar.open(err, 'Dismiss', {
+                    duration: 10000,
                 });
                 // alert(err);
             });

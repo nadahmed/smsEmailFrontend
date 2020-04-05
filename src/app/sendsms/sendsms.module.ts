@@ -1,3 +1,4 @@
+import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -9,15 +10,17 @@ import { RouterModule } from '@angular/router';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule, MatSelectModule, MatAutocompleteModule, MatBadgeModule, MatTooltipModule } from '@angular/material';
+import { MatInputModule, MatSelectModule, MatAutocompleteModule, MatBadgeModule, MatTooltipModule, MatChipsModule } from '@angular/material';
 import { AddgroupComponent } from './addgroup/addgroup.component';
 import { SmsComponent } from './sms/sms.component';
+import { DoneComponent } from './done/done.component';
 
 @NgModule({
   declarations: [
       SendsmsComponent,
       AddgroupComponent,
       SmsComponent,
+      DoneComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +39,8 @@ import { SmsComponent } from './sms/sms.component';
     MatBadgeModule,
     MatIconModule,
     MatTooltipModule,
+    MatTableModule,
+    MatChipsModule,
   ]
 })
 export class SendsmsModule {}

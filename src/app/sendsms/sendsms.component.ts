@@ -26,7 +26,11 @@ export class SendsmsComponent implements OnInit {
     formIndex: FormGroup[];
 
 
+    details: object;
+
     formArray: FormArray;
+
+    smsForm: FormGroup;
 
     myIndex: number;
 
@@ -55,9 +59,15 @@ export class SendsmsComponent implements OnInit {
 
     constructor(private breakpointObserver: BreakpointObserver) {
         this.formArray = new FormArray([]);
+        this.smsForm = new FormGroup({});
         this.formIndex = [];
         this.data = [];
         this.myIndex = 0;
+
+        this.details = {
+            group: this.formArray,
+            message: this.smsForm,
+        };
      }
 
     ngOnInit() {
@@ -133,5 +143,18 @@ export class SendsmsComponent implements OnInit {
             
             // this.formArray.setControl(i, value.group);
             // this.formArray.insert(value.index, value.group);
+    }
+
+    messageEvents(form) {
+        this.smsForm = form;
+    }
+
+    formComplete() {
+        this.details = {
+            group: this.formArray,
+            cost: this.data,
+            totalCost: this.totalCost,
+            message: this.smsForm,
+        };
     }
 }
