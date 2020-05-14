@@ -1,0 +1,24 @@
+<form [formGroup]="email">
+  <div class="container expand">
+    <div class="form-group has-feedback">
+      <ckeditor
+        [formControl]="message"
+        name="myckeditor"
+        required
+        [config]="ckeConfig"
+        debounce="200"
+        (paste)="onPaste($event)"
+        (change)="onChange($event)"
+      >
+      </ckeditor>
+    </div>
+    <button
+      [disabled]="message.invalid"
+      mat-stroked-button
+      color="primary"
+      style="margin: 20px 0px;"
+    >
+      Send me a test email
+    </button>
+  </div>
+</form>

@@ -1,0 +1,37 @@
+.inline{
+    display: inline-block; 
+// border: 1px solid red; 
+margin:10px;
+
+}
+
+
+mat-form-field.inline{
+    width: 100px;
+}
+
+.center{
+    text-align: center;
+}
+
+.form-container {
+    margin: 0 auto;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    -webkit-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+  }
+  
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+
+  input[type=number] {
+    -moz-appearance:textfield;
+}

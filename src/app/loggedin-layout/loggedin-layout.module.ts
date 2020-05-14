@@ -35,6 +35,7 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
     RouterModule.forChild([
         {path: '', component: LoggedinLayoutComponent, children: [
             {path: 'sendsms', loadChildren: () => import('../sendsms/sendsms.module').then(m => m.SendsmsModule)},
+            {path: 'sendemail', loadChildren: () => import('../sendemail/sendemail.module').then(m => m.SendemailModule)},
             {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)},
         ]},
 
@@ -43,5 +44,4 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
   ]
 })
 export class LoggedinLayoutModule {
-   
  }

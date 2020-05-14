@@ -1,0 +1,87 @@
+<div class="my-container">
+    <h1 class="mat-h1">Send Email</h1>
+    <mat-horizontal-stepper linear #stepper color="accent">
+        <mat-step  [stepControl]="formArray" errorMessage="Invalid">
+          <div>
+     
+            <ng-template matStepLabel>Groups</ng-template>
+            <div
+            class="add-group-container"
+            *ngFor= "let form of formIndex; let i = index"
+          >
+            <button
+              class="corner-button"
+              mat-mini-fab
+              color="accent"
+              (click)="removeForm(i)"
+            >
+              <mat-icon>clear</mat-icon>
+            </button>
+            <!-- <app-addgroup
+              (formEvents)="myEvents($event)"
+            ></app-addgroup> -->
+            <app-addgroup
+              (init)= "createdEvent(i, $event)"
+              (del)= "deletedEvent(i, $event)"
+              (formEvents)= "myEvents(i, $event)"
+            ></app-addgroup>
+          </div>
+  
+          <div class="add-group-button">
+            <button mat-stroked-button color="primary" (click)="addForm()" class="add-button" matTooltip="Add more groups">
+              <mat-icon>add</mat-icon>
+            </button>
+            <!-- <a> Add more groups</a> -->
+          </div>
+  
+          <div class="add-group-container">
+            <mat-card>
+              <mat-grid-list cols="16" rowHeight="50px">
+                <mat-grid-tile
+                  *ngFor="let card of cards | async"
+                  [colspan]="card.cols"
+                  [rowspan]="card.rows"
+                >
+                  <h4 *ngIf="card.name === 'total'" style="width: 100%;">
+                    TOTAL
+                  </h4>
+                  <h4 *ngIf="card.name === 'quantity'">{{!!totalQuantity? totalQuantity: 0}}<small> email</small></h4>
+                  <h4 *ngIf="card.name === 'amount'"><small>৳</small> {{!!totalCost? totalCost: '0.00'}}</h4>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </mat-card>
+          </div>
+  
+          <div style="text-align: center;">
+            <button mat-raised-button color="primary" matStepperNext>Next</button>
+          </div>
+            
+            <!-- </form> -->
+          </div>
+        </mat-step>
+
+
+
+        <mat-step [stepControl]="emailForm" errorMessage="Invalid">
+          <!-- <form formGroupName="secondFormGroup"> -->
+            <ng-template matStepLabel>EMAIL</ng-template>
+           <app-email (emailChangeEvent) = "messageEvents($event)"></app-email>
+           <div class="stepperButtons">
+            <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+            <button mat-raised-button color="primary" matStepperNext (click)="formComplete()">Next</button>
+          </div >
+          <!-- </form> -->
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <div class="add-group-container">
+            <app-done [details] ="details"></app-done>
+            <div  class="stepperButtons">
+              <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+              <button mat-raised-button color="primary">Send to All</button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+  </div>
+  

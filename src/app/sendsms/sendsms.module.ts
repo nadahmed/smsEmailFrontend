@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
+// tslint:disable-next-line: max-line-length
 import { MatInputModule, MatSelectModule, MatAutocompleteModule, MatBadgeModule, MatTooltipModule, MatChipsModule } from '@angular/material';
 import { AddgroupComponent } from './addgroup/addgroup.component';
 import { SmsComponent } from './sms/sms.component';

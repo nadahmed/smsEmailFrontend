@@ -1,0 +1,80 @@
+@import "src/variables.scss";
+
+.my-container {
+  min-height: 100vh;
+}
+
+.stepperButtons{
+    text-align: center;
+
+    button {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+.add-button{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+}
+::ng-deep .mat-horizontal-stepper-header-container {
+  max-width: 800px;
+  position: relative;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
+
+  .mat-step-icon.mat-step-icon-selected{
+      background-color: $accent;
+  }
+}
+
+.mat-h1 {
+  margin: 20px;
+//   width: 100%;
+}
+
+.add-group-container {
+  margin-top: 20px;
+  padding: 15px 15px 15px 15px;
+  position: relative;
+
+  .corner-button {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 2;
+  }
+}
+
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background-color: transparent;
+}
+
+.add-group-button{
+width: 100%;
+text-align: center;
+}
+
+@media only screen and (min-width: 640px) {
+  .add-group-container {
+    // margin-top: 20px;
+    max-width: 1000px;
+    // padding: 15px 15px 15px 15px;
+    overflow: visible;
+    // position: relative;
+
+    left: 50%;
+    -webkit-transform: translate(-50%, 0%);
+    transform: translate(-50%, 0%);
+
+    // .corner-button{
+    //     position: absolute;
+    //     top: -10px;
+    //     right: -10px;
+    //     z-index: 2;
+    // }
+  }
+}

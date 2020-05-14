@@ -1,0 +1,14 @@
+.expand {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin-top: 4rem;
+  max-width: 90%;
+
+  button {
+      align-self: center;
+    // max-width: 30rem;
+  }
+}
