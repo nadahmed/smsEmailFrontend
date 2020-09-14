@@ -1,16 +1,9 @@
-
-
 <mat-drawer-container class="example-container">
     <mat-drawer mode="side" opened>
         <div class="grid-container">
             <h1 class="mat-h1">Manage Groups</h1>
         </div>
             <mat-action-list>
-                <!-- <button mat-list-item>
-                    <mat-icon mat-list-icon>fact_check</mat-icon>
-                    <div mat-line [routerLink]="['/managegroups/available']">Available Groups</div>
-                  </button>
-                  <mat-divider></mat-divider> -->
                 <div mat-subheader>SMS Groups</div>
                 <button mat-list-item [routerLink]="['/managegroups/sms/editgroup']">
                   <mat-icon mat-list-icon>group_add</mat-icon>

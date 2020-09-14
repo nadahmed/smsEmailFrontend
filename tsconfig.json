@@ -11,13 +11,17 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+        "@valor-software/ng2-charts": ["node_modules/ng2-charts"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

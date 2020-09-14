@@ -8,7 +8,9 @@
     >
       <mat-card
         class="dashboard-card text-center"
-        *ngIf="!(card.title === 'CHART' || card.title === 'RECENT TRANSACTIONS')"
+        *ngIf="
+          !(card.title === 'CHART' || card.title === 'RECENT TRANSACTIONS')
+        "
       >
         <mat-card-title class="dashboard-card-content">
           <div>{{ card.content }}</div>
@@ -30,13 +32,9 @@
           <div>{{ card.title }}</div>
         </mat-card-subtitle>
         <mat-card-content>
-        <app-recent-tranx [tranxData] ="card.content"></app-recent-tranx>
+          <app-recent-tranx [tranxData]="card.content"></app-recent-tranx>
         </mat-card-content>
       </mat-card>
-
-      
-        <!-- <app-recent-tranx class="dashboard-card" [tranxData] ="card.content" *ngIf="card.title === 'RECENT TRANSACTIONS'"></app-recent-tranx> -->
-
-
     </mat-grid-tile>
   </mat-grid-list>
+</div>

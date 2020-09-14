@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ChartsComponent } from './charts/charts.component';
 import { RecentTranxComponent } from './recent-tranx/recent-tranx.component';
 import { RouterModule } from '@angular/router';
@@ -36,6 +36,9 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     LayoutModule,
     ChartsModule,
-  ]
+  ],
+  providers: [
+      ThemeService
+  ],
 })
 export class DashboardModule { }
