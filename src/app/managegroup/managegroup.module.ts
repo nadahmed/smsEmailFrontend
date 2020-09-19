@@ -1,3 +1,4 @@
+import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +21,7 @@ import { CustomersmsgroupComponent } from '../availablegroups/customersmsgroup/c
 import { MatButtonModule, MatPaginatorModule, MatTooltipModule, MatSelectModule } from '@angular/material';
 import { SmsaddcontactComponent } from './smsaddcontact/smsaddcontact.component';
 import { MatFileUploadModule } from 'angular-material-fileupload';
+import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,7 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
         CustomersmsgroupComponent,
         CustomeremailgroupComponent,
         SmsaddcontactComponent,
+        SmsbulkuploadComponent,
     ],
     imports: [
         // BrowserModule,
@@ -50,6 +53,7 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
         MatTooltipModule,
         MatSelectModule,
         MatFileUploadModule,
+        MatCardModule,
     ],
     exports: [CommonModule]
 })

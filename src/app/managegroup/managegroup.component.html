@@ -9,13 +9,13 @@
                   <mat-icon mat-list-icon>group_add</mat-icon>
                   <div mat-line>Edit Groups</div>
                 </button>
+                <button mat-list-item [routerLink]="['/managegroups/sms/import']">
+                    <mat-icon mat-list-icon>person_add</mat-icon>
+                    <div mat-line>Import Contact</div>
+                </button>
                 <button mat-list-item [routerLink]="['/managegroups/sms/contactlist']">
                     <mat-icon mat-list-icon>contact_phone</mat-icon>
                     <div mat-line>Contact list</div>
-                </button>
-                  <button mat-list-item [routerLink]="['/managegroups/sms/import']">
-                    <mat-icon mat-list-icon>person_add</mat-icon>
-                    <div mat-line>Import Contact</div>
                 </button>
                 <mat-divider></mat-divider>
                 <div mat-subheader>Email Groups</div>
@@ -23,13 +23,13 @@
                     <mat-icon mat-list-icon>group_add</mat-icon>
                     <div mat-line>Edit Groups</div>
                 </button>
+                <button mat-list-item [routerLink]="['/managegroups/email/editgroup']">
+                    <mat-icon mat-list-icon>person_add</mat-icon>
+                    <div mat-line>Import Contact</div>
+                  </button>
                   <button mat-list-item [routerLink]="['/managegroups/email/editgroup']">
                       <mat-icon mat-list-icon>contact_mail</mat-icon>
                       <div mat-line>Contact list</div>
-                    </button>
-                    <button mat-list-item [routerLink]="['/managegroups/email/editgroup']">
-                      <mat-icon mat-list-icon>person_add</mat-icon>
-                      <div mat-line>Import Contact</div>
                     </button>
               </mat-action-list>
         

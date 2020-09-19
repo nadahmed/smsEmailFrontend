@@ -1,12 +1,12 @@
 <h4 class="mat-h4 sub-header">Import Contacts - SMS</h4>
 <div class="grid-container">
     <div class="item">
-        <h5 style="text-align: center;">Add a contact</h5>
+        <h5 style="text-align: center;">ADD CONTACT</h5>
         <p>
             <mat-form-field appearance="standard">
               <mat-label>Name</mat-label>
               <input matInput placeholder="Placeholder">
-              <mat-icon matSuffix>account_box</mat-icon>
+              <mat-icon matPrefix>account_box</mat-icon>
               <mat-hint>Optional</mat-hint>
             </mat-form-field>
           </p>
@@ -14,7 +14,7 @@
             <mat-form-field appearance="standard">
               <mat-label>Phone Number</mat-label>
               <input matInput placeholder="Placeholder" required type="tel">
-              <mat-icon matSuffix>smartphone</mat-icon>
+              <mat-icon matPrefix>smartphone</mat-icon>
               <mat-hint>Required</mat-hint>
             </mat-form-field>
           </p>
@@ -22,29 +22,33 @@
             <mat-form-field appearance="standard">
               <mat-label>Occupation</mat-label>
               <input matInput placeholder="Placeholder">
-              <mat-icon matSuffix>assignment_ind</mat-icon>
+              <mat-icon matPrefix>assignment_ind</mat-icon>
               <mat-hint>Optional</mat-hint>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="standard">
-              <mat-label>Location</mat-label>
+                <mat-icon matPrefix>place</mat-icon>
+                <mat-label>Location</mat-label>
               <input matInput placeholder="Placeholder">
-              <mat-icon matSuffix>place</mat-icon>
+
               <mat-hint>Optional</mat-hint>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field>
                 <mat-label>Select Group</mat-label>
-                <mat-select>
+                <mat-select required>
                   <mat-option *ngFor="let group of groups" [value]="group.value">
                     {{group.viewValue}}
                   </mat-option>
                 </mat-select>
+                <mat-hint>Required</mat-hint>
               </mat-form-field>
           </p>
           <button mat-raised-button><mat-icon>person_add</mat-icon> ADD CONTACT</button>
     </div>
-        <div class="item"><app-officialemailgroup></app-officialemailgroup></div>
+        <div class="item">
+            <app-smsbulkupload></app-smsbulkupload>
+        </div>
          </div>
