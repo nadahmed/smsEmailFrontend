@@ -27,8 +27,23 @@
         placeholder="Enter your email"
         formControlName="email"
       />
-      <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
+      <mat-error *ngIf="email.invalid">{{ getErrorMessageEmail() }}</mat-error>
     </mat-form-field>
+
+    <mat-form-field class="expand" appearance="outline">
+        <mat-label>Phone</mat-label>
+  
+        <mat-icon matSuffix>phone</mat-icon>
+  
+        <input
+        type='tel'
+          matInput
+          autocomplete="tel"
+          placeholder="Enter your mobile no."
+          formControlName="mobile"
+        />
+        <mat-error *ngIf="mobile.invalid">{{ getErrorMessageMobile() }}</mat-error>
+      </mat-form-field>
 
     <mat-form-field class="expand" appearance="outline">
       <mat-label>New Password</mat-label>

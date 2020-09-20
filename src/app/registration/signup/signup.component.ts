@@ -4,6 +4,7 @@ import { FormControl, Validators, ValidatorFn, AbstractControl, FormGroup } from
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { User } from 'firebase';
 import { MatSnackBar } from '@angular/material';
+import { valHooks } from 'jquery';
 
 @Component({
     selector: 'app-signup',
@@ -17,6 +18,7 @@ export class SignupComponent {
 
     name = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*')]);
     email = new FormControl('', [Validators.required, Validators.email]);
+    mobile = new FormControl('', [Validators.required, Validators.pattern('^(?:\\+88|01)?(?:\\d{11}|\\d{13})$')]);
     password = new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]);
     password2 = new FormControl('', [
         Validators.required,
@@ -31,6 +33,7 @@ export class SignupComponent {
         ) {
         this.formGroup.addControl('name', this.name);
         this.formGroup.addControl('email', this.email);
+        this.formGroup.addControl('mobile', this.mobile);
         this.formGroup.addControl('password', this.password);
         this.formGroup.addControl('password2', this.password2);
      }
@@ -40,9 +43,15 @@ export class SignupComponent {
                 '';
     }
 
-    getErrorMessage() {
+    getErrorMessageEmail() {
         return this.email.hasError('required') ? `Please enter your email` :
             this.email.hasError('email') ? 'Not a valid email' :
+                '';
+    }
+
+    getErrorMessageMobile() {
+        return this.mobile.hasError('required') ? `Please enter your mobile number.` :
+            this.mobile.hasError('pattern') ? 'Not a valid mobile number' :
                 '';
     }
 
@@ -62,21 +71,29 @@ export class SignupComponent {
     createUser() {
 // console.log('Works');
         if (this.formGroup.valid) {
-            // tslint:disable-next-line: max-line-length
-            this.afAuth.SignUp(this.email.value, this.password2.value)
-            .then(async (result) => {
-                /* Call the SendVerificaitonMail() function when new user sign
-                up and returns promise */
-                await result.user.updateProfile({displayName: this.name.value});
-                await this.afAuth.SendVerificationMail();
-                await this.afAuth.SetUserData(result.user);
-            })
-            .catch(err => {
-                this.snackBar.open(err, 'Dismiss', {
-                    duration: 10000,
-                });
-                // alert(err);
-            });
+            this.afAuth.SignUp(
+                this.name.value,
+                this.email.value,
+                this.mobile.value,
+                this.password2.value
+                ).subscribe(res => {
+                    console.log(res);
+                })
+
+            // this.afAuth.SignUp(this.email.value, this.password2.value)
+            // .then(async (result) => {
+            //     /* Call the SendVerificaitonMail() function when new user sign
+            //     up and returns promise */
+            //     await result.user.updateProfile({displayName: this.name.value});
+            //     await this.afAuth.SendVerificationMail();
+            //     await this.afAuth.SetUserData(result.user);
+            // })
+            // .catch(err => {
+            //     this.snackBar.open(err, 'Dismiss', {
+            //         duration: 10000,
+            //     });
+            //     // alert(err);
+            // });
 
         }
     }
