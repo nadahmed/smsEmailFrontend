@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/api/auth/auth.service';
 import { Component } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
@@ -22,7 +23,7 @@ export class DashboardComponent {
         map(({ matches }) => {
             if (matches) {
                 return [
-                    { title: 'AVAILABLE BALANCE', content: '120.00', cols: 4, rows: 1 },
+                    { title: 'AVAILABLE BALANCE', content: this.auth.user.balance.toFixed(2), cols: 4, rows: 1 },
                     { title: 'SMS LAST MONTH', content: '1020', cols: 4, rows: 1 },
                     { title: 'EMAILS LAST MONTH', content: '2200', cols: 4, rows: 1 },
                     { title: 'COST LAST MONTH', content: '5521.0', cols: 4, rows: 1 },
@@ -33,7 +34,7 @@ export class DashboardComponent {
             }
 
             return [
-                { title: 'AVAILABLE BALANCE', content: '120.0', cols: 1, rows: 1 },
+                { title: 'AVAILABLE BALANCE', content: this.auth.user.balance.toFixed(2), cols: 1, rows: 1 },
                 { title: 'SMS LAST MONTH', content: '1020', cols: 1, rows: 1 },
                 { title: 'EMAILS LAST MONTH', content: '2200', cols: 1, rows: 1 },
                 { title: 'COST LAST MONTH', content: '5521.0', cols: 1, rows: 1 },
@@ -44,5 +45,5 @@ export class DashboardComponent {
         })
     );
 
-    constructor(private breakpointObserver: BreakpointObserver) { }
+    constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) { }
 }

@@ -3,11 +3,11 @@
       <span class="brand">BigDigi<small>.com.bd</small></span>
       <span class="nav-spacer" (click) = 'sidenav.close()'></span>
       <div fxShow="true" fxHide.lt-md>
-        <span style="margin-right: 50px;">Available balance: ৳ 120.00</span>
+        <span style="margin-right: 50px;">Available balance: ৳ {{user.balance.toFixed(2)}}</span>
         <button mat-raised-button color="accent" style="margin-right: 50px;">RECHARGE</button>
        
         <button mat-button [matMenuTriggerFor]= "menu" aria-label="user-icon">
-          <mat-icon>person</mat-icon><span>{{ user.displayName }}</span>
+          <mat-icon>person</mat-icon><span>{{ user.name }}</span>
         </button>
         <mat-menu #menu="matMenu" xPosition="before">
             <button mat-menu-item><mat-icon>person</mat-icon>My Account</button>

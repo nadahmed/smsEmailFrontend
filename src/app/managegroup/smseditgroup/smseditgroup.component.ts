@@ -1,6 +1,8 @@
+import { GroupAddBody } from './../../api/sms/sms.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { OfficialSMSGroupResponse, SmsService } from 'src/app/api/sms/sms.service';
 
 export interface PeriodicElement {
     id: number;
@@ -35,17 +37,35 @@ export class SmseditgroupComponent implements OnInit {
 
     newGroup = '';
     oldGroup = '';
+    data: {group: string, contacts: number}[] = [];
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     displayedColumns: string[] = ['group', 'contacts', 'actions'];
-    dataSource = new MatTableDataSource(ELEMENT_DATA);
+    dataSource = new MatTableDataSource();
+
+    constructor(private smsService: SmsService) {}
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
     ngOnInit() {
-        this.dataSource.paginator = this.paginator;
+        this.smsService.getCustomerGroups()
+        .subscribe(
+            (res: OfficialSMSGroupResponse) => {
+                console.log(res.data);
+                res.data.forEach( val => {
+                    this.data.push({
+                        group: val.professionGroup,
+                        contacts: val.contacts.length,
+                    });
+                });
+            },
+            err => {},
+            () => {
+                this.dataSource = new MatTableDataSource(this.data);
+                this.dataSource.paginator = this.paginator;
+            });
     }
 
     deleteGroup(el: PeriodicElement) {

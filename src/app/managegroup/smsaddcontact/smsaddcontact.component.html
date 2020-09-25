@@ -1,54 +1,54 @@
 <h4 class="mat-h4 sub-header">Import Contacts - SMS</h4>
 <div class="grid-container">
-    <div class="item">
-        <h5 style="text-align: center;">ADD CONTACT</h5>
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Name</mat-label>
-              <input matInput placeholder="Placeholder">
-              <mat-icon matPrefix>account_box</mat-icon>
-              <mat-hint>Optional</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Phone Number</mat-label>
-              <input matInput placeholder="Placeholder" required type="tel">
-              <mat-icon matPrefix>smartphone</mat-icon>
-              <mat-hint>Required</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Occupation</mat-label>
-              <input matInput placeholder="Placeholder">
-              <mat-icon matPrefix>assignment_ind</mat-icon>
-              <mat-hint>Optional</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-                <mat-icon matPrefix>place</mat-icon>
-                <mat-label>Location</mat-label>
-              <input matInput placeholder="Placeholder">
-
-              <mat-hint>Optional</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-                <mat-label>Select Group</mat-label>
-                <mat-select required>
-                  <mat-option *ngFor="let group of groups" [value]="group.value">
-                    {{group.viewValue}}
+  <div class="item">
+    <h5 style="text-align: center">ADD CONTACT</h5>
+    <form
+      [formGroup]="contactsFormGroup"
+      style="text-align: right"
+      (ngSubmit)="onSubmit()"
+    >
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label><mat-icon matPrefix>account_box</mat-icon> Name</mat-label>
+          <input matInput type="text" formControlName="name" />
+          <mat-hint>Optional</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label><mat-icon matPrefix>smartphone</mat-icon> Phone Number</mat-label>
+          <input matInput formControlName="cell" />
+          <mat-error *ngIf="cell.invalid">Enter a valid Bangladeshi cellphone number</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label><mat-icon matPrefix>group</mat-icon> Assign Group</mat-label>
+          
+          <input type="text" placeholder="Create new or pick" aria-label="Number" matInput formControlName="profession" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
                   </mat-option>
-                </mat-select>
-                <mat-hint>Required</mat-hint>
-              </mat-form-field>
-          </p>
-          <button mat-raised-button><mat-icon>person_add</mat-icon> ADD CONTACT</button>
-    </div>
-        <div class="item">
-            <app-smsbulkupload></app-smsbulkupload>
-        </div>
-         </div>
+    </mat-autocomplete>
+
+
+
+
+          <!-- <mat-select type="text" formControlName='profession'>
+            <mat-option *ngFor="let group of groups" [value]="group.value">
+              {{ group.viewValue }}
+            </mat-option>
+          </mat-select> -->
+          <mat-error *ngIf="cell.invalid">This field is required</mat-error>
+        </mat-form-field>
+      </p>
+      <button type="submit" mat-raised-button [disabled]="contactsFormGroup.invalid" color="primary">
+        <mat-icon>person_add</mat-icon> ADD CONTACT
+      </button>
+    </form>
+  </div>
+  <div class="item">
+    <app-smsbulkupload></app-smsbulkupload>
+  </div>
+</div>

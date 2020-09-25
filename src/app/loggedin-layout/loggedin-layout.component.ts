@@ -1,4 +1,4 @@
-import { User } from './../api/auth/user';
+import { UserData } from './../api/auth/user';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
@@ -13,7 +13,7 @@ import { AuthService } from '../api/auth/auth.service';
 export class LoggedinLayoutComponent {
 
     opened = true;
-    user: User = JSON.parse(localStorage.getItem('user'));
+    user: UserData = JSON.parse(localStorage.getItem('user'));
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
       .pipe(

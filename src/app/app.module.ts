@@ -1,3 +1,6 @@
+import { TokenInterceptorService } from './_helpers/token-interceptor.service';
+import { EmailService } from './api/email/email.service';
+import { SmsService } from './api/sms/sms.service';
 import { MatSnackBarModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -10,9 +13,7 @@ import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AuthService } from './api/auth/auth.service';
-import { HttpClientModule } from '@angular/common/http';
-
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,16 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MatSnackBarModule,
   ],
-  providers: [AuthService],
+  providers: [
+    {
+        provide : HTTP_INTERCEPTORS,
+        useClass : TokenInterceptorService,
+        multi : true,
+    },
+    AuthService,
+    SmsService,
+    EmailService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -22,6 +22,8 @@ import { MatButtonModule, MatPaginatorModule, MatTooltipModule, MatSelectModule 
 import { SmsaddcontactComponent } from './smsaddcontact/smsaddcontact.component';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -54,6 +56,9 @@ import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component'
         MatSelectModule,
         MatFileUploadModule,
         MatCardModule,
+        MatSnackBarModule,
+        MatAutocompleteModule,
+
     ],
     exports: [CommonModule]
 })

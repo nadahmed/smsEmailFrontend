@@ -15,7 +15,9 @@ export class ControlnavComponent implements OnInit {
         {label: 'Send SMS', path: '/sendsms'},
         {label: 'Send Email', path: '/sendemail'},
         {label: 'Manage Groups', path: '/managegroups'},
-        {label: 'Transaction', path: '/transactions'},
+        // {label: 'Transaction', path: '/transactions'},
+        {label: 'Transaction', path: '/'},
+
     ];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

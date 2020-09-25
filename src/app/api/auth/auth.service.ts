@@ -1,13 +1,20 @@
 import { MatSnackBar } from '@angular/material';
 import { Injectable, NgZone } from '@angular/core';
-import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { User, UserData } from './user';
+import { UserData } from './user';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+
+interface AuthResponseObject {
+    isExecuted: boolean;
+    data: UserData;
+    message: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +22,6 @@ import { of } from 'rxjs';
 
 export class AuthService {
     userData: any; // Save logged in user data
-
     constructor(
         private http: HttpClient,
         public afs: AngularFirestore,   // Inject Firestore service
@@ -24,63 +30,40 @@ export class AuthService {
         public ngZone: NgZone, // NgZone service to remove outside scope warning
         public snackBar: MatSnackBar,
     ) {
-        /* Saving user data in localstorage when
-        logged in and setting up null when logged out */
-        // this.afAuth.authState.subscribe(user => {
-        //     if (user) {
-        //         this.userData = user;
-        //         localStorage.setItem('user', JSON.stringify(this.userData));
-        //         JSON.parse(localStorage.getItem('user'));
-        //     } else {
-        //         localStorage.setItem('user', null);
-        //         JSON.parse(localStorage.getItem('user'));
-        //     }
-        // });
+
     }
 
     // Sign in with email/password
     SignIn(email, password) {
         return this.http.post(
             'https://bigdigi.herokuapp.com/auth/login/',
-            {email, password},
-         ).subscribe(async (res: {isExecuted: boolean, data: UserData}) => {
-             console.log(res);
-             if (res.isExecuted) {
-                this.saveUserToStorage(res.data);
-                this.ngZone.run(async () => {
-                    if (res.data.isVerified) {
-                        await this.router.navigate(['dashboard']);
-                    } else {
-                        await this.router.navigate(['verify-email-address']);
-                    }
-                });
-
-
-                // this.SetUserData(res.data);
-            }
-         },
-         (err) => {
+            { email, password },
+        ).subscribe(
+            async (res: AuthResponseObject) => {
+                console.log(res);
+                if (res.isExecuted) {
+                    this.user = res.data;
+                    this.token = res.data.accessToken;
+                    this.refreshToken = res.data.refreshToken;
+                    this.ngZone.run(async () => {
+                        if (res.data.isVerified) {
+                            await this.router.navigate(['dashboard']);
+                        } else {
+                            await this.router.navigate(['verify-email-address']);
+                        }
+                    });
+                    // this.SetUserData(res.data);
+                } else {
+                    this.snackBar.open(res.message, 'dismiss', {
+                        duration: 10000,
+                    });
+                }
+            },
+            (err) => {
                 this.snackBar.open(err.message, 'dismiss', {
                     duration: 10000,
                 });
-         });
-        // return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-        //     .then((result) => {
-        //         this.ngZone.run(async () => {
-        //             if (result.user.emailVerified) {
-        //                 await this.router.navigate(['dashboard']);
-        //             } else {
-        //                 await this.router.navigate(['verify-email-address']);
-        //             }
-
-        //         });
-        //         this.SetUserData(result.user);
-        //     }).catch((error) => {
-        //         this.snackBar.open(error, 'dismiss', {
-        //             duration: 10000,
-        //         });
-        //         // window.alert(error.message);
-        //     });
+            });
     }
 
     // Sign up with email/password
@@ -92,25 +75,24 @@ export class AuthService {
                 category: 'user',
                 email,
                 cell: mobile,
-                balance: '0',
                 password,
-                        }
+            }
         ).pipe(
+            tap((val: AuthResponseObject) => {
+                if (!val.isExecuted) {
+                    this.snackBar.open(val.message, 'Dismiss', {
+                        duration: 10000,
+                    });
+                }
+            }),
             catchError(
-            (e) => {
-                return of(
-                    this.snackBar.open(e.message, 'Dismiss', {
-                    duration: 2000,
-                    })
-            );
-        }));
-        // return this.aAuth.auth.createUserWithEmailAndPassword(email, password);
-        // .catch(
-        //     err => {
-        //         this._snackBar.open(err, 'Dismiss', {
-        //             duration: 2000,
-        //         })
-        //     });
+                (e) => {
+                    return of(
+                        this.snackBar.open(e.message, 'Dismiss', {
+                            duration: 10000,
+                        })
+                    );
+                }));
     }
 
     // Send email verfificaiton when new user sign up
@@ -125,74 +107,78 @@ export class AuthService {
     ForgotPassword(passwordResetEmail) {
         return this.http.post('https://bigdigi.herokuapp.com/auth/forgetpassword', {
             email: passwordResetEmail
-        }).subscribe((res: {message: string}) => {
+        }).subscribe((res: { message: string; }) => {
             console.log(res);
             this.snackBar.open(res.message, 'dismiss');
         });
-        return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
-            .then(() => {
-                window.alert('Password reset email has been sent. Please check your inbox.');
-            }).catch((error) => {
-                this.snackBar.open(error, 'dismiss', {
-                    duration: 10000,
-                });
-            });
     }
 
-    // Returns true when user is looged in and email is verified
-    get isLoggedIn(): boolean {
-        const user = JSON.parse(localStorage.getItem('user'));
-        return (user !== null && user.emailVerified !== false) ? true : false;
+    // Returns true when user is loged in and email is verified
+    get isAuthenticated(): boolean {
+        if (!!this.user) {
+            return this.user.isVerified;
+        }
+        return false;
     }
 
-    // Sign in with Google
-    // GoogleAuth() {
-    //     return this.AuthLogin(new auth.GoogleAuthProvider());
-    // }
-
-    // Auth logic to run auth providers
-    // AuthLogin(provider) {
-    //     return this.afAuth.auth.signInWithPopup(provider)
-    //         .then((result) => {
-    //             this.ngZone.run(() => {
-    //                 this.router.navigate(['dashboard']);
-    //             });
-    //             this.SetUserData(result.user);
-    //         }).catch((error) => {
-    //             this.snackBar.open(error, 'dismiss', {
-    //                 duration: 10000,
-    //             });
-    //         });
-    // }
-
-    /* Setting up user data when sign in with username/password,
-    sign up with username/password and sign in with social auth
-    provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-    SetUserData(user: UserData) {
-
-        // const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-        // const userData: User = {
-        //     uid: user.uid,
-        //     email: user.email,
-        //     displayName: user.displayName,
-        //     photoURL: user.photoURL,
-        //     emailVerified: user.emailVerified
-        // };
-        // return userRef.set(userData, {
-        //     merge: true
-        // });
+    set token(token: string) {
+        localStorage.setItem('token', token);
     }
 
-    saveUserToStorage(user: UserData) {
+    get token(): string {
+        return localStorage.getItem('token');
+    }
+
+    set refreshToken(token: string) {
+        localStorage.setItem('refreshToken', token);
+    }
+
+    get refreshToken(): string {
+        return localStorage.getItem('refreshToken');
+    }
+
+    renewToken() {
+        return this.http.get(
+            'https://bigdigi.herokuapp.com/auth/renewtoken/' + this.user.id,
+            {
+                headers: { refreshToken: this.refreshToken }
+            }).pipe(
+                tap(
+                    (res: {
+                        isExecuted: boolean,
+                        data: {
+                            newAccessToken: string,
+                            newRefreshToken: string;
+                        },
+                        message: string;
+                    }) => {
+                        if (res.isExecuted) {
+                            this.token = res.data.newAccessToken;
+                            this.refreshToken = res.data.newRefreshToken;
+                        } else {
+
+                        }
+                    }
+                )
+            );
+    }
+
+    SetUserData(user: UserData) { }
+
+    set user(user: UserData) {
         localStorage.setItem('user', JSON.stringify(user));
+    }
+
+    get user(): UserData {
+        return JSON.parse(localStorage.getItem('user'));
     }
 
     // Sign out
     SignOut() {
-        return this.afAuth.auth.signOut().then(() => {
-            localStorage.removeItem('user');
-            this.router.navigate(['login']);
-        });
+        // return this.afAuth.auth.signOut().then(() => {
+        localStorage.removeItem('user');
+        this.router.navigate(['login']);
+        // });
     }
 
 }

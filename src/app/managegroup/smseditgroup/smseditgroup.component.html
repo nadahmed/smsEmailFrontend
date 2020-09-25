@@ -45,7 +45,7 @@
                 <button mat-icon-button [matTooltip]="element.editable?'Update':'Edit'" matTooltipPosition="left" (click)="editGroup(element)">
                     <mat-icon>{{element.editable?'done':'edit'}}</mat-icon>
                 </button>
-                <button mat-icon-button [matTooltip]="element.editable?'Cancel':'Rmove'" matTooltipPosition="right" (click)="deleteGroup(element)">
+                <button mat-icon-button [matTooltip]="element.editable?'Cancel':'Remove'" matTooltipPosition="right" (click)="deleteGroup(element)">
                     <mat-icon>{{element.editable?'close':'delete'}}</mat-icon>
                 </button>
             </td>
