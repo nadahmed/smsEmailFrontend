@@ -40,13 +40,13 @@ export class SmsService {
         }) as Observable<OfficialSMSGroupResponse>;
     }
 
-    getOfficialGroups(){
+    getOfficialGroups() {
         return this.http.get('https://bigdigi.herokuapp.com/contacts/all/cell', {
             headers: { accessToken: this.auth.token }
         });
     }
 
-    addOwnContacts(data: GroupAddBody) {
+    addOwnContact(data: GroupAddBody) {
         const body = {
             contacts: [{
                 ...data,
@@ -55,6 +55,21 @@ export class SmsService {
         };
 
         console.log(JSON.stringify(body));
+        return this.http.post('https://bigdigi.herokuapp.com/contacts/add/cell', body, {
+            headers: { accessToken: this.auth.token },
+        });
+    }
+
+    addOwnContacts(data: GroupAddBody[]) {
+        const body = {
+            contacts: []
+        };
+        data.forEach(res => {
+            body.contacts.push({
+                ...res,
+                createdBy: this.auth.user.id
+            });
+        });
         return this.http.post('https://bigdigi.herokuapp.com/contacts/add/cell', body, {
             headers: { accessToken: this.auth.token },
         });

@@ -24,6 +24,7 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
 import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatCardModule,
         MatSnackBarModule,
         MatAutocompleteModule,
+        NgxCsvParserModule,
 
     ],
     exports: [CommonModule]

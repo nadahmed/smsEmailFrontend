@@ -1,5 +1,4 @@
 import { SmsService } from 'src/app/api/sms/sms.service';
-import { AuthService } from 'src/app/api/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
@@ -18,22 +17,6 @@ export interface Group {
 })
 export class SmsaddcontactComponent implements OnInit {
 
-//     "contacts":[
-//         {
-//         	"profession":"IT GUY",
-//         	"name":"test1",
-//         	"email":"testmail1@g.com",
-//         	"createdBy":userId
-//         }
-// /
-// {
-//         	"profession":"IT GUY",
-//         	"name":"test1",
-//         	"cell":"0173333333",
-//         	"createdBy":userId
-//         }
-//    ]
-// }
 
     filteredOptions: Observable<string[]>;
     profession = new FormControl('', [Validators.required]);
@@ -83,7 +66,7 @@ export class SmsaddcontactComponent implements OnInit {
 
   onSubmit() {
       if (this.contactsFormGroup.valid) {
-        this.sms.addOwnContacts(this.contactsFormGroup.value).subscribe( (res: {isExecuted: boolean, message: string}) => {
+        this.sms.addOwnContact(this.contactsFormGroup.value).subscribe( (res: {isExecuted: boolean, message: string}) => {
             if (res.isExecuted) {
                 this.snackBar.open(`The contact ${this.name.value} is added to the group ${this.profession.value}`, 'Dismiss', {
                     duration: 5000,

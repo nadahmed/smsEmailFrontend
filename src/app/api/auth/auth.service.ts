@@ -115,8 +115,9 @@ export class AuthService {
 
     // Returns true when user is loged in and email is verified
     get isAuthenticated(): boolean {
+        const helper = new JwtHelperService();
         if (!!this.user) {
-            return this.user.isVerified;
+            return this.user.isVerified && !helper.isTokenExpired(this.refreshToken);
         }
         return false;
     }

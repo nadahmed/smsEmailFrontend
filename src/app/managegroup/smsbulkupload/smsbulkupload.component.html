@@ -1,9 +1,40 @@
 <h5 style="text-align: center;">ADD MULTIPLE CONTACT</h5>
 <mat-card style="text-align: center;">
     <p>
-        Drop file here or <br><br>
-        <button mat-raised-button color="primary">UPLOAD</button><br>
-    <small>(csv file only)</small>
+        <!-- Drop file here or <br><br> -->
+        <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="csvInputChange($event)" accept=".csv"/>
+        <button mat-raised-button color="primary" (click)="csvInput.click()"><mat-icon>list</mat-icon> Select file</button><br>
+        <small>{{!!filename? filename:'(.csv file only)'}}</small>
     </p>
-
 </mat-card>
+<br>
+
+<h6>Select columns below:</h6>
+<form style="text-align: right;" [formGroup]="columnSelectGroup" (ngSubmit)="startImport()" >
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <mat-select [formControl]="nameColumn">
+          <mat-option *ngFor="let column of columns" [value]="column">
+            {{column}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Phone Number</mat-label>
+        <mat-select [formControl]="numberColumn">
+          <mat-option *ngFor="let column of columns" [value]="column">
+            {{column}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Group</mat-label>
+        <mat-select [formControl]="groupColumn">
+          <mat-option *ngFor="let column of columns" [value]="column">
+            {{column}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <button mat-raised-button color="primary" type="submit" [disabled]="columnSelectGroup.invalid"><mat-icon>group_add</mat-icon> ADD CONTACTS</button>
+</form>
