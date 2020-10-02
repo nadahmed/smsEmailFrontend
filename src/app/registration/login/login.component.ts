@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/api/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
 
+    isBusy = false;
     formGroup = new FormGroup(
         {
             email: new FormControl('', [Validators.required, Validators.email]),
@@ -27,6 +28,21 @@ export class LoginComponent implements OnInit {
     return this.formGroup.get('email').hasError('required') ? `Please enter your email` :
         this.formGroup.get('email').hasError('email') ? 'Not a valid email' :
             '';
+  }
+
+  signIn() {
+      console.log('Clicked');
+      if (this.formGroup.valid) {
+        this.isBusy = true;
+        this.auth.SignIn(this.formGroup.get('email').value, this.formGroup.get('password').value).subscribe(
+            _ => {},
+            _ => {
+                this.isBusy = false;
+            },
+            () => {
+            }
+            );
+      }
   }
 
 }

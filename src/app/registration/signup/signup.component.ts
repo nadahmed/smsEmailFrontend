@@ -16,6 +16,8 @@ export class SignupComponent {
 
     formGroup = new FormGroup({});
 
+    isBusy = false;
+
     name = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*')]);
     email = new FormControl('', [Validators.required, Validators.email]);
     mobile = new FormControl('', [Validators.required, Validators.pattern('^(?:\\+88|01)?(?:\\d{11}|\\d{13})$')]);
@@ -69,32 +71,27 @@ export class SignupComponent {
     }
 
     createUser() {
-// console.log('Works');
+        this.isBusy = true;
         if (this.formGroup.valid) {
             this.afAuth.SignUp(
                 this.name.value,
                 this.email.value,
                 this.mobile.value,
                 this.password2.value
-                ).subscribe(res => {
-                    console.log(res);
-                })
-
-            // this.afAuth.SignUp(this.email.value, this.password2.value)
-            // .then(async (result) => {
-            //     /* Call the SendVerificaitonMail() function when new user sign
-            //     up and returns promise */
-            //     await result.user.updateProfile({displayName: this.name.value});
-            //     await this.afAuth.SendVerificationMail();
-            //     await this.afAuth.SetUserData(result.user);
-            // })
-            // .catch(err => {
-            //     this.snackBar.open(err, 'Dismiss', {
-            //         duration: 10000,
-            //     });
-            //     // alert(err);
-            // });
-
+                )
+                .subscribe(
+                    res => {
+                        console.log(res);
+                        if (!res.isExecuted) {
+                            this.isBusy = false;
+                        }
+                    },
+                    _ => {
+                        this.isBusy = false;
+                    },
+                    () => {
+                    }
+                );
         }
     }
 

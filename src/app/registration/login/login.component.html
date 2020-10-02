@@ -4,7 +4,7 @@
     [formGroup]="formGroup"
     autocomplete="off"
     (ngSubmit)="
-      auth.SignIn(formGroup.get('email').value, formGroup.get('password').value)
+      signIn()
     "
   >
     <mat-form-field class="expand" appearance="outline">
@@ -58,10 +58,11 @@
       mat-raised-button
       type="submit"
       class="expand login-button"
-      [disabled]="formGroup.invalid"
+      [disabled]="formGroup.invalid || isBusy"
     >
       LOG IN
     </button>
   </form>
+  <mat-progress-bar *ngIf="isBusy"  mode="query"></mat-progress-bar>
 </div>
 <!-- </mat-card> -->

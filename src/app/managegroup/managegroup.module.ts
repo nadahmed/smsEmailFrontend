@@ -18,7 +18,7 @@ import { CustomeremailgroupComponent } from '../availablegroups/customeremailgro
 import { OfficialsmsgroupComponent } from '../availablegroups/officialsmsgroup/officialsmsgroup.component';
 import { OfficialemailgroupComponent } from '../availablegroups/officialemailgroup/officialemailgroup.component';
 import { CustomersmsgroupComponent } from '../availablegroups/customersmsgroup/customersmsgroup.component';
-import { MatButtonModule, MatPaginatorModule, MatTooltipModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatPaginatorModule, MatTooltipModule, MatSelectModule, MatProgressBarModule, MatProgressSpinnerModule } from '@angular/material';
 import { SmsaddcontactComponent } from './smsaddcontact/smsaddcontact.component';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component';
@@ -60,6 +60,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
         MatSnackBarModule,
         MatAutocompleteModule,
         NgxCsvParserModule,
+        MatProgressSpinnerModule,
 
     ],
     exports: [CommonModule]

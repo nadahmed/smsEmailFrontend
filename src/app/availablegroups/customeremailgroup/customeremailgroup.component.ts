@@ -36,6 +36,8 @@ export class CustomeremailgroupComponent implements OnInit {
     displayedColumns: string[] = ['group', 'contacts'];
     dataSource = new MatTableDataSource();
 
+    isBusy = false;
+
     constructor(private emailService: EmailService) { }
 
     applyFilter(filterValue: string) {
@@ -43,6 +45,7 @@ export class CustomeremailgroupComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isBusy = true;
         const data: { group: string, contacts: number; }[] = [];
         this.emailService.getCustomerGroups()
             .subscribe(
@@ -56,10 +59,13 @@ export class CustomeremailgroupComponent implements OnInit {
                         });
                     });
                 },
-                err => { },
+                err => {
+                    this.isBusy = false;
+                },
                 () => {
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.paginator = this.paginator;
+                    this.isBusy = false;
                 }
             );
 

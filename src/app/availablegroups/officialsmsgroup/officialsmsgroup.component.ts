@@ -17,6 +17,8 @@ export class OfficialsmsgroupComponent implements OnInit {
     displayedColumns: string[] = ['group', 'contacts'];
     dataSource = new MatTableDataSource();
 
+    isBusy = true;
+
     constructor(private smsService: SmsService) {}
 
     applyFilter(filterValue: string) {
@@ -24,6 +26,7 @@ export class OfficialsmsgroupComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isBusy = true;
         const data: {group: string, contacts: number}[] = [];
         this.smsService.getOfficialGroups()
         .subscribe(
@@ -36,10 +39,13 @@ export class OfficialsmsgroupComponent implements OnInit {
                     });
                 });
             },
-            err => {},
+            err => {
+                this.isBusy = false;
+            },
             () => {
                 this.dataSource = new MatTableDataSource(data);
                 this.dataSource.paginator = this.paginator;
+                this.isBusy = false;
             }
             );
 

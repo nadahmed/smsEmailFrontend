@@ -35,6 +35,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class SmseditgroupComponent implements OnInit {
 
 
+    isBusy = false;
     newGroup = '';
     oldGroup = '';
     data: {group: string, contacts: number}[] = [];
@@ -50,6 +51,7 @@ export class SmseditgroupComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isBusy = true;
         this.smsService.getCustomerGroups()
         .subscribe(
             (res: OfficialSMSGroupResponse) => {
@@ -61,10 +63,13 @@ export class SmseditgroupComponent implements OnInit {
                     });
                 });
             },
-            err => {},
+            err => {
+                this.isBusy = false;
+            },
             () => {
                 this.dataSource = new MatTableDataSource(this.data);
                 this.dataSource.paginator = this.paginator;
+                this.isBusy = false;
             });
     }
 

@@ -38,32 +38,35 @@ export class AuthService {
         return this.http.post(
             'https://bigdigi.herokuapp.com/auth/login/',
             { email, password },
-        ).subscribe(
-            async (res: AuthResponseObject) => {
-                console.log(res);
-                if (res.isExecuted) {
-                    this.user = res.data;
-                    this.token = res.data.accessToken;
-                    this.refreshToken = res.data.refreshToken;
-                    this.ngZone.run(async () => {
-                        if (res.data.isVerified) {
-                            await this.router.navigate(['dashboard']);
-                        } else {
-                            await this.router.navigate(['verify-email-address']);
-                        }
-                    });
-                    // this.SetUserData(res.data);
-                } else {
-                    this.snackBar.open(res.message, 'dismiss', {
+        ).pipe(
+            tap(
+                async (res: AuthResponseObject) => {
+                    console.log(res);
+                    if (res.isExecuted) {
+                        this.user = res.data;
+                        this.token = res.data.accessToken;
+                        this.refreshToken = res.data.refreshToken;
+                        this.ngZone.run(async () => {
+                            if (res.data.isVerified) {
+                                await this.router.navigate(['dashboard']);
+                            } else {
+                                await this.router.navigate(['verify-email-address']);
+                            }
+                        });
+                        // this.SetUserData(res.data);
+                    } else {
+                        this.snackBar.open(res.message, 'dismiss', {
+                            duration: 10000,
+                        });
+                    }
+                },
+                (err) => {
+                    this.snackBar.open(err.message, 'dismiss', {
                         duration: 10000,
                     });
                 }
-            },
-            (err) => {
-                this.snackBar.open(err.message, 'dismiss', {
-                    duration: 10000,
-                });
-            });
+            )
+            );
     }
 
     // Sign up with email/password
@@ -77,22 +80,23 @@ export class AuthService {
                 cell: mobile,
                 password,
             }
-        ).pipe(
-            tap((val: AuthResponseObject) => {
+        )
+        .pipe(
+            tap(
+                (val: AuthResponseObject) => {
                 if (!val.isExecuted) {
                     this.snackBar.open(val.message, 'Dismiss', {
                         duration: 10000,
                     });
                 }
-            }),
-            catchError(
-                (e) => {
-                    return of(
-                        this.snackBar.open(e.message, 'Dismiss', {
-                            duration: 10000,
-                        })
-                    );
-                }));
+            },
+                error => {
+                    this.snackBar.open(error.message, 'Dismiss', {
+                        duration: 10000,
+                    });
+                }
+            )
+        );
     }
 
     // Send email verfificaiton when new user sign up

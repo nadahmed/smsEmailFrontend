@@ -4,7 +4,7 @@
       <span class="nav-spacer" (click) = 'sidenav.close()'></span>
       <div fxShow="true" fxHide.lt-md>
         <span style="margin-right: 50px;">Available balance: ৳ {{user.balance.toFixed(2)}}</span>
-        <button mat-raised-button color="accent" style="margin-right: 50px;">RECHARGE</button>
+        <button mat-raised-button color="accent" style="margin-right: 50px;"><mat-icon>credit_card</mat-icon> RECHARGE</button>
        
         <button mat-button [matMenuTriggerFor]= "menu" aria-label="user-icon">
           <mat-icon>person</mat-icon><span>{{ user.name }}</span>
