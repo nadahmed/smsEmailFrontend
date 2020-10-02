@@ -25,6 +25,7 @@ import { SmsbulkuploadComponent } from './smsbulkupload/smsbulkupload.component'
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { SmseditcontactComponent } from './smseditcontact/smseditcontact.component';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
         CustomeremailgroupComponent,
         SmsaddcontactComponent,
         SmsbulkuploadComponent,
+        SmseditcontactComponent,
     ],
     imports: [
         // BrowserModule,

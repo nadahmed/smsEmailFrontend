@@ -15,8 +15,7 @@ export class ControlnavComponent implements OnInit {
         {label: 'Send SMS', path: '/sendsms'},
         {label: 'Send Email', path: '/sendemail'},
         {label: 'Manage Groups', path: '/managegroups'},
-        // {label: 'Transaction', path: '/transactions'},
-        {label: 'Transaction', path: '/'},
+        {label: 'Transaction', path: '/transaction'},
 
     ];
 

@@ -37,7 +37,8 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
             {path: 'sendsms', loadChildren: () => import('../sendsms/sendsms.module').then(m => m.SendsmsModule)},
             {path: 'sendemail', loadChildren: () => import('../sendemail/sendemail.module').then(m => m.SendemailModule)},
             {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)},
-            { path: 'managegroups', loadChildren: () => import('../managegroup/managegroup.module').then(m => m.ManagegroupModule) },
+            {path: 'managegroups', loadChildren: () => import('../managegroup/managegroup.module').then(m => m.ManagegroupModule) },
+            {path: 'transaction', loadChildren: () => import('../transaction/transaction.module').then(m => m.TransactionModule) },
         ]},
 
     ]),
