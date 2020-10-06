@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { OfficialSMSGroupResponse, SmsService } from 'src/app/api/sms/sms.service';
+import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 
 @Component({
     selector: 'app-customersmsgroup',
@@ -26,7 +26,7 @@ export class CustomersmsgroupComponent implements OnInit {
         const data: { group: string, contacts: number; }[] = [];
         this.smsService.getCustomerGroups()
             .subscribe(
-                (res: OfficialSMSGroupResponse) => {
+                (res: SMSResponse) => {
                     console.log(res.data);
                     if (!res.data.length) { return; }
                     res.data.forEach(val => {

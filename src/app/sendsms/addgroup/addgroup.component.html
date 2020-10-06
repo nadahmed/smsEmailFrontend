@@ -1,29 +1,27 @@
-<form [formGroup]= "myGroup" >
-<mat-card>
-  <mat-card-content>
-    <mat-grid-list cols="16" rowHeight="80px">
-      <mat-grid-tile
-        *ngFor="let card of cards | async"
-        [colspan]="card.cols"
-        [rowspan]="card.rows"
-      >
-        
-          <div >
+<form [formGroup]="myGroup">
+  <mat-card>
+    <mat-card-content>
+      <mat-grid-list cols="16" rowHeight="80px">
+        <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+
+          <div>
             <mat-form-field class="form-container" *ngIf="card.name === 'group'">
-              
-                <mat-label>Choose Group</mat-label>
-                <mat-select
-                placeholder="Choose Group"
-                [formControl]= "groupName"
-                [(value)]="selectedGroup"
-                >
-                    <mat-option *ngFor="let customerGroup of customerGroups" [value]="customerGroup">
+
+              <mat-label>Choose Group</mat-label>
+              <mat-select placeholder="Choose Group" [formControl]="groupName" [(value)]="selectedGroup">
+                <!-- <mat-option *ngFor="let group of customerGroups" [value]="group.name">
                     {{customerGroup.groupName}}
-                    </mat-option>
-                </mat-select
-                >
-              
-                <!-- <input
+                    </mat-option> -->
+
+                <mat-optgroup *ngFor="let group of customerGroups" [label]="group.name">
+                  <mat-option *ngFor="let category of group.categories" [value]="category">
+                    {{ category.groupName | uppercase }}
+                  </mat-option>
+                </mat-optgroup>
+
+              </mat-select>
+
+              <!-- <input
                 type="text"
                 placeholder="Choose Group"
                 aria-label="Number"
@@ -39,37 +37,28 @@
               </mat-autocomplete> -->
             </mat-form-field>
             <div class="center" *ngIf="card.name === 'available'" matAutocompleteOrigin #origin="matAutocompleteOrigin">
-            <a>{{selectedGroup.available || "0"}}</a><br />
-          <a>Available</a>
-        </div>
+              <a>{{selectedGroup.available || "0"}}</a><br />
+              <a>Available</a>
+            </div>
           </div>
-        
-        
-        
-        
-        <div class="form-container" *ngIf="card.name === 'quantity'">
-          <mat-form-field>
-            <input
-            type = "number"
-            autocomplete="off"
-            [formControl]= "quantity"
-              matInput
-              placeholder="Quantity"
-            />
-            <mat-error *ngIf="myGroup.invalid && !myGroup.hasError('min', 'quantity')">
-                Enter a valid number
-            </mat-error>
-            <mat-error *ngIf="myGroup.getError('min','quantity')">
-                Minimum 50
-            </mat-error>
-          </mat-form-field>
-        </div>
 
-        <div *ngIf="card.name === 'amount'">
-          <h1><small>৳</small> {{cost}}</h1>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-</mat-card>
+          <div class="form-container" *ngIf="card.name === 'quantity'">
+            <mat-form-field>
+              <input type="number" autocomplete="off" [formControl]="quantity" matInput placeholder="Quantity" />
+              <mat-error *ngIf="myGroup.invalid && !myGroup.hasError('min', 'quantity')">
+                Enter a valid number
+              </mat-error>
+              <mat-error *ngIf="myGroup.getError('min','quantity')">
+                Minimum 1
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="card.name === 'amount'">
+            <h1><small>৳</small> {{cost}}</h1>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+  </mat-card>
 </form>

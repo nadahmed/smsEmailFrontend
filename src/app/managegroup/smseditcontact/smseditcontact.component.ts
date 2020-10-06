@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { OfficialSMSGroupResponse, SmsService } from 'src/app/api/sms/sms.service';
+import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 
 @Component({
   selector: 'app-smseditcontact',
@@ -29,7 +29,7 @@ export class SmseditcontactComponent implements OnInit {
         this.isBusy = true;
         this.smsService.getCustomerGroups()
         .subscribe(
-            (res: OfficialSMSGroupResponse) => {
+            (res: SMSResponse) => {
                 console.log(res.data);
                 res.data.forEach( val => {
                     this.data.push({

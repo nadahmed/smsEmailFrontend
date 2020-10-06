@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { SmsService } from 'src/app/api/sms/sms.service';
 
 @Component({
   selector: 'app-sms',
@@ -16,12 +17,14 @@ export class SmsComponent implements OnInit, OnDestroy {
 
     private subscription: Subscription;
 
-  constructor() {
+  constructor(
+    private smsService: SmsService
+  ) {
 
     this.message = new FormControl('',
     [
         Validators.required,
-        Validators.maxLength(255),
+        Validators.maxLength(160),
       ]);
 
     this.sms.addControl('message', this.message);
@@ -30,18 +33,18 @@ export class SmsComponent implements OnInit, OnDestroy {
     this.subscription = this.sms.valueChanges.subscribe(() => {
         this.smsChangeEvent.emit(this.sms);
       });
-// this.message.setValue('');
-//     this.message.setValue(
-// `আমার সোনার বাংলা
-// আমি তোমায় ভালবাসি
-// চিরদিন তোমার আকাশ
-// চিরদিন তোমার আকাশ
-// তোমার বাতাস আমার প্রাণে
-// ও মা
-// আমার প্রাণে বাজায় বাঁশি
-// সোনার বাংলা
-// আমি তোমায় ভালবাসি`
-// );
+this.message.setValue('');
+    this.message.setValue(
+`আমার সোনার বাংলা
+আমি তোমায় ভালবাসি
+চিরদিন তোমার আকাশ
+চিরদিন তোমার আকাশ
+তোমার বাতাস আমার প্রাণে
+ও মা
+আমার প্রাণে বাজায় বাঁশি
+সোনার বাংলা
+আমি তোমায় ভালবাসি`
+);
 
     }
 
@@ -51,6 +54,15 @@ export class SmsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
       this.subscription.unsubscribe();
+  }
+
+  sendTestSms() {
+    console.log('Sending Test SMS');
+    this.smsService.sendTestSms(this.message.value).subscribe(
+      res => {
+        console.log(res);
+      }
+    );
   }
 
 }

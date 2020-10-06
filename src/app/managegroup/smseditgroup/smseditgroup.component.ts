@@ -2,7 +2,7 @@ import { GroupAddBody } from './../../api/sms/sms.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { OfficialSMSGroupResponse, SmsService } from 'src/app/api/sms/sms.service';
+import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 
 export interface PeriodicElement {
     id: number;
@@ -54,7 +54,7 @@ export class SmseditgroupComponent implements OnInit {
         this.isBusy = true;
         this.smsService.getCustomerGroups()
         .subscribe(
-            (res: OfficialSMSGroupResponse) => {
+            (res: SMSResponse) => {
                 console.log(res.data);
                 res.data.forEach( val => {
                     this.data.push({

@@ -1,4 +1,4 @@
-import { OfficialSMSGroupResponse, OfficialSMSGroupdata } from './../../api/sms/sms.service';
+import { SMSResponse, OfficialSMSGroupdata } from './../../api/sms/sms.service';
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
@@ -30,7 +30,7 @@ export class OfficialsmsgroupComponent implements OnInit {
         const data: {group: string, contacts: number}[] = [];
         this.smsService.getOfficialGroups()
         .subscribe(
-            (res: OfficialSMSGroupResponse) => {
+            (res: SMSResponse) => {
                 console.log(res.data);
                 res.data.forEach( val => {
                     data.push({

@@ -26,7 +26,7 @@ export class EmailService {
       ) { }
 
   getOfficialGroups() {
-      return this.http.get('https://bigdigi.herokuapp.com/contacts/all/email', {
+      return this.http.get('https://bigdigi.herokuapp.com/contacts/official/email', {
           headers: { accessToken : this.auth.token }
       });
   }

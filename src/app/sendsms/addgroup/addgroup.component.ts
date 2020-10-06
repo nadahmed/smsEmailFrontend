@@ -3,11 +3,15 @@ import { Component, Input, EventEmitter, Output, OnDestroy, OnInit } from '@angu
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { SmsService } from 'src/app/api/sms/sms.service';
 
 export interface CustomerGroup {
-    groupName: string;
-    available: number;
-}
+    name: string;
+    categories: {
+        groupName: string;
+        available: number;
+    }[];
+};
 
 /**
  * @title Basic select
@@ -27,7 +31,10 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
     myGroup: FormGroup;
 
-    selectedGroup: CustomerGroup = {groupName: '', available: null};
+    selectedGroup = {
+        available: null,
+        groupName: '',  
+    };
 
     groupName = new FormControl('', [Validators.required]);
     quantity = new FormControl(
@@ -36,16 +43,17 @@ export class AddgroupComponent implements OnDestroy, OnInit {
             disabled: true,
         },
         [
-            Validators.min(50),
+            Validators.min(1),
             Validators.pattern('^[0-9]*$'),
             Validators.required,
         ]);
 
-    customerGroups: CustomerGroup[] = [
-        {groupName: 'Engineers', available: 12000},
-        {groupName: 'Doctors', available: 11234},
-        {groupName: 'Students', available: 1223}
-      ];
+        customerGroups: CustomerGroup[] = [];
+    // customerGroups: CustomerGroup[] = [
+        // {groupName: 'Engineers', available: 12000},
+        // {groupName: 'Doctors', available: 11234},
+        // {groupName: 'Students', available: 1223}
+    //   ];
 
 
       cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -71,7 +79,10 @@ export class AddgroupComponent implements OnDestroy, OnInit {
     myGroupSubscription: Subscription;
     cost = '0.00';
 
-    constructor(private breakpointObserver: BreakpointObserver) {
+    constructor(
+        private breakpointObserver: BreakpointObserver,
+        private sms: SmsService,
+        ) {
         this.myGroup = new FormGroup({
             groupName: this.groupName,
             quantity: this.quantity,
@@ -88,9 +99,14 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 } else {
                     // this.myGroup.disable();
                 }
+                console.log(this.selectedGroup);
                 if (value.quantity > this.selectedGroup.available) {
                     this.myGroup.patchValue({quantity: this.selectedGroup.available});
                 }
+                
+                // if (value.quantity > this.selectedGroup[0].categories[0].available) {
+                //     this.myGroup.patchValue({quantity: this.selectedGroup[0].categories[0].groupName});
+                // }
 
                 if ( this.myGroup.valid) {
                     this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
@@ -104,6 +120,44 @@ export class AddgroupComponent implements OnDestroy, OnInit {
      }
 
      ngOnInit() {
+         this.customerGroups = [
+             {
+                 name: 'Official',
+                 categories: []
+            },
+            {
+                name: 'Own',
+                categories: []
+           }
+         ]
+        this.sms.getSmsCategory().subscribe( res => {
+            if(res.isExecuted) {
+                res.data.official.forEach(val => {
+                    this.customerGroups.forEach(group => {
+                        if (group.name === 'Official'){
+                            group.categories.push(
+                                {
+                                    groupName: val.category,
+                                    available: val.count
+                                }
+                            );
+                        }
+                    });
+                });
+                res.data.own.forEach(val => {
+                    this.customerGroups.forEach(group => {
+                        if (group.name === 'Own'){
+                            group.categories.push(
+                                {
+                                    groupName: val.category,
+                                    available: val.count
+                                }
+                            );
+                        }
+                    });
+                });
+            }
+        })
         this.init.emit({group: this.myGroup, cost: this.cost});
      }
 

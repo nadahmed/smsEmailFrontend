@@ -10,11 +10,37 @@ export interface OfficialSMSGroupdata {
         profession: string;
         name: string;
     }[];
-}
-export interface OfficialSMSGroupResponse {
+};
+
+export interface SMSResponse {
     isExecuted: boolean;
     data: OfficialSMSGroupdata[];
     message: string;
+}
+
+export interface TestSMSResponse {
+    isExecuted: boolean;
+    data: Object;
+    message: string;
+}
+
+export interface SMSCategoryResponse {
+    isExecuted: boolean;
+    data: SMSCategoryData;
+    message: string;
+}
+
+export interface SMSCategoryData {
+        official:{
+            _id: string;
+            category: string;
+            count: number
+        }[];
+        own:{
+            _id: string,
+            category: string,
+            count: number
+        }[];
 }
 
 export interface GroupAddBody {
@@ -34,14 +60,14 @@ export class SmsService {
         private auth: AuthService,
     ) { }
 
-    getCustomerGroups(): Observable<OfficialSMSGroupResponse> {
+    getCustomerGroups(): Observable<SMSResponse> {
         return this.http.get('https://bigdigi.herokuapp.com/contacts/own/cell', {
             headers: { accessToken: this.auth.token }
-        }) as Observable<OfficialSMSGroupResponse>;
+        }) as Observable<SMSResponse>;
     }
 
     getOfficialGroups() {
-        return this.http.get('https://bigdigi.herokuapp.com/contacts/all/cell', {
+        return this.http.get('https://bigdigi.herokuapp.com/contacts/official/cell', {
             headers: { accessToken: this.auth.token }
         });
     }
@@ -74,4 +100,20 @@ export class SmsService {
             headers: { accessToken: this.auth.token },
         });
     }
+
+    getSmsCategory() : Observable<SMSCategoryResponse> {
+        return this.http.get('https://bigdigi.herokuapp.com/sms/getSMScategory/', {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<SMSCategoryResponse>;
+    }
+
+    sendTestSms(message: string) : Observable<TestSMSResponse> {
+        return this.http.post(
+            'http://192.168.0.103:5000/sms/sendmesms/',
+            { message }, 
+            {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<SMSCategoryResponse>;
+    }
+
 }
