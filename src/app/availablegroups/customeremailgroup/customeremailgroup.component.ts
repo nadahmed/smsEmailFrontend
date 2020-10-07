@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { EmailService, OfficialEmailGroupResponse } from 'src/app/api/email/email.service';
+import { EmailService, EmailResponse } from 'src/app/api/email/email.service';
 
 export interface PeriodicElement {
     group: string;
@@ -49,7 +49,7 @@ export class CustomeremailgroupComponent implements OnInit {
         const data: { group: string, contacts: number; }[] = [];
         this.emailService.getCustomerGroups()
             .subscribe(
-                (res: OfficialEmailGroupResponse) => {
+                (res: EmailResponse) => {
                     console.log(res.data);
                     if (!res.data.length) {return; }
                     res.data.forEach(val => {

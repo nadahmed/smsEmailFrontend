@@ -11,7 +11,13 @@ export interface OfficialEmailGroupdata {
         name: string
     }[];
 }
-export interface OfficialEmailGroupResponse {
+// export interface OfficialEmailGroupResponse {
+//     isExecuted: boolean;
+//     data: OfficialEmailGroupdata[];
+//     message: string;
+// }
+
+export interface EmailResponse {
     isExecuted: boolean;
     data: OfficialEmailGroupdata[];
     message: string;
@@ -36,6 +42,13 @@ export interface EmailCategoryData {
         }[];
 }
 
+export interface GroupAddBody {
+    profession: string;
+    name: string;
+    email: string;
+    // createdBy:userId
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -52,16 +65,45 @@ export class EmailService {
       });
   }
 
-    getCustomerGroups() {
-        return this.http.get( environment.baseApiURI + 'contacts/own/email', {
-            headers: { accessToken: this.auth.token }
-        });
-    }
+  getCustomerGroups(): Observable<EmailResponse> {
+    return this.http.get( environment.baseApiURI + 'contacts/own/email', {
+        headers: { accessToken: this.auth.token }
+    }) as Observable<EmailResponse>;
+}
 
     getEmailCategory() : Observable<EmailCategoryResponse> {
         return this.http.get( environment.baseApiURI + 'email/getemailcategory/', {
             headers: { accessToken: this.auth.token }
         }) as Observable<EmailCategoryResponse>;
+    }
+
+    addOwnContact(data: GroupAddBody) {
+        const body = {
+            contacts: [{
+                ...data,
+                createdBy: this.auth.user.id
+            }]
+        };
+
+        console.log(JSON.stringify(body));
+        return this.http.post( environment.baseApiURI + 'contacts/add/email', body, {
+            headers: { accessToken: this.auth.token },
+        });
+    }
+
+    addOwnContacts(data: GroupAddBody[]) {
+        const body = {
+            contacts: []
+        };
+        data.forEach(res => {
+            body.contacts.push({
+                ...res,
+                createdBy: this.auth.user.id
+            });
+        });
+        return this.http.post( environment.baseApiURI + 'contacts/add/email', body, {
+            headers: { accessToken: this.auth.token },
+        });
     }
 
 }

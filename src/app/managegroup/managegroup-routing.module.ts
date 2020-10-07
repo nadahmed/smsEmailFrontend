@@ -6,6 +6,7 @@ import { ManagegroupComponent } from './managegroup.component';
 import { SmseditcontactComponent } from './sms/smseditcontact/smseditcontact.component';
 import { SmsaddcontactComponent } from './sms/smsaddcontact/smsaddcontact.component';
 import { SmseditgroupComponent } from './sms/smseditgroup/smseditgroup.component';
+import { EmailaddcontactComponent } from './email/emailaddcontact/emailaddcontact.component';
 
 const routes: Routes = [
     {
@@ -15,6 +16,7 @@ const routes: Routes = [
             { path: 'sms/editgroup', component: SmseditgroupComponent },
             { path: 'sms/contactlist', component: SmseditcontactComponent },
             { path: 'sms/import', component: SmsaddcontactComponent },
+            { path: 'email/import', component: EmailaddcontactComponent },
         ],
     },
 ];
