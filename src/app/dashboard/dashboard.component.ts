@@ -1,16 +1,19 @@
 import { AuthService } from 'src/app/api/auth/auth.service';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy{
     /** Based on the screen size, switch from standard to one column per row */
 
+    balance = 0.0;
+    balanceSub: Subscription;
     transactions = [
         {sms: 2200, cost: 1202.34, date: '30 Dec 2019'},
         {sms: 2210, cost: 1101.53, date: '10 Nov 2019'},
@@ -23,7 +26,7 @@ export class DashboardComponent {
         map(({ matches }) => {
             if (matches) {
                 return [
-                    { title: 'AVAILABLE BALANCE', content: this.auth.user.balance.toFixed(2), cols: 4, rows: 1 },
+                    { title: 'AVAILABLE BALANCE', content: this.balance.toFixed(2), cols: 4, rows: 1 },
                     { title: 'SMS LAST MONTH', content: '1020', cols: 4, rows: 1 },
                     { title: 'EMAILS LAST MONTH', content: '2200', cols: 4, rows: 1 },
                     { title: 'COST LAST MONTH', content: '5521.0', cols: 4, rows: 1 },
@@ -34,7 +37,7 @@ export class DashboardComponent {
             }
 
             return [
-                { title: 'AVAILABLE BALANCE', content: this.auth.user.balance.toFixed(2), cols: 1, rows: 1 },
+                { title: 'AVAILABLE BALANCE', content: this.balance.toFixed(2), cols: 1, rows: 1 },
                 { title: 'SMS LAST MONTH', content: '1020', cols: 1, rows: 1 },
                 { title: 'EMAILS LAST MONTH', content: '2200', cols: 1, rows: 1 },
                 { title: 'COST LAST MONTH', content: '5521.0', cols: 1, rows: 1 },
@@ -46,4 +49,15 @@ export class DashboardComponent {
     );
 
     constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) { }
-}
+
+    ngOnInit() {
+      this.balanceSub = this.auth.balance.subscribe(res => {
+        this.balance = res;
+      })
+    }
+
+    ngOnDestroy() {
+      this.balanceSub.unsubscribe();
+    }
+
+  }

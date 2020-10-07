@@ -10,6 +10,7 @@ export interface OfficialSMSGroupdata {
         contactsId: string;
         profession: string;
         name: string;
+        cell: string;
     }[];
 };
 
@@ -49,6 +50,16 @@ export interface GroupAddBody {
     name: string;
     cell: string;
     // createdBy:userId
+}
+
+export interface BulkSMSRequestBody {
+  groups: {
+    type: string;
+    category: string;
+    qty: number;
+  }[];
+  message: string;
+  bill: string;
 }
 
 @Injectable({
@@ -111,10 +122,20 @@ export class SmsService {
     sendTestSms(message: string) : Observable<TestSMSResponse> {
         return this.http.post(
             environment.baseApiURI + 'sms/sendmesms/',
-            { message }, 
+            { message },
             {
             headers: { accessToken: this.auth.token }
         }) as Observable<SMSCategoryResponse>;
+    }
+
+    sendBulkSMS(data: BulkSMSRequestBody){
+      return this.http.post(
+        environment.baseApiURI + 'sms/send/',
+        { ...data },
+        {
+          headers: { accessToken: this.auth.token }
+        }
+      ) as Observable<SMSResponse>
     }
 
 }

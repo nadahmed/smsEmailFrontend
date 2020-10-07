@@ -1,6 +1,6 @@
 import { UserData } from './../api/auth/user';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../api/auth/auth.service';
@@ -10,7 +10,10 @@ import { AuthService } from '../api/auth/auth.service';
   templateUrl: './loggedin-layout.component.html',
   styleUrls: ['./loggedin-layout.component.scss']
 })
-export class LoggedinLayoutComponent {
+export class LoggedinLayoutComponent implements OnInit, OnDestroy {
+
+  balance =  0.0;
+  balanceSub: Subscription;
 
     opened = true;
     user: UserData = JSON.parse(localStorage.getItem('user'));
@@ -25,4 +28,15 @@ export class LoggedinLayoutComponent {
         private breakpointObserver: BreakpointObserver,
         public auth: AuthService,
         ) {}
-}
+
+        ngOnInit() {
+          this.balanceSub = this.auth.balance.subscribe(res => {
+            this.balance = res;
+          });
+        }
+
+        ngOnDestroy() {
+          this.balanceSub.unsubscribe();
+        }
+
+      }

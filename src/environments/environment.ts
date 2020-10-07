@@ -4,8 +4,10 @@
 
 export const environment = {
     production: false,
-    baseApiURI: 'http://192.168.0.103:5000/'
-};
+    // baseApiURI: 'http://192.168.0.103:5000/'
+    baseApiURI: 'https://bigdigi.herokuapp.com/'
+
+  };
 
 /*
  * For easier debugging in development mode, you can import the following file

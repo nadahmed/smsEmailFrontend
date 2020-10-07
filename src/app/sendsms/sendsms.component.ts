@@ -3,6 +3,7 @@ import { FormBuilder, FormArray, FormControl, FormGroup, AbstractControl } from 
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import { BulkSMSRequestBody, SmsService } from '../api/sms/sms.service';
 
 
 export interface InputData  {
@@ -57,7 +58,10 @@ export class SendsmsComponent implements OnInit {
         })
     );
 
-    constructor(private breakpointObserver: BreakpointObserver) {
+    constructor(
+      private breakpointObserver: BreakpointObserver,
+      private sms: SmsService,
+      ) {
         this.formArray = new FormArray([]);
         this.smsForm = new FormGroup({});
         this.formIndex = [];
@@ -96,7 +100,7 @@ export class SendsmsComponent implements OnInit {
         if (this.formIndex.length <= 0 ) {
             this.addForm();
         }
-        
+
     }
 
     myEvents(i, value) {
@@ -140,7 +144,7 @@ export class SendsmsComponent implements OnInit {
             this.formArray.push(value.group);
             this.data.push(value.cost);
             this.updateTotals(i, {cost: '0.00'});
-            
+
             // this.formArray.setControl(i, value.group);
             // this.formArray.insert(value.index, value.group);
     }
@@ -156,5 +160,26 @@ export class SendsmsComponent implements OnInit {
             totalCost: this.totalCost,
             message: this.smsForm,
         };
+    }
+
+    sendToAll(){
+      const data: BulkSMSRequestBody = {
+        groups:[],
+        ...this.smsForm.value,
+        bill: this.totalCost
+      }
+
+      for(let formgroup of this.formArray.controls){
+
+        data.groups.push({
+          type: formgroup.value.groupName.type.toLowerCase(),
+          category:formgroup.value.groupName.groupName,
+          qty: formgroup.value.quantity,
+        });
+      }
+      console.log(data);
+      this.sms.sendBulkSMS(data).subscribe(res => {
+        console.log(res);
+      })
     }
 }

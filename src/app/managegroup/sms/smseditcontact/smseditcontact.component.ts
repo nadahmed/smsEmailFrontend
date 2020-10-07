@@ -13,10 +13,10 @@ export class SmseditcontactComponent implements OnInit {
     isBusy = false;
     newGroup = '';
     oldGroup = '';
-    data: {group: string, contacts: number}[] = [];
+    data: {profession: string, cell: string, name: string}[] = [];
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    displayedColumns: string[] = ['group', 'contacts', 'actions'];
+    displayedColumns: string[] = ['name', 'cell', 'profession', 'actions'];
     dataSource = new MatTableDataSource();
 
     constructor(private smsService: SmsService) {}
@@ -32,10 +32,14 @@ export class SmseditcontactComponent implements OnInit {
             (res: SMSResponse) => {
                 console.log(res.data);
                 res.data.forEach( val => {
-                    this.data.push({
-                        group: val.professionGroup,
-                        contacts: val.contacts.length,
-                    });
+                    val.contacts.forEach(contact => {
+                        this.data.push({
+                            name: contact.name,
+                            cell: contact.cell,
+                            profession: contact.profession,
+                        });
+                    })
+
                 });
             },
             err => {

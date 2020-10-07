@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
+import { BehaviorSubject } from 'rxjs';
 
 
 interface AuthResponseObject {
@@ -29,6 +30,8 @@ export class AuthService {
 
     }
 
+    balance = new BehaviorSubject<number>(0.0);
+
     // Sign in with email/password
     SignIn(email, password) {
         return this.http.post(
@@ -40,6 +43,7 @@ export class AuthService {
                     console.log(res);
                     if (res.isExecuted) {
                         this.user = res.data;
+                        this.balance.next(res.data.balance);
                         this.token = res.data.accessToken;
                         this.refreshToken = res.data.refreshToken;
                         this.ngZone.run(async () => {

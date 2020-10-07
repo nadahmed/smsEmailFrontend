@@ -63,7 +63,7 @@
     <mat-step [stepControl]="smsForm" errorMessage="Invalid">
       <!-- <form formGroupName="secondFormGroup"> -->
         <ng-template matStepLabel>SMS</ng-template>
-        
+
         <div class="add-group-container">
             <app-sms (smsChangeEvent) = "messageEvents($event)"></app-sms>
         </div>
@@ -80,7 +80,7 @@
         <app-done [details] ="details"></app-done>
         <div  class="stepperButtons">
           <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
-          <button mat-raised-button color="primary">Send to All</button>
+          <button mat-raised-button color="primary" (click)="sendToAll()">Send to All</button>
         </div>
       </div>
     </mat-step>

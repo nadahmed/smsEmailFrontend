@@ -31,10 +31,16 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
     myGroup: FormGroup;
 
+    // selectedGroup = {
+    //     available: null,
+    //     groupName: '',
+    // };
+
     selectedGroup = {
-        available: null,
-        groupName: '',  
-    };
+          available: null,
+          groupName: '',
+          type: ''
+      };
 
     groupName = new FormControl('', [Validators.required]);
     quantity = new FormControl(
@@ -93,7 +99,6 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
         this.myGroupSubscription = this.myGroup.valueChanges.subscribe(
             (value) => {
-                // console.log(value);
                 if (!!value.groupName) {
                     this.quantity.enable({onlySelf: false, emitEvent: false});
                 } else {
@@ -102,7 +107,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 if (value.quantity > this.selectedGroup.available) {
                     this.myGroup.patchValue({quantity: this.selectedGroup.available});
                 }
-                
+
                 // if (value.quantity > this.selectedGroup[0].categories[0].available) {
                 //     this.myGroup.patchValue({quantity: this.selectedGroup[0].categories[0].groupName});
                 // }

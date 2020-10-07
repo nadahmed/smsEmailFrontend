@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start-prod": "ng serve --prod",
+    "start-prod": "ng serve -c production",
     "start": "ng serve",
     "build": "ng build --prod --env=prod",
     "test": "ng test",

@@ -14,7 +14,8 @@
                     </mat-option> -->
 
                 <mat-optgroup *ngFor="let group of customerGroups" [label]="group.name">
-                  <mat-option *ngFor="let category of group.categories" [value]="category">
+                  <mat-option *ngFor="let category of group.categories"
+                  [value]="{available:category.available, groupName: category.groupName, type: group.name}">
                     {{ category.groupName | uppercase }}
                   </mat-option>
                 </mat-optgroup>
