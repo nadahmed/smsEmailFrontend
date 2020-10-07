@@ -1,13 +1,11 @@
 import { MatSnackBar } from '@angular/material';
 import { Injectable, NgZone } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { UserData } from './user';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
 
 
 interface AuthResponseObject {
@@ -24,8 +22,6 @@ export class AuthService {
     userData: any; // Save logged in user data
     constructor(
         private http: HttpClient,
-        public afs: AngularFirestore,   // Inject Firestore service
-        public afAuth: AngularFireAuth, // Inject Firebase auth service
         public router: Router,
         public ngZone: NgZone, // NgZone service to remove outside scope warning
         public snackBar: MatSnackBar,
@@ -36,7 +32,7 @@ export class AuthService {
     // Sign in with email/password
     SignIn(email, password) {
         return this.http.post(
-            'https://bigdigi.herokuapp.com/auth/login/',
+             environment.baseApiURI +'auth/login/',
             { email, password },
         ).pipe(
             tap(
@@ -72,7 +68,7 @@ export class AuthService {
     // Sign up with email/password
     SignUp(name, email, mobile, password) {
         return this.http.post(
-            'https://bigdigi.herokuapp.com/auth/signup/',
+            environment.baseApiURI + 'auth/signup/',
             {
                 name,
                 category: 'user',
@@ -101,15 +97,15 @@ export class AuthService {
 
     // Send email verfificaiton when new user sign up
     SendVerificationMail() {
-        return this.afAuth.auth.currentUser.sendEmailVerification()
-            .then(() => {
-                this.router.navigate(['verify-email-address']);
-            });
+        // return this.afAuth.auth.currentUser.sendEmailVerification()
+        //     .then(() => {
+        //         this.router.navigate(['verify-email-address']);
+        //     });
     }
 
     // Reset Forggot password
     ForgotPassword(passwordResetEmail) {
-        return this.http.post('https://bigdigi.herokuapp.com/auth/forgetpassword', {
+        return this.http.post( environment.baseApiURI + 'auth/forgetpassword', {
             email: passwordResetEmail
         }).subscribe((res: { message: string; }) => {
             console.log(res);
@@ -144,7 +140,7 @@ export class AuthService {
 
     renewToken() {
         return this.http.get(
-            'https://bigdigi.herokuapp.com/auth/renewtoken/' + this.user.id,
+            environment.baseApiURI + 'auth/renewtoken/' + this.user.id,
             {
                 headers: { refreshToken: this.refreshToken }
             }).pipe(

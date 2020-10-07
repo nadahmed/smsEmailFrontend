@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 export interface OfficialSMSGroupdata {
     professionGroup: string;
@@ -61,13 +62,13 @@ export class SmsService {
     ) { }
 
     getCustomerGroups(): Observable<SMSResponse> {
-        return this.http.get('https://bigdigi.herokuapp.com/contacts/own/cell', {
+        return this.http.get( environment.baseApiURI + 'contacts/own/cell', {
             headers: { accessToken: this.auth.token }
         }) as Observable<SMSResponse>;
     }
 
     getOfficialGroups() {
-        return this.http.get('https://bigdigi.herokuapp.com/contacts/official/cell', {
+        return this.http.get(environment.baseApiURI + 'contacts/official/cell', {
             headers: { accessToken: this.auth.token }
         });
     }
@@ -81,7 +82,7 @@ export class SmsService {
         };
 
         console.log(JSON.stringify(body));
-        return this.http.post('https://bigdigi.herokuapp.com/contacts/add/cell', body, {
+        return this.http.post( environment.baseApiURI + 'contacts/add/cell', body, {
             headers: { accessToken: this.auth.token },
         });
     }
@@ -96,20 +97,20 @@ export class SmsService {
                 createdBy: this.auth.user.id
             });
         });
-        return this.http.post('https://bigdigi.herokuapp.com/contacts/add/cell', body, {
+        return this.http.post( environment.baseApiURI + 'contacts/add/cell', body, {
             headers: { accessToken: this.auth.token },
         });
     }
 
     getSmsCategory() : Observable<SMSCategoryResponse> {
-        return this.http.get('https://bigdigi.herokuapp.com/sms/getSMScategory/', {
+        return this.http.get( environment.baseApiURI + 'sms/getsmscategory/', {
             headers: { accessToken: this.auth.token }
         }) as Observable<SMSCategoryResponse>;
     }
 
     sendTestSms(message: string) : Observable<TestSMSResponse> {
         return this.http.post(
-            'http://192.168.0.103:5000/sms/sendmesms/',
+            environment.baseApiURI + 'sms/sendmesms/',
             { message }, 
             {
             headers: { accessToken: this.auth.token }

@@ -17,9 +17,11 @@
                 [formControl]= "groupName"
                 [(value)]="selectedGroup"
                 >
-                    <mat-option *ngFor="let customerGroup of customerGroups" [value]="customerGroup">
-                    {{customerGroup.groupName}}
-                    </mat-option>
+                <mat-optgroup *ngFor="let group of customerGroups" [label]="group.name">
+                  <mat-option *ngFor="let category of group.categories" [value]="category">
+                    {{ category.groupName | uppercase }}
+                  </mat-option>
+                </mat-optgroup>
                 </mat-select
                 >
               

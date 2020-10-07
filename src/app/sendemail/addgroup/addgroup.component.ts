@@ -3,19 +3,23 @@ import { Component, Input, EventEmitter, Output, OnDestroy, OnInit } from '@angu
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { EmailService } from 'src/app/api/email/email.service';
 
 export interface CustomerGroup {
-    groupName: string;
-    available: number;
-}
+    name: string;
+    categories: {
+        groupName: string;
+        available: number;
+    }[];
+};
 
 /**
  * @title Basic select
  */
 @Component({
-  selector: 'app-addgroup',
-  templateUrl: './addgroup.component.html',
-  styleUrls: ['./addgroup.component.scss']
+    selector: 'app-addgroup',
+    templateUrl: './addgroup.component.html',
+    styleUrls: ['./addgroup.component.scss']
 })
 export class AddgroupComponent implements OnDestroy, OnInit {
 
@@ -27,7 +31,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
     myGroup: FormGroup;
 
-    selectedGroup: CustomerGroup = {groupName: '', available: null};
+    selectedGroup = { groupName: '', available: null };
 
     groupName = new FormControl('', [Validators.required]);
     quantity = new FormControl(
@@ -41,14 +45,10 @@ export class AddgroupComponent implements OnDestroy, OnInit {
             Validators.required,
         ]);
 
-    customerGroups: CustomerGroup[] = [
-        {groupName: 'Engineers', available: 12000},
-        {groupName: 'Doctors', available: 11234},
-        {groupName: 'Students', available: 1223}
-      ];
+    customerGroups: CustomerGroup[] = [];
 
 
-      cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
         map(({ matches }) => {
             if (matches) {
                 return [
@@ -71,7 +71,10 @@ export class AddgroupComponent implements OnDestroy, OnInit {
     myGroupSubscription: Subscription;
     cost = '0.00';
 
-    constructor(private breakpointObserver: BreakpointObserver) {
+    constructor(
+        private breakpointObserver: BreakpointObserver,
+        private email: EmailService,
+    ) {
         this.myGroup = new FormGroup({
             groupName: this.groupName,
             quantity: this.quantity,
@@ -84,33 +87,72 @@ export class AddgroupComponent implements OnDestroy, OnInit {
             (value) => {
                 // console.log(value);
                 if (!!value.groupName) {
-                    this.quantity.enable({onlySelf: false, emitEvent: false});
+                    this.quantity.enable({ onlySelf: false, emitEvent: false });
                 } else {
                     // this.myGroup.disable();
                 }
                 if (value.quantity > this.selectedGroup.available) {
-                    this.myGroup.patchValue({quantity: this.selectedGroup.available});
+                    this.myGroup.patchValue({ quantity: this.selectedGroup.available });
                 }
 
-                if ( this.myGroup.valid) {
+                if (this.myGroup.valid) {
                     this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
                 } else {
                     this.cost = (0).toFixed(2);
                 }
 
-                this.formEvents.emit({group: this.myGroup, cost: this.cost});
+                this.formEvents.emit({ group: this.myGroup, cost: this.cost });
                 // console.log(this.selectedGroup);
             });
-     }
+    }
 
-     ngOnInit() {
-        this.init.emit({group: this.myGroup, cost: this.cost});
-     }
+    ngOnInit() {
+        this.customerGroups = [
+            {
+                name: 'Official',
+                categories: []
+            },
+            {
+                name: 'Own',
+                categories: []
+            }
+        ]
+        this.email.getEmailCategory().subscribe(res => {
+            if (res.isExecuted) {
+                res.data.official.forEach(val => {
+                    this.customerGroups.forEach(group => {
+                        if (group.name === 'Official') {
+                            group.categories.push(
+                                {
+                                    groupName: val.category,
+                                    available: val.count
+                                }
+                            );
+                        }
+                    });
+                });
+                res.data.own.forEach(val => {
+                    this.customerGroups.forEach(group => {
+                        if (group.name === 'Own') {
+                            group.categories.push(
+                                {
+                                    groupName: val.category,
+                                    available: val.count
+                                }
+                            );
+                        }
+                    });
+                });
+            }
+        });
 
-     ngOnDestroy() {
-        this.del.emit({group: this.myGroup, cost: this.cost});
+        this.init.emit({ group: this.myGroup, cost: this.cost });
+    }
+
+    ngOnDestroy() {
+        this.del.emit({ group: this.myGroup, cost: this.cost });
 
         this.myGroupSubscription.unsubscribe();
         delete this.formEvents;
-     }
+    }
 }

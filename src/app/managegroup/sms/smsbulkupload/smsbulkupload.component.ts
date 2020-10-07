@@ -1,7 +1,7 @@
-import { GroupAddBody, SmsService } from './../../api/sms/sms.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
+import { GroupAddBody, SmsService } from 'src/app/api/sms/sms.service';
 
 @Component({
   selector: 'app-smsbulkupload',

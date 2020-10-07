@@ -99,7 +99,6 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 } else {
                     // this.myGroup.disable();
                 }
-                console.log(this.selectedGroup);
                 if (value.quantity > this.selectedGroup.available) {
                     this.myGroup.patchValue({quantity: this.selectedGroup.available});
                 }
@@ -157,7 +156,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                     });
                 });
             }
-        })
+        });
         this.init.emit({group: this.myGroup, cost: this.cost});
      }
 

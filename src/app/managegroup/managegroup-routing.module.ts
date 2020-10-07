@@ -1,11 +1,11 @@
-import { SmseditcontactComponent } from './smseditcontact/smseditcontact.component';
-import { SmsaddcontactComponent } from './smsaddcontact/smsaddcontact.component';
-import { SmseditgroupComponent } from './smseditgroup/smseditgroup.component';
 import { AvailablegroupsComponent } from './../availablegroups/availablegroups.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { ManagegroupComponent } from './managegroup.component';
+
+import { SmseditcontactComponent } from './sms/smseditcontact/smseditcontact.component';
+import { SmsaddcontactComponent } from './sms/smsaddcontact/smsaddcontact.component';
+import { SmseditgroupComponent } from './sms/smseditgroup/smseditgroup.component';
 
 const routes: Routes = [
     {

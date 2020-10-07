@@ -1,4 +1,4 @@
-import { GroupAddBody } from './../../api/sms/sms.service';
+import { GroupAddBody } from 'src/app/api/sms/sms.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
