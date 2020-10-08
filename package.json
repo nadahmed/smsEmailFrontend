@@ -5,10 +5,11 @@
     "ng": "ng",
     "start-prod": "ng serve -c production",
     "start": "ng serve",
-    "build": "ng build --prod --env=prod",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "firebase deploy"
   },
   "resolutions": {
     "@babel/preset-env": "7.5.5"

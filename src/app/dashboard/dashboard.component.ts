@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy{
     constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) { }
 
     ngOnInit() {
-      this.balanceSub = this.auth.balance.subscribe(res => {
+      this.balanceSub = this.auth.balanceSub.subscribe(res => {
         this.balance = res;
       })
     }

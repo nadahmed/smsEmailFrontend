@@ -26,11 +26,9 @@ export class AuthService {
         public router: Router,
         public ngZone: NgZone, // NgZone service to remove outside scope warning
         public snackBar: MatSnackBar,
-    ) {
+    ) { }
 
-    }
-
-    balance = new BehaviorSubject<number>(0.0);
+    balanceSub = new BehaviorSubject<number>(this.balance);
 
     // Sign in with email/password
     SignIn(email, password) {
@@ -43,7 +41,7 @@ export class AuthService {
                     console.log(res);
                     if (res.isExecuted) {
                         this.user = res.data;
-                        this.balance.next(res.data.balance);
+                        this.balance = res.data.balance;
                         this.token = res.data.accessToken;
                         this.refreshToken = res.data.refreshToken;
                         this.ngZone.run(async () => {
@@ -140,6 +138,15 @@ export class AuthService {
 
     get refreshToken(): string {
         return localStorage.getItem('refreshToken');
+    }
+
+    set balance(bal: number){
+      this.balanceSub.next(bal);
+      localStorage.setItem('balance', bal.toString());
+    }
+
+    get balance(): number {
+      return parseFloat(localStorage.getItem('balance'));
     }
 
     renewToken() {

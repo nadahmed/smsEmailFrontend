@@ -22,20 +22,28 @@ export interface InputData  {
 export class SendsmsComponent implements OnInit {
 
 
-    data: InputData[];
+    data: InputData[] = [];
 
-    formIndex: FormGroup[];
+    formIndex: FormGroup[] = [];
 
 
-    details: object;
+    formArray = new FormArray([]);
 
-    formArray: FormArray;
+    smsForm= new FormGroup({});
 
-    smsForm: FormGroup;
+    totalCost: string = '';
 
-    myIndex: number;
+    details = {
+      group: this.formArray,
+      message: this.smsForm,
+      cost: this.data,
+      totalCost: this.totalCost,
+  };
 
-    totalCost: string;
+
+    myIndex: number = 0;
+
+
     totalQuantity: number;
     // firstFormGroup: FormGroup;
     // secondFormGroup: FormGroup;
@@ -61,18 +69,7 @@ export class SendsmsComponent implements OnInit {
     constructor(
       private breakpointObserver: BreakpointObserver,
       private sms: SmsService,
-      ) {
-        this.formArray = new FormArray([]);
-        this.smsForm = new FormGroup({});
-        this.formIndex = [];
-        this.data = [];
-        this.myIndex = 0;
-
-        this.details = {
-            group: this.formArray,
-            message: this.smsForm,
-        };
-     }
+      ) {}
 
     ngOnInit() {
         this.formIndex.push(new FormGroup({}));

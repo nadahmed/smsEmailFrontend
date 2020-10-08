@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface OfficialEmailGroupdata {
     professionGroup: string;
     contacts: {
-        profession: string,
-        name: string
+        profession: string;
+        name: string;
+        email: string;
     }[];
 }
 // export interface OfficialEmailGroupResponse {
@@ -47,6 +49,24 @@ export interface GroupAddBody {
     name: string;
     email: string;
     // createdBy:userId
+}
+
+export interface TestEmailResponse {
+  isExecuted: boolean;
+  data: {
+    balance: number;
+  };
+  message: string;
+}
+
+export interface BulkEmailRequestBody {
+  groups: {
+    type: string;
+    category: string;
+    qty: number;
+  }[];
+  message: string;
+  subject: string;
 }
 
 @Injectable({
@@ -105,5 +125,41 @@ export class EmailService {
             headers: { accessToken: this.auth.token },
         });
     }
+
+    sendTestEmail(subject:string, message: string) : Observable<TestEmailResponse> {
+      return this.http.post(
+          environment.baseApiURI + 'email/sendmeemail/',
+          {
+            subject,
+            message
+          },
+          {
+          headers: { accessToken: this.auth.token }
+      }).pipe(
+        tap( (res: TestEmailResponse) => {
+          if (res.isExecuted) {
+            this.auth.balance = res.data.balance;
+            location.reload();
+          }
+        })
+      ) as Observable<TestEmailResponse>;
+  }
+
+  sendBulkSMS(data: BulkEmailRequestBody){
+    return this.http.post(
+      environment.baseApiURI + 'email/send/',
+      { ...data },
+      {
+        headers: { accessToken: this.auth.token }
+      }
+    ).pipe(
+      tap( (res: TestEmailResponse) => {
+        if (res.isExecuted) {
+          this.auth.balance = res.data.balance;
+          location.reload();
+        }
+      })
+    ) as Observable<TestEmailResponse>
+  }
 
 }

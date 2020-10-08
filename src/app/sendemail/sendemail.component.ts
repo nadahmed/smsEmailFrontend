@@ -3,6 +3,9 @@ import { FormBuilder, FormArray, FormControl, FormGroup, AbstractControl } from 
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../api/auth/auth.service';
+import { BulkEmailRequestBody, EmailService } from '../api/email/email.service';
+import { Router } from '@angular/router';
 
 
 export interface InputData  {
@@ -21,20 +24,25 @@ export interface InputData  {
 export class SendemailComponent implements OnInit {
 
 
-    data: InputData[];
+    data: InputData[] = [];
 
-    formIndex: FormGroup[];
+    formIndex: FormGroup[] = [];
+    formArray = new FormArray([]);
+
+    emailForm = new FormGroup({});
+    totalCost: string = '';
+
+    details = {
+      group: this.formArray,
+      message: this.emailForm,
+      cost: this.data,
+      totalCost: this.totalCost
+  };
 
 
-    details: object;
 
-    formArray: FormArray;
+    myIndex = 0;
 
-    emailForm: FormGroup;
-
-    myIndex: number;
-
-    totalCost: string;
     totalQuantity: number;
     // firstFormGroup: FormGroup;
     // secondFormGroup: FormGroup;
@@ -57,18 +65,11 @@ export class SendemailComponent implements OnInit {
         })
     );
 
-    constructor(private breakpointObserver: BreakpointObserver) {
-        this.formArray = new FormArray([]);
-        this.emailForm = new FormGroup({});
-        this.formIndex = [];
-        this.data = [];
-        this.myIndex = 0;
-
-        this.details = {
-            group: this.formArray,
-            message: this.emailForm,
-        };
-     }
+    constructor(
+      private breakpointObserver: BreakpointObserver,
+      private emailService: EmailService,
+      private router: Router,
+      ) {}
 
     ngOnInit() {
         this.formIndex.push(new FormGroup({}));
@@ -96,7 +97,7 @@ export class SendemailComponent implements OnInit {
         if (this.formIndex.length <= 0 ) {
             this.addForm();
         }
-        
+
     }
 
     myEvents(i, value) {
@@ -140,7 +141,7 @@ export class SendemailComponent implements OnInit {
             this.formArray.push(value.group);
             this.data.push(value.cost);
             this.updateTotals(i, {cost: '0.00'});
-            
+
             // this.formArray.setControl(i, value.group);
             // this.formArray.insert(value.index, value.group);
     }
@@ -156,5 +157,25 @@ export class SendemailComponent implements OnInit {
             totalCost: this.totalCost,
             message: this.emailForm,
         };
+    }
+
+    sendToAll(){
+      const data: BulkEmailRequestBody = {
+        groups:[],
+        ...this.emailForm.value
+      }
+
+
+      for(let formgroup of this.formArray.controls){
+        data.groups.push({
+          type: formgroup.value.groupName.type.toLowerCase(),
+          category:formgroup.value.groupName.groupName,
+          qty: formgroup.value.quantity,
+        });
+      }
+      console.log(data);
+      this.emailService.sendBulkSMS(data).subscribe(res => {
+        console.log(res);
+      })
     }
 }

@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/api/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { tap } from 'rxjs/operators';
 
 export interface OfficialSMSGroupdata {
     professionGroup: string;
@@ -22,7 +23,9 @@ export interface SMSResponse {
 
 export interface TestSMSResponse {
     isExecuted: boolean;
-    data: Object;
+    data: {
+      balance: number;
+    };
     message: string;
 }
 
@@ -125,7 +128,14 @@ export class SmsService {
             { message },
             {
             headers: { accessToken: this.auth.token }
-        }) as Observable<SMSCategoryResponse>;
+        }).pipe(
+          tap( (res: TestSMSResponse) => {
+            if (res.isExecuted) {
+              this.auth.balance = res.data.balance;
+              location.reload();
+            }
+          })
+        ) as Observable<TestSMSResponse>;
     }
 
     sendBulkSMS(data: BulkSMSRequestBody){
@@ -135,7 +145,14 @@ export class SmsService {
         {
           headers: { accessToken: this.auth.token }
         }
-      ) as Observable<SMSResponse>
+      ).pipe(
+        tap( (res: TestSMSResponse) => {
+          if (res.isExecuted) {
+            this.auth.balance = res.data.balance;
+            location.reload();
+          }
+        })
+      ) as Observable<TestSMSResponse>
     }
 
 }

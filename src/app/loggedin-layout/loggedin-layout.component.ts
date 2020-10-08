@@ -30,7 +30,7 @@ export class LoggedinLayoutComponent implements OnInit, OnDestroy {
         ) {}
 
         ngOnInit() {
-          this.balanceSub = this.auth.balance.subscribe(res => {
+          this.balanceSub = this.auth.balanceSub.subscribe(res => {
             this.balance = res;
           });
         }

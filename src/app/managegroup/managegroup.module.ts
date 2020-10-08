@@ -28,6 +28,7 @@ import { SmseditcontactComponent } from './sms/smseditcontact/smseditcontact.com
 import { SmseditgroupComponent } from './sms/smseditgroup/smseditgroup.component';
 import { EmailaddcontactComponent } from './email/emailaddcontact/emailaddcontact.component';
 import { EmailbulkuploadComponent } from './email/emailbulkupload/emailbulkupload.component';
+import { EmaileditcontactComponent } from './email/emaileditcontact/emaileditcontact.component';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { EmailbulkuploadComponent } from './email/emailbulkupload/emailbulkuploa
         SmseditcontactComponent,
         EmailaddcontactComponent,
         EmailbulkuploadComponent,
+        EmaileditcontactComponent,
     ],
     imports: [
         CommonModule,

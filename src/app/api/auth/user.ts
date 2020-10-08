@@ -9,7 +9,7 @@ export interface User {
 export interface UserData {
     accessToken: string;
     balance: number;
-    emaiilUnitCost: string;
+    emailUnitCost: string;
     email: string;
     id: string;
     isVerified: boolean;

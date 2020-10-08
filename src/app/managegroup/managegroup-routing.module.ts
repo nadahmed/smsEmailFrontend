@@ -7,6 +7,7 @@ import { SmseditcontactComponent } from './sms/smseditcontact/smseditcontact.com
 import { SmsaddcontactComponent } from './sms/smsaddcontact/smsaddcontact.component';
 import { SmseditgroupComponent } from './sms/smseditgroup/smseditgroup.component';
 import { EmailaddcontactComponent } from './email/emailaddcontact/emailaddcontact.component';
+import { EmaileditcontactComponent } from './email/emaileditcontact/emaileditcontact.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,7 @@ const routes: Routes = [
             { path: 'sms/contactlist', component: SmseditcontactComponent },
             { path: 'sms/import', component: SmsaddcontactComponent },
             { path: 'email/import', component: EmailaddcontactComponent },
+            { path: 'email/contactlist', component: EmaileditcontactComponent },
         ],
     },
 ];

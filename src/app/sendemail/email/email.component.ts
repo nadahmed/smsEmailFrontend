@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { EmailService } from 'src/app/api/email/email.service';
 
 
 @Component({
@@ -25,42 +26,37 @@ export class EmailComponent implements OnInit, OnDestroy {
 
     // public Editor = ClassicEditor;
 
-    email = new FormGroup({});
-    message: FormControl;
+
+    message = new FormControl('',
+    [
+        Validators.required,
+        Validators.maxLength(384000),
+    ]);
+    subject = new FormControl('',
+    [
+        Validators.required,
+        Validators.maxLength(78),
+    ]);
+
+    email = new FormGroup({
+      'subject': this.subject,
+      'message': this.message,
+    });
 
     private subscription: Subscription;
 
-  constructor() {
-////////////////////////
+  constructor(private emailService: EmailService) {}
+
+  ngOnInit() {
+
+    ////////////////////////
     this.mycontent = `<p>My html content</p>`;
 /////////////////////////
-    this.message = new FormControl('',
-    [
-        Validators.required,
-        Validators.maxLength(255),
-      ]);
-
-    this.email.addControl('message', this.message);
 
     this.subscription = this.email.valueChanges.subscribe(() => {
         this.emailChangeEvent.emit(this.email);
       });
-// this.message.setValue('');
-//     this.message.setValue(
-// `আমার সোনার বাংলা
-// আমি তোমায় ভালবাসি
-// চিরদিন তোমার আকাশ
-// চিরদিন তোমার আকাশ
-// তোমার বাতাস আমার প্রাণে
-// ও মা
-// আমার প্রাণে বাজায় বাঁশি
-// সোনার বাংলা
-// আমি তোমায় ভালবাসি`
-// );
 
-    }
-
-  ngOnInit() {
     this.emailChangeEvent.emit(this.email);
 ////////////////////////
     this.ckeConfig = {
@@ -76,8 +72,8 @@ export class EmailComponent implements OnInit, OnDestroy {
   }
 
 
-  
-  
+
+
   onChange($event: any): void {
     console.log("onChange");
     //this.log += new Date() + "<br />";
@@ -87,5 +83,19 @@ export class EmailComponent implements OnInit, OnDestroy {
     console.log("onPaste");
     //this.log += new Date() + "<br />";
   }
-  
+
+  sendTestEmail(){
+
+    if (this.email.valid){
+      console.log('Sending Test Email');
+      this.emailService.sendTestEmail(this.subject.value, this.message.value)
+      .subscribe( res => {
+        console.log(res);
+      });
+    } else {
+      console.log("Cannot send invalid content");
+    }
+
+  }
+
 }

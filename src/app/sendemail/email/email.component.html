@@ -1,5 +1,11 @@
 <form [formGroup]="email">
   <div class="container expand">
+
+    <mat-form-field>
+      <mat-icon matPrefix>subject</mat-icon>
+      <input matInput placeholder="Subject" [formControl]="subject">
+    </mat-form-field>
+
     <div class="form-group has-feedback">
       <ckeditor
         [formControl]="message"
@@ -17,6 +23,7 @@
       mat-stroked-button
       color="primary"
       style="margin: 20px 0px;"
+      (click)="sendTestEmail()"
     >
       Send me a test email
     </button>

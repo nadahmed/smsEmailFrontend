@@ -4,6 +4,7 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { SmsService } from 'src/app/api/sms/sms.service';
+import { AuthService } from 'src/app/api/auth/auth.service';
 
 export interface CustomerGroup {
     name: string;
@@ -88,6 +89,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
     constructor(
         private breakpointObserver: BreakpointObserver,
         private sms: SmsService,
+        private auth: AuthService
         ) {
         this.myGroup = new FormGroup({
             groupName: this.groupName,
@@ -113,7 +115,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 // }
 
                 if ( this.myGroup.valid) {
-                    this.cost = (this.myGroup.value.quantity * 0.25).toFixed(2);
+                    this.cost = (this.myGroup.value.quantity * Number(this.auth.user.smsUnitCost)).toFixed(2);
                 } else {
                     this.cost = (0).toFixed(2);
                 }
