@@ -36,13 +36,6 @@ export class SmsComponent implements OnInit, OnDestroy {
 this.message.setValue('');
     this.message.setValue(
 `আমার সোনার বাংলা
-আমি তোমায় ভালবাসি
-চিরদিন তোমার আকাশ
-চিরদিন তোমার আকাশ
-তোমার বাতাস আমার প্রাণে
-ও মা
-আমার প্রাণে বাজায় বাঁশি
-সোনার বাংলা
 আমি তোমায় ভালবাসি`
 );
 

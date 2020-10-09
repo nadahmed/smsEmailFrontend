@@ -1,3 +1,4 @@
+import { ExtrasModule } from './../extras/extras.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
@@ -12,6 +13,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ChartsComponent } from './charts/charts.component';
 import { RecentTranxComponent } from './recent-tranx/recent-tranx.component';
 import { RouterModule } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PopinfoComponent } from '../extras/popinfo/popinfo.component';
 
 @NgModule({
   declarations: [

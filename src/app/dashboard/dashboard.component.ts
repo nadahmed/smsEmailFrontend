@@ -1,8 +1,10 @@
+import { DialogInfoData, PopinfoComponent } from './../extras/popinfo/popinfo.component';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material';
 
 @Component({
     selector: 'app-dashboard',
@@ -48,12 +50,25 @@ export class DashboardComponent implements OnInit, OnDestroy{
         })
     );
 
-    constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) { }
+    constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService, public dialog: MatDialog) { }
+
+    openDialog() {
+        const data: DialogInfoData = {tile: 'Warning!', icon: 'warning', message: 'This is test warning!'};
+        const dialogRef = this.dialog.open(PopinfoComponent, {
+            // width: '450px',
+            data
+          });
+
+        dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        console.log(result);
+        });
+    }
 
     ngOnInit() {
       this.balanceSub = this.auth.balanceSub.subscribe(res => {
         this.balance = res;
-      })
+      });
     }
 
     ngOnDestroy() {
