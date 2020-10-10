@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormControl, FormGroup, AbstractControl } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { BulkSMSRequestBody, SmsService } from '../api/sms/sms.service';
 
 
-export interface InputData  {
+export interface InputData {
     id: number;
     cost: string;
 }
@@ -29,19 +29,19 @@ export class SendsmsComponent implements OnInit {
 
     formArray = new FormArray([]);
 
-    smsForm= new FormGroup({});
+    smsForm = new FormGroup({});
 
-    totalCost: string = '';
+    totalCost = '';
 
     details = {
-      group: this.formArray,
-      message: this.smsForm,
-      cost: this.data,
-      totalCost: this.totalCost,
-  };
+        group: this.formArray,
+        message: this.smsForm,
+        cost: this.data,
+        totalCost: this.totalCost,
+    };
 
 
-    myIndex: number = 0;
+    myIndex = 0;
 
 
     totalQuantity: number;
@@ -67,9 +67,9 @@ export class SendsmsComponent implements OnInit {
     );
 
     constructor(
-      private breakpointObserver: BreakpointObserver,
-      private sms: SmsService,
-      ) {}
+        private breakpointObserver: BreakpointObserver,
+        private sms: SmsService,
+    ) { }
 
     ngOnInit() {
         this.formIndex.push(new FormGroup({}));
@@ -79,7 +79,7 @@ export class SendsmsComponent implements OnInit {
         // if (this.formArray.length < 10 ) {
         //     this.formArray.push(new FormGroup({}));
         // }
-        if (this.formIndex.length < 10 ) {
+        if (this.formIndex.length < 10) {
             this.formIndex.push(new FormGroup({}));
         }
 
@@ -94,7 +94,7 @@ export class SendsmsComponent implements OnInit {
             this.formIndex.splice(index, 1);
         }
 
-        if (this.formIndex.length <= 0 ) {
+        if (this.formIndex.length <= 0) {
             this.addForm();
         }
 
@@ -109,9 +109,9 @@ export class SendsmsComponent implements OnInit {
 
     private updateTotals(i, value) {
 
-        this.data[i] = {id: i, cost: value.cost};
+        this.data[i] = { id: i, cost: value.cost };
         let cost = 0.00;
-        this.data.forEach( (val) => {
+        this.data.forEach((val) => {
             cost = cost + parseFloat(val.cost);
             // console.log(val.cost);
         });
@@ -131,19 +131,19 @@ export class SendsmsComponent implements OnInit {
     deletedEvent(i, value) {
         // console.log('[DELETED]', i, value);
         this.formArray.removeAt(i);
-        this.updateTotals(i, {cost: '0.00'});
+        this.updateTotals(i, { cost: '0.00' });
         this.data.splice(i, 1);
 
     }
 
     createdEvent(i, value) {
-            // console.log('[CREATED]', i, value);
-            this.formArray.push(value.group);
-            this.data.push(value.cost);
-            this.updateTotals(i, {cost: '0.00'});
+        // console.log('[CREATED]', i, value);
+        this.formArray.push(value.group);
+        this.data.push(value.cost);
+        this.updateTotals(i, { cost: '0.00' });
 
-            // this.formArray.setControl(i, value.group);
-            // this.formArray.insert(value.index, value.group);
+        // this.formArray.setControl(i, value.group);
+        // this.formArray.insert(value.index, value.group);
     }
 
     messageEvents(form) {
@@ -159,24 +159,24 @@ export class SendsmsComponent implements OnInit {
         };
     }
 
-    sendToAll(){
-      const data: BulkSMSRequestBody = {
-        groups:[],
-        ...this.smsForm.value,
-        bill: this.totalCost
-      }
+    sendToAll() {
+        const data: BulkSMSRequestBody = {
+            groups: [],
+            ...this.smsForm.value,
+            bill: this.totalCost
+        };
 
-      for(let formgroup of this.formArray.controls){
+        for (const formgroup of this.formArray.controls) {
 
-        data.groups.push({
-          type: formgroup.value.groupName.type.toLowerCase(),
-          category:formgroup.value.groupName.groupName,
-          qty: formgroup.value.quantity,
+            data.groups.push({
+                type: formgroup.value.groupName.type.toLowerCase(),
+                category: formgroup.value.groupName.groupName,
+                qty: formgroup.value.quantity,
+            });
+        }
+        console.log(data);
+        this.sms.sendBulkSMS(data).subscribe(res => {
+            console.log(res);
         });
-      }
-      console.log(data);
-      this.sms.sendBulkSMS(data).subscribe(res => {
-        console.log(res);
-      })
     }
 }

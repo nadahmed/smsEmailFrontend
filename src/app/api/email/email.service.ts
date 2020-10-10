@@ -126,7 +126,7 @@ export class EmailService {
         });
     }
 
-    sendTestEmail(subject:string, message: string) : Observable<TestEmailResponse> {
+    sendTestEmail(subject: string, message: string): Observable<TestEmailResponse> {
       return this.http.post(
           environment.baseApiURI + 'email/sendmeemail/',
           {
@@ -139,7 +139,6 @@ export class EmailService {
         tap( (res: TestEmailResponse) => {
           if (res.isExecuted) {
             this.auth.balance = res.data.balance;
-            location.reload();
           }
         })
       ) as Observable<TestEmailResponse>;
@@ -156,7 +155,6 @@ export class EmailService {
       tap( (res: TestEmailResponse) => {
         if (res.isExecuted) {
           this.auth.balance = res.data.balance;
-          location.reload();
         }
       })
     ) as Observable<TestEmailResponse>

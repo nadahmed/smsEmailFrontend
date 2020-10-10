@@ -1,16 +1,16 @@
 <div class="pop-container">
     <div class="icon">
-        <mat-icon [inline]="true">{{ data.icon }}</mat-icon>
+        <mat-icon [inline]="true" [color]="data.color">{{ data.icon }}</mat-icon>
     </div>
     
     <div class="detail">
-        <h1 mat-dialog-title>{{data.tile}}</h1>
+        <h1 mat-dialog-title>{{data.title}}</h1>
         <div mat-dialog-content>
           <p>{{data.message}}</p>
         </div>
         <div mat-dialog-actions>
-          <button mat-button (click)="onNoClick()">Cancel</button>
-          <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+          <button mat-raised-button (click)="onNoClick()">Cancel</button>
+          <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>OK</button>
         </div>
     </div>
 </div>

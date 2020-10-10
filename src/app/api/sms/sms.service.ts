@@ -132,7 +132,6 @@ export class SmsService {
           tap( (res: TestSMSResponse) => {
             if (res.isExecuted) {
               this.auth.balance = res.data.balance;
-              location.reload();
             }
           })
         ) as Observable<TestSMSResponse>;
@@ -149,10 +148,9 @@ export class SmsService {
         tap( (res: TestSMSResponse) => {
           if (res.isExecuted) {
             this.auth.balance = res.data.balance;
-            location.reload();
           }
         })
-      ) as Observable<TestSMSResponse>
+      ) as Observable<TestSMSResponse>;
     }
 
 }

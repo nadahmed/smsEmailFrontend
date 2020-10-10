@@ -13,8 +13,6 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ChartsComponent } from './charts/charts.component';
 import { RecentTranxComponent } from './recent-tranx/recent-tranx.component';
 import { RouterModule } from '@angular/router';
-import { MatDialogModule } from '@angular/material/dialog';
-import { PopinfoComponent } from '../extras/popinfo/popinfo.component';
 
 @NgModule({
   declarations: [

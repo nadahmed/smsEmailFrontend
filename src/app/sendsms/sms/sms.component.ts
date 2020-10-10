@@ -1,61 +1,107 @@
+import { AuthService } from 'src/app/api/auth/auth.service';
+import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SmsService } from 'src/app/api/sms/sms.service';
+import { PopinfoComponent } from 'src/app/extras/popinfo/popinfo.component';
+import { LoaderComponent } from 'src/app/extras/loader/loader.component';
 
 @Component({
-  selector: 'app-sms',
-  templateUrl: './sms.component.html',
-  styleUrls: ['./sms.component.scss']
+    selector: 'app-sms',
+    templateUrl: './sms.component.html',
+    styleUrls: ['./sms.component.scss']
 })
 export class SmsComponent implements OnInit, OnDestroy {
 
     @Output() smsChangeEvent = new EventEmitter<any>();
 
-    sms = new FormGroup({});
-    message: FormControl;
+    message = new FormControl('',
+        [
+            Validators.required,
+            Validators.maxLength(160),
+        ]);
+
+    sms = new FormGroup({
+        message: this.message
+    });
 
     private subscription: Subscription;
 
-  constructor(
-    private smsService: SmsService
-  ) {
+    constructor(
+        private smsService: SmsService,
+        public dialog: MatDialog,
+        private auth: AuthService,
+    ) { }
 
-    this.message = new FormControl('',
-    [
-        Validators.required,
-        Validators.maxLength(160),
-      ]);
+    ngOnInit() {
 
-    this.sms.addControl('message', this.message);
-
-    
-    this.subscription = this.sms.valueChanges.subscribe(() => {
-        this.smsChangeEvent.emit(this.sms);
-      });
-this.message.setValue('');
-    this.message.setValue(
-`আমার সোনার বাংলা
+        this.subscription = this.sms.valueChanges.subscribe(() => {
+            this.smsChangeEvent.emit(this.sms);
+        });
+        this.message.setValue(
+            `আমার সোনার বাংলা
 আমি তোমায় ভালবাসি`
-);
+        );
 
+
+        this.smsChangeEvent.emit(this.sms);
     }
 
-  ngOnInit() {
-    this.smsChangeEvent.emit(this.sms);
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  ngOnDestroy() {
-      this.subscription.unsubscribe();
-  }
+    sendTestSms() {
+        if (this.sms.valid) {
+            console.log('Sending Test SMS');
+            const dialogRef = this.dialog.open(PopinfoComponent, {
+                data: {
+                    icon: 'warning',
+                    title: 'Warning!',
+                    message: 'This sms will cost you ৳' + this.auth.user.smsUnitCost + '. Would you like to continue?',
+                }
+            });
 
-  sendTestSms() {
-    console.log('Sending Test SMS');
-    this.smsService.sendTestSms(this.message.value).subscribe(
-      res => {
-        console.log(res);
-      }
-    );
-  }
+            dialogRef.afterClosed().subscribe(res => {
+                if (res === true) {
+                    const dialogRefLoader = this.dialog.open(LoaderComponent, {
+                        disableClose: true,
+                    });
+
+                    this.smsService.sendTestSms(this.message.value).subscribe(
+                        response => {
+                            if (response.isExecuted) {
+
+                                const dialogRef2 = this.dialog.open(PopinfoComponent, {
+                                    data: {
+                                        icon: 'textsms',
+                                        title: 'Message Sent!',
+                                        message: 'The message you have typed has been sent to your cellphone.',
+                                    }
+                                });
+                            }
+                        },
+                        err => {
+                            const dialogRef2 = this.dialog.open(PopinfoComponent, {
+                                data: {
+                                    icon: 'error',
+                                    title: 'Sending Failed!',
+                                    message: 'An error occured. We were unable to send your text.',
+                                }
+                            });
+
+                        },
+                        () => {
+                            dialogRefLoader.close();
+                        }
+
+                    );
+                }
+            });
+
+
+        }
+    }
 
 }

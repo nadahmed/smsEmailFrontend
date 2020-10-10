@@ -3,8 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DialogInfoData {
     icon: string;
-    tile: string;
+    title: string;
     message: string;
+    color?: string;
 }
 
 @Component({
