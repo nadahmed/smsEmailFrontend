@@ -144,7 +144,7 @@ export class EmailService {
       ) as Observable<TestEmailResponse>;
   }
 
-  sendBulkSMS(data: BulkEmailRequestBody){
+  sendBulkEmail(data: BulkEmailRequestBody){
     return this.http.post(
       environment.baseApiURI + 'email/send/',
       { ...data },

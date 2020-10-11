@@ -1,0 +1,35 @@
+.my-container{
+  margin: 20px;
+}
+
+img{
+  height: 5rem;
+}
+
+.mat-radio-group{
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+
+}
+.mat-radio-button{
+  margin: 0 2rem 0 0;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+.mat-card{
+  // max-width: 40rem;
+  text-align: center;
+}

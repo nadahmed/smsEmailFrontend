@@ -99,7 +99,7 @@ export class EmailComponent implements OnInit, OnDestroy {
             const dialogRef = this.dialog.open(PopinfoComponent, {
                 data: {
                     icon: 'warning',
-                    title: 'Are you sure?',
+                    title: 'Action required',
                     message: 'Are you sure you want to send this message to yourself?',
                 }
             });

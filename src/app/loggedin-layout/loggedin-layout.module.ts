@@ -39,6 +39,7 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
             {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)},
             {path: 'managegroups', loadChildren: () => import('../managegroup/managegroup.module').then(m => m.ManagegroupModule) },
             {path: 'transaction', loadChildren: () => import('../transaction/transaction.module').then(m => m.TransactionModule) },
+            {path: 'recharge', loadChildren: () => import('../recharge/recharge.module').then(m => m.RechargeModule) },
         ]},
 
     ]),

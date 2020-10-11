@@ -1,0 +1,23 @@
+<div class="my-container">
+  <h1 class="mat-h1">Recharge</h1>
+  <mat-card>
+
+    <label id="example-radio-group-label">Pick your payment method:</label><br>
+  <mat-radio-group aria-label="Select an option">
+    <mat-radio-button value="master"><img src='/assets/payment/mastercard.svg'></mat-radio-button>
+    <mat-radio-button value="amex"><img src='/assets/payment/amex.svg'></mat-radio-button>
+    <mat-radio-button value="bkash"><img src='/assets/payment/bkash.svg'></mat-radio-button>
+    <mat-radio-button value="visa"><img src='/assets/payment/visa.svg'></mat-radio-button>
+  </mat-radio-group>
+<br>
+  <mat-form-field>
+    <input matInput placeholder="Amount" type="number" class="example-right-align">
+    <span matPrefix>৳&nbsp;</span>
+  </mat-form-field>
+<br>
+  <button mat-raised-button color="primary">Recharge</button>
+
+  </mat-card>
+
+
+</div>
