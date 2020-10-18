@@ -40,6 +40,7 @@ import { ControlnavComponent } from '../controlnav/controlnav.component';
             {path: 'managegroups', loadChildren: () => import('../managegroup/managegroup.module').then(m => m.ManagegroupModule) },
             {path: 'transaction', loadChildren: () => import('../transaction/transaction.module').then(m => m.TransactionModule) },
             {path: 'recharge', loadChildren: () => import('../recharge/recharge.module').then(m => m.RechargeModule) },
+            {path: 'account', loadChildren: () => import('../accountsettings/accountsettings.module').then(m => m.AccountsettingsModule) },
         ]},
 
     ]),

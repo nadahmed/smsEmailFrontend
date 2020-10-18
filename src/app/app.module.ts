@@ -1,3 +1,4 @@
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ExtrasModule } from './extras/extras.module';
 import { TokenInterceptorService } from './_helpers/token-interceptor.service';
 import { EmailService } from './api/email/email.service';
@@ -10,7 +11,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './api/auth/auth.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { PopinfoComponent } from './extras/popinfo/popinfo.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +23,7 @@ import { PopinfoComponent } from './extras/popinfo/popinfo.component';
     BrowserAnimationsModule,
     MatSnackBarModule,
     ExtrasModule,
+    MatToolbarModule,
   ],
   providers: [
     {

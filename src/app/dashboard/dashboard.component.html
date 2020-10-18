@@ -1,6 +1,9 @@
+<mat-toolbar>
+    <h1 class="mat-h1">Dashboard</h1>
+</mat-toolbar>
 
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
+
   <mat-grid-list cols="4" rowHeight="200px">
     <mat-grid-tile
       *ngFor="let card of cards | async"

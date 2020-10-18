@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/api/auth/auth.service';
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
     );
 
     hide = true;
-  constructor(public auth: AuthService) { }
+  constructor(public auth: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -31,13 +32,16 @@ export class LoginComponent implements OnInit {
   }
 
   signIn() {
-      console.log('Clicked');
       if (this.formGroup.valid) {
         this.isBusy = true;
         this.auth.SignIn(this.formGroup.get('email').value, this.formGroup.get('password').value).subscribe(
             _ => {},
-            _ => {
+            async (error) => {
                 this.isBusy = false;
+                if(error.error.message === 'Account is not acctivated') {
+                    await this.router.navigate(['verify-email-address', encodeURI(this.formGroup.get('email').value)]);
+                }
+
             },
             () => {
             }

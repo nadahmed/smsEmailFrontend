@@ -34,7 +34,7 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
             {path: 'signup', component: SignupComponent},
         ] },
         {path: 'forgot-password', component: ForgotpasswordComponent},
-        {path: 'verify-email-address', component: VerifyemailComponent},
+        {path: 'verify-email-address/:email', component: VerifyemailComponent},
     ]),
 
     MatCardModule,

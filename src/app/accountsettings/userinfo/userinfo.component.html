@@ -1,0 +1,28 @@
+<div class="info-container">
+    <h2 class="mat-h2">User Infromation</h2>
+    <mat-divider></mat-divider><br>
+
+    <table>
+        <tr *ngFor="let item of tableLable1" >
+            <td><mat-label class="label">{{item}}: </mat-label></td>
+            <td class="detail">{{tableData1[item]}}</td>
+        </tr>
+    </table>
+
+    <h2 class="mat-h2">Billing Infromation</h2>
+    <mat-divider></mat-divider><br>
+    <table>
+        <tr *ngFor="let item of tableLable2" >
+            <td><mat-label class="label">{{item}}: </mat-label></td>
+            <td class="detail">{{tableData2[item]}}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- <form class="form-container">
+    <h2 class="mat-h2">User Infromation</h2>
+<mat-divider></mat-divider><br>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name">
+    </mat-form-field>
+  </form> -->

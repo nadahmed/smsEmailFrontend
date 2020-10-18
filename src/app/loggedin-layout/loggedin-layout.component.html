@@ -10,7 +10,7 @@
           <mat-icon>person</mat-icon><span>{{ user.name }}</span>
         </button>
         <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item><mat-icon>person</mat-icon>My Account</button>
+            <button mat-menu-item routerLink='/account'><mat-icon>person</mat-icon>Settings</button>
             <button mat-menu-item (click)="auth.SignOut()"><mat-icon>exit_to_app</mat-icon>Sign out</button>
         </mat-menu>
       </div>
@@ -30,14 +30,18 @@
         <mat-nav-list >
             <mat-list-item
             >
-              <mat-icon matListIcon>account_balance</mat-icon> <span>৳ 120.00</span></mat-list-item>
+              <mat-icon matListIcon>account_balance</mat-icon> <span>৳ {{ balance.toFixed(2)}}</span></mat-list-item>
 
           <mat-list-item
-            >
-              <mat-icon matListIcon>person</mat-icon> <span > My Account</span></mat-list-item
+          routerLink='/account'
+          (click)="sidenav.close()"  
+          >
+              <mat-icon matListIcon >person</mat-icon><span>Settings</span></mat-list-item
           >
 
           <mat-list-item
+          routerLink="/recharge"
+          (click)="sidenav.close()" 
             >
               <mat-icon matListIcon>credit_card</mat-icon> <span> Recharge</span></mat-list-item
           >

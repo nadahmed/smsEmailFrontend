@@ -1,3 +1,4 @@
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ExtrasModule } from './../extras/extras.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -37,6 +38,7 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     LayoutModule,
     ChartsModule,
+    MatToolbarModule,
   ],
   providers: [
       ThemeService

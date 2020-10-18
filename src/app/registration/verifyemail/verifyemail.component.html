@@ -1,5 +1,5 @@
 <div class="center-vh">
-<mat-card class="verify-card" *ngIf="auth.userData">
+<mat-card class="verify-card" *ngIf="email.valid" >
     <mat-card-title>
       Verify your email
     </mat-card-title>
@@ -7,9 +7,10 @@
     <mat-icon class="verify-icon">security</mat-icon>
 </mat-card-subtitle>
     <mat-card-content>
-        <div class="formGroup" *ngIf="auth.userData as user">
-        <p class="text-center">A confirmation email was sent to <strong>{{user.email}}</strong>.</p>
-        <p class="text-center">Please check your email and click on the link to verfiy your email address.</p>
+        <div class="formGroup">
+        <p class="text-center">Previously a confirmation email was sent to <strong>{{email.value}}</strong>.</p>
+        <p class="text-center">Please check your email to verfiy your email address.</p>
+        <p class="text-center">Alternatively, click on <b>Resend Verification Email</b>.</p>
     </div>
     </mat-card-content>
 
@@ -20,7 +21,7 @@
                 <mat-icon >arrow_back</mat-icon>
               Go to login page
             </button>
-            <button mat-raised-button type="button" (click)="auth.SendVerificationMail()">
+            <button mat-raised-button type="button" [disabled]="email.invalid || !timeUp" (click)="sendVerificationMail()">
                 <mat-icon>mail</mat-icon>
               Resend Verification Email
             </button>
@@ -28,7 +29,7 @@
 
 </mat-card>
 
-<mat-card class="verify-card" *ngIf="!auth.userData">
+<mat-card class="verify-card" *ngIf="email.invalid">
     <mat-card-title>
        ERROR
     </mat-card-title>
@@ -37,7 +38,7 @@
 </mat-card-subtitle>
     <mat-card-content>
         <div class="formGroup">
-        <p class="text-center">Please try and login before you visit this page</p>
+        <p class="text-center">Invalid route</p>
     </div>
     </mat-card-content>
 

@@ -33,7 +33,7 @@ export class AuthService {
     // Sign in with email/password
     SignIn(email, password) {
         return this.http.post(
-             environment.baseApiURI +'auth/login/',
+             environment.baseApiURI + 'auth/login/',
             { email, password },
         ).pipe(
             tap(
@@ -53,15 +53,19 @@ export class AuthService {
                         });
                         // this.SetUserData(res.data);
                     } else {
-                        this.snackBar.open(res.message, 'dismiss', {
+                        const snack = this.snackBar.open(res.message, 'dismiss', {
                             duration: 10000,
                         });
                     }
                 },
-                (err) => {
-                    this.snackBar.open(err.message, 'dismiss', {
-                        duration: 10000,
-                    });
+                async (err) => {
+                    if ( err.error.message === 'Account is not acctivated') {
+
+                    } else {
+                        this.snackBar.open(err.error.message, 'dismiss', {
+                            duration: 10000
+                        });
+                    }
                 }
             )
             );
@@ -89,7 +93,7 @@ export class AuthService {
                 }
             },
                 error => {
-                    this.snackBar.open(error.message, 'Dismiss', {
+                    this.snackBar.open(error.error.message, 'Dismiss', {
                         duration: 10000,
                     });
                 }
@@ -98,20 +102,25 @@ export class AuthService {
     }
 
     // Send email verfificaiton when new user sign up
-    SendVerificationMail() {
-        // return this.afAuth.auth.currentUser.sendEmailVerification()
-        //     .then(() => {
-        //         this.router.navigate(['verify-email-address']);
-        //     });
+    SendVerificationMail(email) {
+        return this.http.put( environment.baseApiURI + 'auth/accountacctivation/' + email, {}).pipe(
+            tap((res: AuthResponseObject) => {
+                this.snackBar.open(res.message, 'dismiss', {
+                    duration: 5000,
+                });
+            })
+        );
     }
 
     // Reset Forggot password
     ForgotPassword(passwordResetEmail) {
         return this.http.post( environment.baseApiURI + 'auth/forgetpassword', {
             email: passwordResetEmail
-        }).subscribe((res: { message: string; }) => {
+        }).subscribe((res: AuthResponseObject) => {
             console.log(res);
-            this.snackBar.open(res.message, 'dismiss');
+            this.snackBar.open(res.message, 'dismiss', {
+                duration: 5000,
+            });
         });
     }
 

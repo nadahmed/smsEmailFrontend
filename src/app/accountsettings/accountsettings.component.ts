@@ -1,15 +1,15 @@
+import { AuthService } from './../api/auth/auth.service';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 
 @Component({
-    selector: 'app-managegroup',
-    templateUrl: './managegroup.component.html',
-    styleUrls: ['./managegroup.component.scss']
+    selector: 'app-accountsettings',
+    templateUrl: './accountsettings.component.html',
+    styleUrls: ['./accountsettings.component.scss']
 })
-export class ManagegroupComponent implements OnDestroy {
+export class AccountsettingsComponent implements OnDestroy {
 
-    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public auth: AuthService) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this.mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addEventListener('change', this.mobileQueryListener);
@@ -19,7 +19,8 @@ export class ManagegroupComponent implements OnDestroy {
 
     private mobileQueryListener: () => void;
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
     }
+
 }

@@ -20,7 +20,10 @@ const routes: Routes = [
     {
         path: '',
         // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./registration/registration.module').then(m => m.RegistrationModule), canActivate: [SecureInnerPagesGuard]
+        loadChildren: () => import('./registration/registration.module').then(m => m.RegistrationModule),
+        canActivate: [
+            // SecureInnerPagesGuard
+        ]
     },
     {
         path: 'pagenotfound',

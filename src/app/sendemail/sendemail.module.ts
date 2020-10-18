@@ -1,3 +1,4 @@
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { DoneComponent } from './done/done.component';
 import { SendemailComponent } from './sendemail.component';
 import { NgModule } from '@angular/core';
@@ -47,6 +48,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
     MatTooltipModule,
     MatTableModule,
     MatChipsModule,
+    MatToolbarModule,
   ]
 })
 export class SendemailModule { }

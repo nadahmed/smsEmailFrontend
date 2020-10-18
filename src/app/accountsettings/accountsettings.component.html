@@ -1,0 +1,51 @@
+<mat-toolbar>
+  <button mat-icon-button (click)="snav.toggle()" *ngIf="mobileQuery.matches">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1 class="mat-h1">Settings</h1>
+</mat-toolbar>
+
+<div class="my-container">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #snav
+      [mode]="mobileQuery.matches?'over':'side'"
+      [opened]="!mobileQuery.matches"
+    >
+    <app-avatar></app-avatar>
+    <mat-action-list>
+        <div mat-subheader>User</div>
+        <button
+        mat-list-item
+        [routerLinkActiveOptions]="{exact: true}"
+        [routerLink]="['/account/userinfo']"
+        routerLinkActive="active"
+        
+      >
+        <mat-icon mat-list-icon>person</mat-icon>
+        <div mat-line>Info</div>
+      </button>
+      <button
+        mat-list-item
+        [routerLink]="['/account/changepassword']"
+        routerLinkActive="active"
+      >
+        <mat-icon mat-list-icon>lock</mat-icon>
+        <div mat-line>Change Password</div>
+      </button>
+      <button
+        mat-list-item
+        (click)="auth.SignOut()"
+      >
+        <mat-icon mat-list-icon>exit_to_app</mat-icon>
+        <div mat-line>Sign Out</div>
+      </button>
+    </mat-action-list>
+      
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

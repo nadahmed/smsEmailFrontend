@@ -1,41 +1,57 @@
-<mat-drawer-container class="example-container">
-    <mat-drawer mode="side" opened>
-        <div class="grid-container">
-            <h1 class="mat-h1">Manage Groups</h1>
-        </div>
-            <mat-action-list>
-                <div mat-subheader>SMS Groups</div>
-                <!-- <button mat-list-item [routerLink]="['/managegroups/sms/editgroup']">
+<mat-toolbar>
+    <button mat-icon-button (click)="snav.toggle()" *ngIf="mobileQuery.matches" ><mat-icon>menu</mat-icon></button>
+    <h1 class="mat-h1" >Manage Groups</h1>
+</mat-toolbar>
+
+<mat-drawer-container class="my-container">
+  <mat-drawer #snav [mode]="mobileQuery.matches?'over':'side'" [opened]='!mobileQuery.matches' (click)="mobileQuery.matches ? snav.toggle():''">
+    <mat-action-list>
+      <div mat-subheader>SMS Groups</div>
+      <!-- <button mat-list-item [routerLink]="['/managegroups/sms/editgroup']">
                   <mat-icon mat-list-icon>group_add</mat-icon>
                   <div mat-line>Edit Groups</div>
                 </button> -->
-                <button mat-list-item [routerLink]="['/managegroups/sms/import']" routerLinkActive="active">
-                    <mat-icon mat-list-icon>person_add</mat-icon>
-                    <div mat-line>Import Contact</div>
-                </button>
-                <button mat-list-item [routerLink]="['/managegroups/sms/contactlist']" routerLinkActive="active">
-                    <mat-icon mat-list-icon>contact_phone</mat-icon>
-                    <div mat-line>Contact list</div>
-                </button>
-                <mat-divider></mat-divider>
-                <div mat-subheader>Email Groups</div>
-                <!-- <button disabled mat-list-item [routerLink]="['/managegroups/email/editgroup']">
+      <button
+        mat-list-item
+        [routerLink]="['/managegroups/sms/import']"
+        routerLinkActive="active"
+      >
+        <mat-icon mat-list-icon>person_add</mat-icon>
+        <div mat-line>Import Contact</div>
+      </button>
+      <button
+        mat-list-item
+        [routerLink]="['/managegroups/sms/contactlist']"
+        routerLinkActive="active"
+      >
+        <mat-icon mat-list-icon>contact_phone</mat-icon>
+        <div mat-line>Contact list</div>
+      </button>
+      <mat-divider></mat-divider>
+      <div mat-subheader>Email Groups</div>
+      <!-- <button disabled mat-list-item [routerLink]="['/managegroups/email/editgroup']">
                     <mat-icon mat-list-icon>group_add</mat-icon>
                     <div mat-line>Edit Groups</div>
                 </button> -->
-                <button mat-list-item [routerLink]="['/managegroups/email/import']" routerLinkActive="active">
-                    <mat-icon mat-list-icon>person_add</mat-icon>
-                    <div mat-line>Import Contact</div>
-                  </button>
-                  <button mat-list-item [routerLink]="['/managegroups/email/contactlist']" routerLinkActive="active">
-                      <mat-icon mat-list-icon>contact_mail</mat-icon>
-                      <div mat-line>Contact list</div>
-                    </button>
-              </mat-action-list>
-
-
-    </mat-drawer>
-    <mat-drawer-content>
-        <router-outlet></router-outlet>
-    </mat-drawer-content>
-  </mat-drawer-container>
+      <button
+        mat-list-item
+        [routerLink]="['/managegroups/email/import']"
+        routerLinkActive="active"
+      >
+        <mat-icon mat-list-icon>person_add</mat-icon>
+        <div mat-line>Import Contact</div>
+      </button>
+      <button
+        mat-list-item
+        [routerLink]="['/managegroups/email/contactlist']"
+        routerLinkActive="active"
+      >
+        <mat-icon mat-list-icon>contact_mail</mat-icon>
+        <div mat-line>Contact list</div>
+      </button>
+    </mat-action-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

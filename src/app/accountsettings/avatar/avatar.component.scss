@@ -1,0 +1,54 @@
+@import 'src/variables.scss';
+
+$box: 20rem;
+$circle: $box - 5rem ;
+
+.box {
+    position: relative;
+    background: $primary;
+    min-width: $box;
+    min-height: $box;
+}
+
+.circle {
+    position: absolute;
+    background-color: whitesmoke;
+    width: $circle;
+    height: $circle;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.initials {
+    font-size: 10rem;
+    // padding: 50%;
+    // width: 100%;
+    color: $primary;
+    
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.info-container {
+    text-align: center;
+    padding: 1.5rem 0;
+    .name {
+        font-size: x-large;;
+    }
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }

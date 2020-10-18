@@ -1,3 +1,4 @@
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RechargeComponent } from './recharge.component';
@@ -17,6 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatCardModule,
     ReactiveFormsModule,
+    MatToolbarModule,
     FormsModule,
 
     RouterModule.forChild([{path:'', component: RechargeComponent}]),
