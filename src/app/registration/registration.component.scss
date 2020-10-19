@@ -3,12 +3,14 @@
         width: 100%;
         left: 50%;
         // top: 50%;
+        margin-top: 1.5rem;
         -webkit-transform: translate(-50%, 0%);
         transform: translate(-50%, 0%);
 }
 
 .card-container{
 
+    overflow: hidden;
     margin: 10px;
     padding-top: 50px;
     text-align: center;

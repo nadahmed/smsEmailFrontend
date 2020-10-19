@@ -149,7 +149,7 @@ export class AuthService {
         return localStorage.getItem('refreshToken');
     }
 
-    set balance(bal: number){
+    set balance(bal: number) {
       this.balanceSub.next(bal);
       localStorage.setItem('balance', bal.toString());
     }

@@ -28,14 +28,14 @@ export class VerifyemailComponent implements OnInit {
   }
 
   sendVerificationMail() {
-    if (this.email.valid){
+    if (this.email.valid) {
         this.timeUp = false;
         this.auth.SendVerificationMail(this.email.value).subscribe(
             res => {
             },
             _ => {
                 this.timeUp = true;
-            })
+            });
     }
   }
 

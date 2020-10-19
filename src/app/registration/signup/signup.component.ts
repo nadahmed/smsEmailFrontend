@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable, config } from 'rxjs';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormControl, Validators, ValidatorFn, AbstractControl, FormGroup } from '@angular/forms';
@@ -14,7 +15,7 @@ import { valHooks } from 'jquery';
 export class SignupComponent {
     @ViewChild('scrollBottom', { static: false }) private scrollBottom: ElementRef;
 
-    formGroup = new FormGroup({});
+
 
     isBusy = false;
 
@@ -28,16 +29,22 @@ export class SignupComponent {
         Validators.maxLength(24),
         this.mismatchValidator(this.password)]);
 
+    formGroup = new FormGroup({
+        name: this.name,
+        email: this.email,
+        mobile: this.mobile,
+        password: this.password,
+        password2: this.password2
+    });
+
     hide = true;
+
+
+
     constructor(
         private afAuth: AuthService,
-        private snackBar: MatSnackBar,
+        private router: Router,
         ) {
-        this.formGroup.addControl('name', this.name);
-        this.formGroup.addControl('email', this.email);
-        this.formGroup.addControl('mobile', this.mobile);
-        this.formGroup.addControl('password', this.password);
-        this.formGroup.addControl('password2', this.password2);
      }
 
     getErrorMessageName() {
@@ -80,10 +87,12 @@ export class SignupComponent {
                 this.password2.value
                 )
                 .subscribe(
-                    res => {
-                        console.log(res);
+                    async (res) => {
+
                         if (!res.isExecuted) {
                             this.isBusy = false;
+                        } else {
+                            await this.router.navigate(['verify-email-address', encodeURI(this.email.value)]);
                         }
                     },
                     _ => {
