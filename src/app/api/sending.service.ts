@@ -4,15 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
-import { ApiResponse, BalanceData, BulkSendingRequestBody, GroupAddRequestBody } from '../api-service.interface';
-import { AbstractApi } from '../abstract-api';
+import { ApiResponse, BalanceData, BulkSendingRequestBody, GroupAddRequestBody } from './api-service.interface';
+import { AbstractApi } from './abstract-api';
 
-
+export enum Carrier {
+    Email,
+    Sms
+}
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class SmsService extends AbstractApi {
+export class SendingService extends AbstractApi {
 
     constructor(
         private http: HttpClient,
@@ -21,14 +24,27 @@ export class SmsService extends AbstractApi {
         super();
     }
 
+    private setCarrier = '';
+
+    set carrier(entry: Carrier) {
+        if (entry === Carrier.Email) {
+            this.setCarrier = 'email';
+        } else if (entry === Carrier.Sms) {
+            this.setCarrier = 'cell';
+        } else {
+            throw Error('Set carrier was invalid.');
+        }
+    }
+
     getCustomerGroups(): Observable<ApiResponse> {
-        return this.http.get( environment.baseApiURI + 'contacts/own/cell', {
+
+        return this.http.get( environment.baseApiURI + 'contacts/own/' + this.setCarrier, {
             headers: { accessToken: this.auth.token }
         }) as Observable<ApiResponse>;
     }
 
     getOfficialGroups(): Observable<ApiResponse> {
-        return this.http.get(environment.baseApiURI + 'contacts/official/cell', {
+        return this.http.get(environment.baseApiURI + 'contacts/official/' + this.setCarrier, {
             headers: { accessToken: this.auth.token }
         }) as Observable<ApiResponse>;
     }
@@ -39,7 +55,7 @@ export class SmsService extends AbstractApi {
         };
 
         console.log(JSON.stringify(body));
-        return this.http.post( environment.baseApiURI + 'contacts/add/cell', body, {
+        return this.http.post( environment.baseApiURI + 'contacts/add/' + this.setCarrier, body, {
             headers: { accessToken: this.auth.token },
         }) as Observable<ApiResponse>;
     }
@@ -54,19 +70,19 @@ export class SmsService extends AbstractApi {
                 createdBy: this.auth.user.id
             });
         });
-        return this.http.post( environment.baseApiURI + 'contacts/add/cell', body, {
+        return this.http.post( environment.baseApiURI + 'contacts/add/' + this.setCarrier, body, {
             headers: { accessToken: this.auth.token },
         }) as Observable<ApiResponse>;
     }
 
     deleteContact(id: string, groupName: string): Observable<ApiResponse> {
-        return this.http.delete(environment.baseApiURI + 'contacts/cell/' + id + '/' + groupName, {
+        return this.http.delete(environment.baseApiURI + 'contacts/' + this.setCarrier + '/' + id + '/' + groupName, {
             headers: { accessToken: this.auth.token }
         }) as Observable<ApiResponse>;
     }
 
     modifyContact(id: string, groupName: string, body: {name?: string, cell?: string}): Observable<ApiResponse> {
-        return this.http.post(environment.baseApiURI + 'contacts/update/cell/' + id + '/' + groupName,
+        return this.http.post(environment.baseApiURI + 'contacts/update/' + this.setCarrier + '/' + id + '/' + groupName,
         body,
         {
             headers: { accessToken: this.auth.token }
@@ -75,14 +91,16 @@ export class SmsService extends AbstractApi {
     }
 
     getCategory(): Observable<ApiResponse> {
-        return this.http.get( environment.baseApiURI + 'sms/getsmscategory/', {
+        const tempCarrier = this.setCarrier === 'cell' ? 'sms' : 'email';
+        return this.http.get( environment.baseApiURI + tempCarrier + '/get' + tempCarrier + 'category/', {
             headers: { accessToken: this.auth.token }
         }) as Observable<ApiResponse>;
     }
 
-    sendMeTestMessage(body: { message: string }): Observable<ApiResponse> {
+    sendMeTestMessage(body: { message: string, subject?: string }): Observable<ApiResponse> {
+        const tempCarrier = this.setCarrier === 'cell' ? 'sms' : 'email';
         return this.http.post(
-            environment.baseApiURI + 'sms/sendmesms/',
+            environment.baseApiURI + tempCarrier + '/sendme' + tempCarrier + '/',
             body,
             {
             headers: { accessToken: this.auth.token }
@@ -96,8 +114,9 @@ export class SmsService extends AbstractApi {
     }
 
     sendBulkMessage(data: BulkSendingRequestBody) {
-      return this.http.post(
-        environment.baseApiURI + 'sms/send/',
+        const tempCarrier = this.setCarrier === 'cell' ? 'sms' : 'email';
+        return this.http.post(
+        environment.baseApiURI + tempCarrier + '/send/',
         { ...data },
         {
           headers: { accessToken: this.auth.token }
@@ -110,5 +129,4 @@ export class SmsService extends AbstractApi {
         })
       ) as Observable<ApiResponse>;
     }
-
 }

@@ -1,7 +1,8 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
-import { GroupAddBody, EmailService } from 'src/app/api/email/email.service';
+import { Carrier, SendingService } from 'src/app/api/sending.service';
+import { GroupAddRequestBody } from 'src/app/api/api-service.interface';
 
 @Component({
   selector: 'app-emailbulkupload',
@@ -23,10 +24,11 @@ export class EmailbulkuploadComponent implements OnInit {
             groupColumn: this.groupColumn,
         },
     );
-  constructor(private csvParser: NgxCsvParser, private email: EmailService) { }
+  constructor(private csvParser: NgxCsvParser, private email: SendingService) { }
 
   ngOnInit() {
-  }
+    this.email.carrier = Carrier.Email;
+}
 
   csvInputChange(event: Event) {
       const target = event.target as HTMLInputElement;
@@ -59,7 +61,7 @@ export class EmailbulkuploadComponent implements OnInit {
   }
 
   startImport() {
-    const data: GroupAddBody[] = [];
+    const data: GroupAddRequestBody[] = [];
     if (this.columnSelectGroup.valid) {
         this.rawData.forEach(res => {
             data.push({

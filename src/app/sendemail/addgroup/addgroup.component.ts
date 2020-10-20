@@ -1,4 +1,5 @@
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Carrier, SendingService } from './../../api/sending.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   Component,
   Input,
@@ -6,12 +7,13 @@ import {
   Output,
   OnDestroy,
   OnInit,
-} from "@angular/core";
-import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
-import { map } from "rxjs/operators";
-import { Subscription } from "rxjs";
-import { EmailService } from "src/app/api/email/email.service";
-import { AuthService } from "src/app/api/auth/auth.service";
+} from '@angular/core';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { EmailService } from 'src/app/api/email/email.service';
+import { AuthService } from 'src/app/api/auth/auth.service';
+import { CategoryData } from 'src/app/api/api-service.interface';
 
 export interface CustomerGroup {
   name: string;
@@ -25,9 +27,9 @@ export interface CustomerGroup {
  * @title Basic select
  */
 @Component({
-  selector: "app-addgroup",
-  templateUrl: "./addgroup.component.html",
-  styleUrls: ["./addgroup.component.scss"],
+  selector: 'app-addgroup',
+  templateUrl: './addgroup.component.html',
+  styleUrls: ['./addgroup.component.scss'],
 })
 export class AddgroupComponent implements OnDestroy, OnInit {
   @Output() formEvents = new EventEmitter<any>();
@@ -38,17 +40,17 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
   selectedGroup = {
     available: null,
-    groupName: "",
-    type: "",
+    groupName: '',
+    type: '',
   };
 
-  groupName = new FormControl("", [Validators.required]);
+  groupName = new FormControl('', [Validators.required]);
   quantity = new FormControl(
     {
       value: null,
       disabled: true,
     },
-    [Validators.min(1), Validators.pattern("^[0-9]*$"), Validators.required]
+    [Validators.min(1), Validators.pattern('^[0-9]*$'), Validators.required]
   );
 
   myGroup = new FormGroup({
@@ -62,32 +64,33 @@ export class AddgroupComponent implements OnDestroy, OnInit {
     map(({ matches }) => {
       if (matches) {
         return [
-          { name: "group", cols: 16, rows: 1 },
-          { name: "available", cols: 8, rows: 1 },
-          { name: "quantity", cols: 8, rows: 1 },
-          { name: "amount", cols: 16, rows: 1 },
+          { name: 'group', cols: 16, rows: 1 },
+          { name: 'available', cols: 8, rows: 1 },
+          { name: 'quantity', cols: 8, rows: 1 },
+          { name: 'amount', cols: 16, rows: 1 },
         ];
       }
 
       return [
-        { name: "group", cols: 7, rows: 1 },
-        { name: "available", cols: 3, rows: 1 },
-        { name: "quantity", cols: 2, rows: 1 },
-        { name: "amount", cols: 4, rows: 1 },
+        { name: 'group', cols: 7, rows: 1 },
+        { name: 'available', cols: 3, rows: 1 },
+        { name: 'quantity', cols: 2, rows: 1 },
+        { name: 'amount', cols: 4, rows: 1 },
       ];
     })
   );
 
   myGroupSubscription: Subscription;
-  cost = "0.00";
+  cost = '0.00';
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private email: EmailService,
+    private email: SendingService,
     private auth: AuthService
   ) {}
 
   ngOnInit() {
+    this.email.carrier = Carrier.Email;
     this.myGroupSubscription = this.myGroup.valueChanges.subscribe((value) => {
       // console.log(value);
       if (!!value.groupName) {
@@ -112,19 +115,21 @@ export class AddgroupComponent implements OnDestroy, OnInit {
     });
     this.customerGroups = [
       {
-        name: "Official",
+        name: 'Official',
         categories: [],
       },
       {
-        name: "Own",
+        name: 'Own',
         categories: [],
       },
     ];
-    this.email.getEmailCategory().subscribe((res) => {
+    this.email.getCategory().subscribe((res) => {
       if (res.isExecuted) {
-        res.data.official.forEach((val) => {
+        const data = (res.data as CategoryData);
+        if ( !data.official) { return; }
+        data.official.forEach((val) => {
           this.customerGroups.forEach((group) => {
-            if (group.name === "Official") {
+            if (group.name === 'Official') {
               group.categories.push({
                 groupName: val.category,
                 available: val.count,
@@ -132,9 +137,9 @@ export class AddgroupComponent implements OnDestroy, OnInit {
             }
           });
         });
-        res.data.own.forEach((val) => {
+        data.own.forEach((val) => {
           this.customerGroups.forEach((group) => {
-            if (group.name === "Own") {
+            if (group.name === 'Own') {
               group.categories.push({
                 groupName: val.category,
                 available: val.count,

@@ -1,8 +1,8 @@
-import { GroupAddBody } from 'src/app/api/sms/sms.service';
+import { ApiResponse, GroupData } from './../../../api/api-service.interface';
+import { Carrier, SendingService } from './../../../api/sending.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 
 export interface PeriodicElement {
     id: number;
@@ -44,19 +44,21 @@ export class SmseditgroupComponent implements OnInit {
     displayedColumns: string[] = ['group', 'contacts', 'actions'];
     dataSource = new MatTableDataSource();
 
-    constructor(private smsService: SmsService) {}
+    constructor(private smsService: SendingService) {}
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
     ngOnInit() {
+        this.smsService.carrier = Carrier.Sms;
         this.isBusy = true;
         this.smsService.getCustomerGroups()
         .subscribe(
-            (res: SMSResponse) => {
+            (res: ApiResponse) => {
                 console.log(res.data);
-                res.data.cell.forEach( val => {
+                if (!(res.data as GroupData).cell) { return; }
+                (res.data as GroupData).cell.forEach( val => {
                     this.data.push({
                         group: val.groupName,
                         contacts: val.contacts.length,

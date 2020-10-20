@@ -1,7 +1,8 @@
+import { Carrier, SendingService } from './../../api/sending.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { EmailService, EmailResponse } from 'src/app/api/email/email.service';
+import { ApiResponse, GroupData } from 'src/app/api/api-service.interface';
 
 export interface PeriodicElement {
     group: string;
@@ -37,26 +38,26 @@ export class OfficialemailgroupComponent implements OnInit {
     dataSource = new MatTableDataSource();
 
     isBusy = false;
-    constructor(private emailService: EmailService) { }
+    constructor(private emailService: SendingService) { }
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
     ngOnInit() {
+        this.emailService.carrier = Carrier.Email;
         this.isBusy = true;
         const data: { group: string, contacts: number; }[] = [];
         this.emailService.getOfficialGroups()
             .subscribe(
-                (res: EmailResponse) => {
-                    if (!!res.data.email) {
-                        res.data.email.forEach(val => {
-                            data.push({
-                                group: val.groupName,
-                                contacts: val.contacts.length,
-                            });
+                (res: ApiResponse) => {
+                    if (!(res.data as GroupData).email) { return; }
+                    (res.data as GroupData).email.forEach(val => {
+                        data.push({
+                            group: val.groupName,
+                            contacts: val.contacts.length,
                         });
-                    }
+                    });
                 },
                 err => {
                     this.isBusy = false;

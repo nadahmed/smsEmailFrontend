@@ -1,12 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { FormArray, FormGroup } from "@angular/forms";
-import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
-import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
-import { map } from "rxjs/operators";
-import { BulkSMSRequestBody, SmsService } from "../api/sms/sms.service";
+import { Carrier, SendingService } from 'src/app/api/sending.service';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { PopinfoComponent } from '../extras/popinfo/popinfo.component';
 import { LoaderComponent } from '../extras/loader/loader.component';
+import { BulkSendingRequestBody } from '../api/api-service.interface';
 
 export interface InputData {
   id: number;
@@ -14,9 +15,9 @@ export interface InputData {
 }
 
 @Component({
-  selector: "app-sendsms",
-  templateUrl: "./sendsms.component.html",
-  styleUrls: ["./sendsms.component.scss"],
+  selector: 'app-sendsms',
+  templateUrl: './sendsms.component.html',
+  styleUrls: ['./sendsms.component.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -33,7 +34,7 @@ export class SendsmsComponent implements OnInit {
 
   smsForm = new FormGroup({});
 
-  totalCost = "";
+  totalCost = '';
 
   details = {
     group: this.formArray,
@@ -52,27 +53,28 @@ export class SendsmsComponent implements OnInit {
     map(({ matches }) => {
       if (matches) {
         return [
-          { name: "total", cols: 8, rows: 2 },
-          { name: "quantity", cols: 8, rows: 1 },
-          { name: "amount", cols: 8, rows: 1 },
+          { name: 'total', cols: 8, rows: 2 },
+          { name: 'quantity', cols: 8, rows: 1 },
+          { name: 'amount', cols: 8, rows: 1 },
         ];
       }
 
       return [
-        { name: "total", cols: 10, rows: 1 },
-        { name: "quantity", cols: 3, rows: 1 },
-        { name: "amount", cols: 3, rows: 1 },
+        { name: 'total', cols: 10, rows: 1 },
+        { name: 'quantity', cols: 3, rows: 1 },
+        { name: 'amount', cols: 3, rows: 1 },
       ];
     })
   );
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private smsService: SmsService,
+    private smsService: SendingService,
     public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
+    this.smsService.carrier = Carrier.Sms;
     this.formIndex.push(new FormGroup({}));
   }
 
@@ -126,7 +128,7 @@ export class SendsmsComponent implements OnInit {
   deletedEvent(i, value) {
     // console.log('[DELETED]', i, value);
     this.formArray.removeAt(i);
-    this.updateTotals(i, { cost: "0.00" });
+    this.updateTotals(i, { cost: '0.00' });
     this.data.splice(i, 1);
   }
 
@@ -134,7 +136,7 @@ export class SendsmsComponent implements OnInit {
     // console.log('[CREATED]', i, value);
     this.formArray.push(value.group);
     this.data.push(value.cost);
-    this.updateTotals(i, { cost: "0.00" });
+    this.updateTotals(i, { cost: '0.00' });
 
     // this.formArray.setControl(i, value.group);
     // this.formArray.insert(value.index, value.group);
@@ -157,7 +159,7 @@ export class SendsmsComponent implements OnInit {
     if (this.smsForm.invalid || this.formArray.invalid) {
       return;
     } else {
-      const data: BulkSMSRequestBody = {
+      const data: BulkSendingRequestBody = {
         groups: [],
         ...this.smsForm.value,
         bill: this.totalCost,
@@ -175,6 +177,7 @@ export class SendsmsComponent implements OnInit {
         data: {
             icon: 'warning',
             title: 'Warning! Irreversible action!',
+            // tslint:disable-next-line: max-line-length
             message: `This action will send an sms to ALL your selected reciepients and is irreversible. Click Cancel to abort or OK to continue.`,
         }
       });
@@ -185,7 +188,7 @@ export class SendsmsComponent implements OnInit {
                 disableClose: true,
             });
 
-            this.smsService.sendBulkSMS(data).subscribe(
+            this.smsService.sendBulkMessage(data).subscribe(
                 response => {
                     if (response.isExecuted) {
 
@@ -197,12 +200,12 @@ export class SendsmsComponent implements OnInit {
                             }
                         });
 
-                        dialogRef2.afterClosed().subscribe(res => {
+                        dialogRef2.afterClosed().subscribe( _ => {
                           location.reload();
                         });
                     }
                 },
-                err => {
+                _ => {
                     const dialogRef2 = this.dialog.open(PopinfoComponent, {
                         data: {
                             icon: 'error',

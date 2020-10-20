@@ -1,10 +1,10 @@
+import { ApiResponse, GroupData } from './../../../api/api-service.interface';
+import { Carrier, SendingService } from './../../../api/sending.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmailResponse, EmailService } from 'src/app/api/email/email.service';
-import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 import { PopinfoComponent } from 'src/app/extras/popinfo/popinfo.component';
 
 
@@ -35,7 +35,7 @@ export class EmaileditcontactComponent implements OnInit {
     dataSource = new MatTableDataSource();
 
     constructor(
-        private emailService: EmailService,
+        private emailService: SendingService,
         private matDialog: MatDialog,
         private snackBar: MatSnackBar,
         ) {}
@@ -45,12 +45,14 @@ export class EmaileditcontactComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.emailService.carrier = Carrier.Email;
         this.isBusy = true;
         this.emailService.getCustomerGroups()
         .subscribe(
-            (res: EmailResponse) => {
+            (res: ApiResponse) => {
                 console.log(res.data);
-                res.data.email.forEach( val => {
+                if (!(res.data as GroupData).email) { return; }
+                (res.data as GroupData).email.forEach( val => {
                     val.contacts.forEach(contact => {
                         this.data.push({
                             id: contact._id,

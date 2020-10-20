@@ -1,20 +1,16 @@
+import { Carrier, SendingService } from './../api/sending.service';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
   FormArray,
-  FormControl,
   FormGroup,
-  AbstractControl,
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
-import { AuthService } from '../api/auth/auth.service';
-import { BulkEmailRequestBody, EmailService } from '../api/email/email.service';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PopinfoComponent } from '../extras/popinfo/popinfo.component';
 import { LoaderComponent } from '../extras/loader/loader.component';
+import { BulkSendingRequestBody } from '../api/api-service.interface';
 
 export interface InputData {
   id: number;
@@ -74,11 +70,12 @@ export class SendemailComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private emailService: EmailService,
+    private emailService: SendingService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.emailService.carrier = Carrier.Email;
     this.formIndex.push(new FormGroup({}));
   }
 
@@ -163,7 +160,7 @@ export class SendemailComponent implements OnInit {
     if (this.emailForm.invalid || this.formArray.invalid) {
       return;
     } else {
-      const data: BulkEmailRequestBody = {
+      const data: BulkSendingRequestBody = {
         groups: [],
         ...this.emailForm.value,
       };
@@ -192,7 +189,7 @@ export class SendemailComponent implements OnInit {
                 disableClose: true,
             });
 
-            this.emailService.sendBulkEmail(data).subscribe(
+            this.emailService.sendBulkMessage(data).subscribe(
                 response => {
                     if (response.isExecuted) {
 

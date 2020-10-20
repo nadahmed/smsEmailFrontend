@@ -3,8 +3,9 @@ import { Component, Input, EventEmitter, Output, OnDestroy, OnInit } from '@angu
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { SmsService } from 'src/app/api/sms/sms.service';
 import { AuthService } from 'src/app/api/auth/auth.service';
+import { Carrier, SendingService } from 'src/app/api/sending.service';
+import { CategoryData } from 'src/app/api/api-service.interface';
 
 export interface CustomerGroup {
     name: string;
@@ -12,7 +13,7 @@ export interface CustomerGroup {
         groupName: string;
         available: number;
     }[];
-};
+}
 
 /**
  * @title Basic select
@@ -88,7 +89,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
 
     constructor(
         private breakpointObserver: BreakpointObserver,
-        private sms: SmsService,
+        private sms: SendingService,
         private auth: AuthService
         ) {
         this.myGroup = new FormGroup({
@@ -126,6 +127,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
      }
 
      ngOnInit() {
+         this.sms.carrier = Carrier.Sms;
          this.customerGroups = [
              {
                  name: 'Official',
@@ -135,12 +137,14 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 name: 'Own',
                 categories: []
            }
-         ]
-        this.sms.getSmsCategory().subscribe( res => {
-            if(res.isExecuted) {
-                res.data.official.forEach(val => {
+         ];
+         this.sms.getCategory().subscribe( res => {
+
+            if (res.isExecuted) {
+                const data = res.data as CategoryData;
+                data.official.forEach(val => {
                     this.customerGroups.forEach(group => {
-                        if (group.name === 'Official'){
+                        if (group.name === 'Official') {
                             group.categories.push(
                                 {
                                     groupName: val.category,
@@ -150,9 +154,9 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                         }
                     });
                 });
-                res.data.own.forEach(val => {
+                data.own.forEach(val => {
                     this.customerGroups.forEach(group => {
-                        if (group.name === 'Own'){
+                        if (group.name === 'Own') {
                             group.categories.push(
                                 {
                                     groupName: val.category,
@@ -164,7 +168,7 @@ export class AddgroupComponent implements OnDestroy, OnInit {
                 });
             }
         });
-        this.init.emit({group: this.myGroup, cost: this.cost});
+         this.init.emit({group: this.myGroup, cost: this.cost});
      }
 
      ngOnDestroy() {

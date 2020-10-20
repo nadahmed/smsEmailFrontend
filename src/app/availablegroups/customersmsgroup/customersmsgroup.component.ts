@@ -1,7 +1,8 @@
+import { SendingService, Carrier } from './../../api/sending.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
+import { ApiResponse, GroupData } from 'src/app/api/api-service.interface';
 
 @Component({
     selector: 'app-customersmsgroup',
@@ -15,21 +16,26 @@ export class CustomersmsgroupComponent implements OnInit {
     dataSource = new MatTableDataSource();
 
     isBusy = false;
-    constructor(private smsService: SmsService) { }
+
+    constructor(private smsService: SendingService) {
+
+     }
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
     ngOnInit() {
+        this.smsService.carrier = Carrier.Sms;
+
         this.isBusy = true;
         const data: { group: string, contacts: number; }[] = [];
         this.smsService.getCustomerGroups()
             .subscribe(
-                (res: SMSResponse) => {
+                (res: ApiResponse) => {
                     // console.log(res.data);
-                    // if (!res.data.length) { return; }
-                    res.data.cell.forEach(val => {
+                    if (!(res.data as GroupData).cell) { return; }
+                    (res.data as GroupData).cell.forEach(val => {
                         data.push({
                             group: val.groupName,
                             contacts: val.contacts.length,

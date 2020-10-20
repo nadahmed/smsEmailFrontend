@@ -1,29 +1,14 @@
+import { GroupData } from 'src/app/api/api-service.interface'
+import { Carrier, SendingService } from './../../api/sending.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { EmailService, EmailResponse } from 'src/app/api/email/email.service';
+import { ApiResponse } from 'src/app/api/api-service.interface';
 
 export interface PeriodicElement {
     group: string;
     contacts: number;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    { group: 'Engineers', contacts: 2000 },
-    { group: 'Doctors', contacts: 6152 },
-    { group: 'House wives', contacts: 120 },
-    { group: 'Truck drivers', contacts: 150 },
-    { group: 'Lawyers', contacts: 1120 },
-    { group: 'Salesmen', contacts: 1320 },
-    { group: 'Pivate car drivers', contacts: 204 },
-    { group: 'BBA Students', contacts: 66 },
-    { group: 'BSc Students', contacts: 1203 },
-    { group: 'School Students', contacts: 1233 },
-];
-
-/**
- * @title Table with filtering
- */
 
 @Component({
     selector: 'app-customeremailgroup',
@@ -38,21 +23,25 @@ export class CustomeremailgroupComponent implements OnInit {
 
     isBusy = false;
 
-    constructor(private emailService: EmailService) { }
+    constructor(private emailService: SendingService) {
+      
+     }
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
     ngOnInit() {
+        this.emailService.carrier = Carrier.Email;
+        
         this.isBusy = true;
         const data: { group: string, contacts: number; }[] = [];
         this.emailService.getCustomerGroups()
             .subscribe(
-                (res: EmailResponse) => {
+                (res: ApiResponse) => {
                     // console.log(res.data);
-                    // if (!res.data.length) {return; }
-                    res.data.email.forEach(val => {
+                    if (!(res.data as GroupData).email) {return; }
+                    (res.data as GroupData).email.forEach(val => {
                         data.push({
                             group: val.groupName,
                             contacts: val.contacts.length,

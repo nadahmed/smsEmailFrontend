@@ -1,9 +1,10 @@
-import { EmailService } from 'src/app/api/email/email.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Carrier, SendingService } from 'src/app/api/sending.service';
+import { GroupData } from 'src/app/api/api-service.interface';
 
 export interface Group {
     value: string;
@@ -38,13 +39,14 @@ export class EmailaddcontactComponent implements OnInit {
 
     groups: string[];
 
-  constructor(private emailService: EmailService, public snackBar: MatSnackBar ) { }
+  constructor(private emailService: SendingService, public snackBar: MatSnackBar ) { }
 
   ngOnInit() {
+    this.emailService.carrier = Carrier.Email;
     this.groups = [];
     this.emailService.getCustomerGroups().subscribe( res => {
           if (res.isExecuted) {
-              res.data.email.forEach(val => {
+              (res.data as GroupData).email.forEach(val => {
                   this.groups.push(val.groupName);
               });
           }

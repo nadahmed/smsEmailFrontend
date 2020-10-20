@@ -1,7 +1,8 @@
+import { Carrier, SendingService } from './../../../api/sending.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
-import { GroupAddBody, SmsService } from 'src/app/api/sms/sms.service';
+import { GroupAddRequestBody } from 'src/app/api/api-service.interface';
 
 @Component({
   selector: 'app-smsbulkupload',
@@ -23,9 +24,10 @@ export class SmsbulkuploadComponent implements OnInit {
             groupColumn: this.groupColumn,
         },
     );
-  constructor(private csvParser: NgxCsvParser, private sms: SmsService) { }
+  constructor(private csvParser: NgxCsvParser, private sms: SendingService) { }
 
   ngOnInit() {
+      this.sms.carrier = Carrier.Sms;
   }
 
   csvInputChange(event: Event) {
@@ -59,7 +61,7 @@ export class SmsbulkuploadComponent implements OnInit {
   }
 
   startImport() {
-    const data: GroupAddBody[] = [];
+    const data: GroupAddRequestBody[] = [];
     if (this.columnSelectGroup.valid) {
         this.rawData.forEach(res => {
             data.push({

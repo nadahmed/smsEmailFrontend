@@ -1,9 +1,9 @@
+import { Carrier, SendingService } from 'src/app/api/sending.service';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { SmsService } from 'src/app/api/sms/sms.service';
 import { PopinfoComponent } from 'src/app/extras/popinfo/popinfo.component';
 import { LoaderComponent } from 'src/app/extras/loader/loader.component';
 
@@ -29,13 +29,13 @@ export class SmsComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
 
     constructor(
-        private smsService: SmsService,
+        private smsService: SendingService,
         public dialog: MatDialog,
         private auth: AuthService,
     ) { }
 
     ngOnInit() {
-
+        this.smsService.carrier = Carrier.Sms;
         this.subscription = this.sms.valueChanges.subscribe(() => {
             this.smsChangeEvent.emit(this.sms);
         });
@@ -69,7 +69,7 @@ export class SmsComponent implements OnInit, OnDestroy {
                         disableClose: true,
                     });
 
-                    this.smsService.sendTestSms(this.message.value).subscribe(
+                    this.smsService.sendMeTestMessage(this.message.value).subscribe(
                         response => {
                             if (response.isExecuted) {
 
@@ -99,8 +99,6 @@ export class SmsComponent implements OnInit, OnDestroy {
                     );
                 }
             });
-
-
         }
     }
 

@@ -1,3 +1,4 @@
+import { SendingService } from './api/sending.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ExtrasModule } from './extras/extras.module';
 import { TokenInterceptorService } from './_helpers/token-interceptor.service';
@@ -33,7 +34,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     },
     AuthService,
     SmsService,
-    EmailService
+    EmailService,
+    SendingService,
     ],
   bootstrap: [AppComponent]
 })

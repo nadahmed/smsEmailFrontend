@@ -1,125 +1,58 @@
+
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ApiResponse, BalanceData, BulkSendingRequestBody, GroupAddRequestBody } from '../api-service.interface';
+import { AbstractApi } from '../abstract-api';
 
-export interface OfficialEmailGroupdata {
-    id?: string;
-    email: {
-        _id: string;
-        groupName: string;
-        contacts: {
-            createdAt: Date,
-            updatedAt: Date,
-            isDisabled: boolean,
-            _id: string,
-            location: string,
-            name: string,
-            email: string
-        }[];
-    }[];
-}
-// export interface OfficialEmailGroupResponse {
-//     isExecuted: boolean;
-//     data: OfficialEmailGroupdata[];
-//     message: string;
-// }
-
-export interface EmailResponse {
-    isExecuted: boolean;
-    data: OfficialEmailGroupdata;
-    message: string;
-}
-
-export interface EmailCategoryResponse {
-    isExecuted: boolean;
-    data: EmailCategoryData;
-    message: string;
-}
-
-export interface EmailCategoryData {
-        official: {
-            _id: string;
-            category: string;
-            count: number
-        }[];
-        own: {
-            _id: string,
-            category: string,
-            count: number
-        }[];
-}
-
-export interface GroupAddBody {
-    profession: string;
-    name: string;
-    email: string;
-    // createdBy:userId
-}
-
-export interface TestEmailResponse {
-  isExecuted: boolean;
-  data: {
-    balance: number;
-  };
-  message: string;
-}
-
-export interface BulkEmailRequestBody {
-  groups: {
-    type: string;
-    category: string;
-    qty: number;
-  }[];
-  message: string;
-  subject: string;
-}
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class EmailService {
+export class EmailService extends AbstractApi {
 
-  constructor(
-      private http: HttpClient,
-      private auth: AuthService,
-      ) { }
-
-  getOfficialGroups() {
-      return this.http.get( environment.baseApiURI + 'contacts/official/email', {
-          headers: { accessToken : this.auth.token }
-      });
-  }
-
-  getCustomerGroups(): Observable<EmailResponse> {
-    return this.http.get( environment.baseApiURI + 'contacts/own/email', {
-        headers: { accessToken: this.auth.token }
-    }) as Observable<EmailResponse>;
-}
-
-    getEmailCategory(): Observable<EmailCategoryResponse> {
-        return this.http.get( environment.baseApiURI + 'email/getemailcategory/', {
-            headers: { accessToken: this.auth.token }
-        }) as Observable<EmailCategoryResponse>;
+    constructor(
+        private http: HttpClient,
+        private auth: AuthService,
+    ) {
+        super();
     }
 
-    addOwnContact(data: GroupAddBody) {
+    getOfficialGroups(): Observable<ApiResponse> {
+        return this.http.get(environment.baseApiURI + 'contacts/official/email', {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<ApiResponse>;
+    }
+
+    getCustomerGroups(): Observable<ApiResponse> {
+        return this.http.get(environment.baseApiURI + 'contacts/own/email', {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<ApiResponse>;
+    }
+
+    getCategory(): Observable<ApiResponse> {
+        return this.http.get(environment.baseApiURI + 'email/getemailcategory/', {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<ApiResponse>;
+    }
+
+    addOwnContact(data: GroupAddRequestBody): Observable<ApiResponse> {
         const body = {
             contacts: [{
-                ...data,
-                createdBy: this.auth.user.id
+                ...data
             }]
         };
 
         console.log(JSON.stringify(body));
-        return this.http.post( environment.baseApiURI + 'contacts/add/email', body, {
+        return this.http.post(environment.baseApiURI + 'contacts/add/email', body, {
             headers: { accessToken: this.auth.token },
-        });
+        }) as Observable<ApiResponse>;
     }
 
-    addOwnContacts(data: GroupAddBody[]) {
+    addOwnContacts(data: GroupAddRequestBody[]): Observable<ApiResponse> {
         const body = {
             contacts: []
         };
@@ -129,58 +62,55 @@ export class EmailService {
                 createdBy: this.auth.user.id
             });
         });
-        return this.http.post( environment.baseApiURI + 'contacts/add/email', body, {
+        return this.http.post(environment.baseApiURI + 'contacts/add/email', body, {
             headers: { accessToken: this.auth.token },
-        });
+        }) as Observable<ApiResponse>;
     }
 
-    deleteContact(id: string, groupName: string): Observable<EmailResponse> {
+    deleteContact(id: string, groupName: string): Observable<ApiResponse> {
         return this.http.delete(environment.baseApiURI + 'contacts/email/' + id + '/' + groupName, {
             headers: { accessToken: this.auth.token }
-        }) as Observable<EmailResponse>;
+        }) as Observable<ApiResponse>;
     }
 
-    modifyContact(id: string, groupName: string, body: {name?: string, email?: string}): Observable<EmailResponse> {
+    modifyContact(id: string, groupName: string, body: { name?: string, email?: string; }): Observable<ApiResponse> {
         return this.http.post(environment.baseApiURI + 'contacts/update/email/' + id + '/' + groupName,
-        body,
-        {
-            headers: { accessToken: this.auth.token }
-        }
-        ) as Observable<EmailResponse>;
+            body,
+            {
+                headers: { accessToken: this.auth.token }
+            }
+        ) as Observable<ApiResponse>;
     }
 
-    sendTestEmail(subject: string, message: string): Observable<TestEmailResponse> {
-      return this.http.post(
-          environment.baseApiURI + 'email/sendmeemail/',
-          {
-            subject,
-            message
-          },
-          {
-          headers: { accessToken: this.auth.token }
-      }).pipe(
-        tap( (res: TestEmailResponse) => {
-          if (res.isExecuted) {
-            this.auth.balance = res.data.balance;
-          }
-        })
-      ) as Observable<TestEmailResponse>;
-  }
+    sendMeTestMessage(body: {subject: string, message: string}): Observable<ApiResponse> {
+        return this.http.post(
+            environment.baseApiURI + 'email/sendmeemail/',
+            body,
+            {
+                headers: { accessToken: this.auth.token }
+            }).pipe(
+                tap((res: ApiResponse) => {
+                    if (res.isExecuted) {
+                        this.auth.balance = (res.data as BalanceData).balance;
+                    }
+                })
+            ) as Observable<ApiResponse>;
+    }
 
-  sendBulkEmail(data: BulkEmailRequestBody) {
-    return this.http.post(
-      environment.baseApiURI + 'email/send/',
-      { ...data },
-      {
-        headers: { accessToken: this.auth.token }
-      }
-    ).pipe(
-      tap( (res: TestEmailResponse) => {
-        if (res.isExecuted) {
-          this.auth.balance = res.data.balance;
-        }
-      })
-    ) as Observable<TestEmailResponse>;
-  }
+    sendBulkMessage(body: BulkSendingRequestBody) {
+        return this.http.post(
+            environment.baseApiURI + 'email/send/',
+            body,
+            {
+                headers: { accessToken: this.auth.token }
+            }
+        ).pipe(
+            tap((res: ApiResponse) => {
+                if (res.isExecuted) {
+                    this.auth.balance = (res.data as BalanceData).balance;
+                }
+            })
+        ) as Observable<ApiResponse>;
+    }
 
 }

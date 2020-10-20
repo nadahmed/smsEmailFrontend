@@ -1,3 +1,4 @@
+import { Carrier, SendingService } from './../../api/sending.service';
 import { MatDialog } from '@angular/material';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -50,13 +51,13 @@ export class EmailComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
 
     constructor(
-        private emailService: EmailService,
-        private auth: AuthService,
+        private emailService: SendingService,
         private dialog: MatDialog,
         ) { }
 
     ngOnInit() {
 
+        this.emailService.carrier = Carrier.Email;
         ////////////////////////
         this.mycontent = `<p>My html content</p>`;
         /////////////////////////
@@ -110,7 +111,7 @@ export class EmailComponent implements OnInit, OnDestroy {
                         disableClose: true,
                     });
 
-                    this.emailService.sendTestEmail(this.subject.value, this.message.value).subscribe(
+                    this.emailService.sendMeTestMessage({subject: this.subject.value, message: this.message.value}).subscribe(
                         response => {
                             if (response.isExecuted) {
 

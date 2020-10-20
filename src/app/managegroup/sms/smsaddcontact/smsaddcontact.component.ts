@@ -1,3 +1,5 @@
+import { GroupData } from './../../../api/api-service.interface';
+import { Carrier, SendingService } from './../../../api/sending.service';
 import { SmsService } from 'src/app/api/sms/sms.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -38,13 +40,15 @@ export class SmsaddcontactComponent implements OnInit {
 
     groups: string[];
 
-  constructor(private sms: SmsService, public snackBar: MatSnackBar ) { }
+  constructor(private sms: SendingService, public snackBar: MatSnackBar ) { }
 
   ngOnInit() {
+    this.sms.carrier = Carrier.Sms;
     this.groups = [];
     this.sms.getCustomerGroups().subscribe( res => {
           if (res.isExecuted) {
-              res.data.cell.forEach(val => {
+            if (!(res.data as GroupData).cell) { return; }
+            (res.data as GroupData).cell.forEach(val => {
                   this.groups.push(val.groupName);
               });
           }

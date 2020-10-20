@@ -1,11 +1,9 @@
-import { DialogInfoData, PopinfoComponent } from './../extras/popinfo/popinfo.component';
 import { AuthService } from 'src/app/api/auth/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { LoaderComponent } from '../extras/loader/loader.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -51,7 +49,11 @@ export class DashboardComponent implements OnInit, OnDestroy{
         })
     );
 
-    constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService, public dialog: MatDialog) { }
+    constructor(
+        private breakpointObserver: BreakpointObserver,
+        private auth: AuthService,
+        public dialog: MatDialog
+        ) { }
 
     ngOnInit() {
       this.balanceSub = this.auth.balanceSub.subscribe(res => {

@@ -1,10 +1,10 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ApiResponse, GroupData } from './../../../api/api-service.interface';
+import { Carrier, SendingService } from './../../../api/sending.service';
 import { PopinfoComponent } from './../../../extras/popinfo/popinfo.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SMSResponse, SmsService } from 'src/app/api/sms/sms.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -38,7 +38,7 @@ export class SmseditcontactComponent implements OnInit {
     dataSource = new MatTableDataSource();
 
     constructor(
-        private smsService: SmsService,
+        private smsService: SendingService,
         private matDialog: MatDialog,
         private snackBar: MatSnackBar,
         ) {}
@@ -48,11 +48,13 @@ export class SmseditcontactComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.smsService.carrier = Carrier.Sms;
         this.isBusy = true;
         this.smsService.getCustomerGroups()
         .subscribe(
-            (res: SMSResponse) => {
-                res.data.cell.forEach( val => {
+            (res: ApiResponse) => {
+                if (!(res.data as GroupData).cell) { return; }
+                (res.data as GroupData).cell.forEach( val => {
                     val.contacts.forEach(contact => {
                         this.data.push({
                             id: contact._id,
