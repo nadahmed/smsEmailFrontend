@@ -1,14 +1,7 @@
-export interface User {
-    uid: string;
-    email: string;
-    displayName: string;
-    photoURL: string;
-    emailVerified: boolean;
- }
-
 export interface UserData {
     accessToken: string;
     balance: number;
+    cell: string;
     emailUnitCost: string;
     email: string;
     id: string;

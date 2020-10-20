@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
             _ => {},
             async (error) => {
                 this.isBusy = false;
-                if(error.error.message === 'Account is not acctivated') {
+                if(error.error.message === 'Account is not activated') {
                     await this.router.navigate(['verify-email-address', encodeURI(this.formGroup.get('email').value)]);
                 }
 

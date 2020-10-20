@@ -3,7 +3,8 @@
     <p class="initials noselect">{{initials}}</p>
 </div>
 </div>
-<div class="info-container">
+<div class="info-container" *ngIf="auth.user" >
     <p class="name">{{ auth.user.name }}</p>
     <p class="email">{{ auth.user.email }}</p>
+    <p class="cell">{{ auth.user.cell }}</p>
 </div>

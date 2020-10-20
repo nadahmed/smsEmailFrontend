@@ -11,10 +11,12 @@ export class ChangePasswordComponent implements OnInit {
 
     hide = [true, true, true];
 
-    newpass = new FormControl('', [Validators.required]);
+    newpass = new FormControl('', [Validators.required, Validators.minLength(8)]);
+
+    oldpass = new FormControl('', [Validators.required]);
 
     passwordGroup = new FormGroup({
-        oldpass: new FormControl('', [Validators.required]),
+        oldpass: this.oldpass,
         newpass: this.newpass,
         confirmpass: new FormControl('', [Validators.required, this.mismatchValidator(this.newpass)]),
     });
@@ -31,5 +33,9 @@ export class ChangePasswordComponent implements OnInit {
         return forbidden ? { mismatch: { value: control.value } } : null;
     };
 }
+
+    changePassword() {
+        this.auth.changePassword(this.oldpass.value, this.newpass.value).subscribe();
+    }
 
 }

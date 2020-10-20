@@ -56,9 +56,9 @@ export class SmseditgroupComponent implements OnInit {
         .subscribe(
             (res: SMSResponse) => {
                 console.log(res.data);
-                res.data.forEach( val => {
+                res.data.cell.forEach( val => {
                     this.data.push({
-                        group: val.professionGroup,
+                        group: val.groupName,
                         contacts: val.contacts.length,
                     });
                 });
@@ -82,7 +82,7 @@ export class SmseditgroupComponent implements OnInit {
         } else {
             ELEMENT_DATA.forEach(v => {
                 v.editable = false;
-            })
+            });
         }
 
     }

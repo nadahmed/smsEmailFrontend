@@ -50,11 +50,11 @@ export class CustomeremailgroupComponent implements OnInit {
         this.emailService.getCustomerGroups()
             .subscribe(
                 (res: EmailResponse) => {
-                    console.log(res.data);
-                    if (!res.data.length) {return; }
-                    res.data.forEach(val => {
+                    // console.log(res.data);
+                    // if (!res.data.length) {return; }
+                    res.data.email.forEach(val => {
                         data.push({
-                            group: val.professionGroup,
+                            group: val.groupName,
                             contacts: val.contacts.length,
                         });
                     });

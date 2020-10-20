@@ -31,13 +31,14 @@ export class OfficialsmsgroupComponent implements OnInit {
         this.smsService.getOfficialGroups()
         .subscribe(
             (res: SMSResponse) => {
-                console.log(res.data);
-                res.data.forEach( val => {
+                if (!!res.data.cell) {
+                res.data.cell.forEach( val => {
                     data.push({
-                        group: val.professionGroup,
+                        group: val.groupName,
                         contacts: val.contacts.length,
                     });
                 });
+            }
             },
             err => {
                 this.isBusy = false;

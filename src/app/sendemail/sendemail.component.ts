@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormArray,
   FormControl,
   FormGroup,
   AbstractControl,
-} from "@angular/forms";
-import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
-import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
-import { map } from "rxjs/operators";
-import { AuthService } from "../api/auth/auth.service";
-import { BulkEmailRequestBody, EmailService } from "../api/email/email.service";
-import { Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { PopinfoComponent } from "../extras/popinfo/popinfo.component";
+} from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
+import { AuthService } from '../api/auth/auth.service';
+import { BulkEmailRequestBody, EmailService } from '../api/email/email.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { PopinfoComponent } from '../extras/popinfo/popinfo.component';
 import { LoaderComponent } from '../extras/loader/loader.component';
 
 export interface InputData {
@@ -22,9 +22,9 @@ export interface InputData {
 }
 
 @Component({
-  selector: "app-sendemail",
-  templateUrl: "./sendemail.component.html",
-  styleUrls: ["./sendemail.component.scss"],
+  selector: 'app-sendemail',
+  templateUrl: './sendemail.component.html',
+  styleUrls: ['./sendemail.component.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -39,7 +39,7 @@ export class SendemailComponent implements OnInit {
   formArray = new FormArray([]);
 
   emailForm = new FormGroup({});
-  totalCost: string = "";
+  totalCost = '';
 
   details = {
     group: this.formArray,
@@ -58,16 +58,16 @@ export class SendemailComponent implements OnInit {
     map(({ matches }) => {
       if (matches) {
         return [
-          { name: "total", cols: 8, rows: 2 },
-          { name: "quantity", cols: 8, rows: 1 },
-          { name: "amount", cols: 8, rows: 1 },
+          { name: 'total', cols: 8, rows: 2 },
+          { name: 'quantity', cols: 8, rows: 1 },
+          { name: 'amount', cols: 8, rows: 1 },
         ];
       }
 
       return [
-        { name: "total", cols: 10, rows: 1 },
-        { name: "quantity", cols: 3, rows: 1 },
-        { name: "amount", cols: 3, rows: 1 },
+        { name: 'total', cols: 10, rows: 1 },
+        { name: 'quantity', cols: 3, rows: 1 },
+        { name: 'amount', cols: 3, rows: 1 },
       ];
     })
   );
@@ -132,7 +132,7 @@ export class SendemailComponent implements OnInit {
   deletedEvent(i, value) {
     // console.log('[DELETED]', i, value);
     this.formArray.removeAt(i);
-    this.updateTotals(i, { cost: "0.00" });
+    this.updateTotals(i, { cost: '0.00' });
     this.data.splice(i, 1);
   }
 
@@ -140,7 +140,7 @@ export class SendemailComponent implements OnInit {
     // console.log('[CREATED]', i, value);
     this.formArray.push(value.group);
     this.data.push(value.cost);
-    this.updateTotals(i, { cost: "0.00" });
+    this.updateTotals(i, { cost: '0.00' });
 
     // this.formArray.setControl(i, value.group);
     // this.formArray.insert(value.index, value.group);
@@ -168,7 +168,7 @@ export class SendemailComponent implements OnInit {
         ...this.emailForm.value,
       };
 
-      for (let formgroup of this.formArray.controls) {
+      for (const formgroup of this.formArray.controls) {
         data.groups.push({
           type: formgroup.value.groupName.type.toLowerCase(),
           category: formgroup.value.groupName.groupName,
@@ -181,6 +181,7 @@ export class SendemailComponent implements OnInit {
         data: {
           icon: 'warning',
             title: 'Warning! Irreversible action!',
+            // tslint:disable-next-line: max-line-length
             message: `This action will send an email to ALL your selected reciepients and is irreversible. Click Cancel to abort or OK to continue.`,
         },
       });
@@ -202,9 +203,9 @@ export class SendemailComponent implements OnInit {
                                 message: 'The Email you have typed has been sent to your selected reciepients.',
                             }
                         });
-                        dialogRef2.afterClosed().subscribe(res => {
+                        dialogRef2.afterClosed().subscribe(_ => {
                           location.reload();
-                        })
+                        });
                     }
                 },
                 err => {

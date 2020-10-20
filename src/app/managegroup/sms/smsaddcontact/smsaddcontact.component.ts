@@ -21,7 +21,7 @@ export class SmsaddcontactComponent implements OnInit {
     filteredOptions: Observable<string[]>;
     profession = new FormControl('', [Validators.required]);
     name = new FormControl('');
-    cell = new FormControl('', [Validators.required, Validators.pattern('^(?:\\+88|01)?(?:\\d{11}|\\d{13})$')]);
+    cell = new FormControl('', [Validators.required, Validators.pattern('^(?:\\+?88)?01[13-9]\\d{8}$')]);
     contactsFormGroup = new FormGroup({
         name: this.name,
         profession: this.profession,
@@ -44,8 +44,8 @@ export class SmsaddcontactComponent implements OnInit {
     this.groups = [];
     this.sms.getCustomerGroups().subscribe( res => {
           if (res.isExecuted) {
-              res.data.forEach(val => {
-                  this.groups.push(val.professionGroup);
+              res.data.cell.forEach(val => {
+                  this.groups.push(val.groupName);
               });
           }
       });
@@ -64,6 +64,15 @@ export class SmsaddcontactComponent implements OnInit {
     return this.groups.filter(option => option.toLowerCase().includes(filterValue));
   }
 
+  resetForm(formGroup: FormGroup) {
+    this.contactsFormGroup.reset();
+    Object.keys(formGroup.controls).forEach(
+       field => {
+          formGroup.get(field).setErrors(null);
+       }
+     );
+ }
+
   onSubmit() {
       if (this.contactsFormGroup.valid) {
         this.sms.addOwnContact(this.contactsFormGroup.value).subscribe( (res: {isExecuted: boolean, message: string}) => {
@@ -71,6 +80,7 @@ export class SmsaddcontactComponent implements OnInit {
                 this.snackBar.open(`The contact ${this.name.value} is added to the group ${this.profession.value}`, 'Dismiss', {
                     duration: 5000,
                 });
+                this.resetForm(this.contactsFormGroup);
             } else {
                 this.snackBar.open(res.message, 'Dismiss', { duration: 10000 });
             }

@@ -50,7 +50,7 @@ export class EmailbulkuploadComponent implements OnInit {
                         this.emailColumn.setValue(res);
                     }
                     if (res.toLowerCase() === 'group') {
-                        this.nameColumn.setValue(res);
+                        this.groupColumn.setValue(res);
                     }
                 });
             }

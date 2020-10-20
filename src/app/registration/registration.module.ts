@@ -1,3 +1,4 @@
+import { SharedMatModule } from './../shared-mat/shared-mat.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SignupComponent } from './signup/signup.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +15,7 @@ import { MatAutocompleteModule, MatProgressBarModule, MatSnackBarModule } from '
 import { LoginComponent } from './login/login.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 
 
 @NgModule({
@@ -23,30 +25,20 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
       SignupComponent,
       ForgotpasswordComponent,
       VerifyemailComponent,
+      ResetpasswordComponent,
   ],
   imports: [
     CommonModule,
-    MatProgressBarModule,
-
+    SharedMatModule,
     RouterModule.forChild([
         {path: '', component: RegistrationComponent, children: [
             {path: 'login', component: LoginComponent},
             {path: 'signup', component: SignupComponent},
         ] },
         {path: 'forgot-password', component: ForgotpasswordComponent},
+        {path: 'resetpassword/:token', component: ResetpasswordComponent},
         {path: 'verify-email-address/:email', component: VerifyemailComponent},
     ]),
-
-    MatCardModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    MatSnackBarModule,
   ]
 })
 export class RegistrationModule { }

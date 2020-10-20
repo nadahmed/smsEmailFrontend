@@ -6,18 +6,25 @@ import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 
 export interface OfficialSMSGroupdata {
-    professionGroup: string;
-    contacts: {
-        contactsId: string;
-        profession: string;
-        name: string;
-        cell: string;
+    id?: string;
+    cell: {
+        _id: string;
+        groupName: string;
+        contacts: {
+            createdAt: Date,
+            updatedAt: Date,
+            isDisabled: boolean,
+            _id: string,
+            location: string,
+            name: string,
+            cell: string
+        }[];
     }[];
-};
+}
 
 export interface SMSResponse {
     isExecuted: boolean;
-    data: OfficialSMSGroupdata[];
+    data: OfficialSMSGroupdata;
     message: string;
 }
 
@@ -36,12 +43,12 @@ export interface SMSCategoryResponse {
 }
 
 export interface SMSCategoryData {
-        official:{
+        official: {
             _id: string;
             category: string;
             count: number
         }[];
-        own:{
+        own: {
             _id: string,
             category: string,
             count: number
@@ -116,13 +123,28 @@ export class SmsService {
         });
     }
 
-    getSmsCategory() : Observable<SMSCategoryResponse> {
+    deleteContact(id: string, groupName: string): Observable<SMSResponse> {
+        return this.http.delete(environment.baseApiURI + 'contacts/cell/' + id + '/' + groupName, {
+            headers: { accessToken: this.auth.token }
+        }) as Observable<SMSResponse>;
+    }
+
+    modifyContact(id: string, groupName: string, body: {name?: string, cell?: string}): Observable<SMSResponse> {
+        return this.http.post(environment.baseApiURI + 'contacts/update/cell/' + id + '/' + groupName,
+        body,
+        {
+            headers: { accessToken: this.auth.token }
+        }
+        ) as Observable<SMSResponse>;
+    }
+
+    getSmsCategory(): Observable<SMSCategoryResponse> {
         return this.http.get( environment.baseApiURI + 'sms/getsmscategory/', {
             headers: { accessToken: this.auth.token }
         }) as Observable<SMSCategoryResponse>;
     }
 
-    sendTestSms(message: string) : Observable<TestSMSResponse> {
+    sendTestSms(message: string): Observable<TestSMSResponse> {
         return this.http.post(
             environment.baseApiURI + 'sms/sendmesms/',
             { message },
@@ -137,7 +159,7 @@ export class SmsService {
         ) as Observable<TestSMSResponse>;
     }
 
-    sendBulkSMS(data: BulkSMSRequestBody){
+    sendBulkSMS(data: BulkSMSRequestBody) {
       return this.http.post(
         environment.baseApiURI + 'sms/send/',
         { ...data },

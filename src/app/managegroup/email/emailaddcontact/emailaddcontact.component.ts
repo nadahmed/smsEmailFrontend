@@ -44,8 +44,8 @@ export class EmailaddcontactComponent implements OnInit {
     this.groups = [];
     this.emailService.getCustomerGroups().subscribe( res => {
           if (res.isExecuted) {
-              res.data.forEach(val => {
-                  this.groups.push(val.professionGroup);
+              res.data.email.forEach(val => {
+                  this.groups.push(val.groupName);
               });
           }
       });
@@ -64,6 +64,15 @@ export class EmailaddcontactComponent implements OnInit {
     return this.groups.filter(option => option.toLowerCase().includes(filterValue));
   }
 
+  resetForm(formGroup: FormGroup) {
+    this.contactsFormGroup.reset();
+    Object.keys(formGroup.controls).forEach(
+       field => {
+          formGroup.get(field).setErrors(null);
+       }
+     );
+ }
+
   onSubmit() {
       if (this.contactsFormGroup.valid) {
         this.emailService.addOwnContact(this.contactsFormGroup.value).subscribe( (res: {isExecuted: boolean, message: string}) => {
@@ -71,6 +80,7 @@ export class EmailaddcontactComponent implements OnInit {
                 this.snackBar.open(`The contact ${this.name.value} is added to the group ${this.profession.value}`, 'Dismiss', {
                     duration: 5000,
                 });
+                this.resetForm(this.contactsFormGroup);
             } else {
                 this.snackBar.open(res.message, 'Dismiss', { duration: 10000 });
             }

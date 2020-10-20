@@ -50,7 +50,7 @@ export class SmsbulkuploadComponent implements OnInit {
                         this.numberColumn.setValue(res);
                     }
                     if (res.toLowerCase() === 'group') {
-                        this.nameColumn.setValue(res);
+                        this.groupColumn.setValue(res);
                     }
                 });
             }

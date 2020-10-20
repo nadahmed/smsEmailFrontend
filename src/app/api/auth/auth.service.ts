@@ -103,7 +103,7 @@ export class AuthService {
 
     // Send email verfificaiton when new user sign up
     SendVerificationMail(email) {
-        return this.http.put( environment.baseApiURI + 'auth/accountacctivation/' + email, {}).pipe(
+        return this.http.put( environment.baseApiURI + 'auth/accountactivation/' + email, {}).pipe(
             tap((res: AuthResponseObject) => {
                 this.snackBar.open(res.message, 'dismiss', {
                     duration: 5000,
@@ -122,6 +122,55 @@ export class AuthService {
                 duration: 5000,
             });
         });
+    }
+
+    resetPassword(resetToken: string, password: string) {
+        return this.http.post( environment.baseApiURI + 'auth/resetpassword', {
+            password
+        }, {
+            headers: {
+                resetpass: resetToken
+            }
+        }).pipe(
+            tap(
+                (res: AuthResponseObject) => {
+                    this.router.navigate(['login']);
+                    this.snackBar.open(res.message, 'dismiss', {
+                        duration: 5000,
+                    });
+                },
+                (err) => {
+                    this.snackBar.open(err.error.message, 'dismiss', {
+                        duration: 5000,
+                    });
+                }
+            )
+        );
+    }
+
+    changePassword(oldPassword: string, password: string) {
+        return this.http.post( environment.baseApiURI + 'auth/changepassword', {
+            oldPassword,
+            password,
+        }, {
+            headers: {
+                accessToken: this.token
+            }
+        }).pipe(
+            tap(
+                (res: AuthResponseObject) => {
+                    this.snackBar.open(res.message, 'dismiss', {
+                        duration: 5000,
+                    });
+                    this.SignOut();
+                },
+                (err) => {
+                    this.snackBar.open(err.error.message, 'dismiss', {
+                        duration: 5000,
+                    });
+                }
+            )
+        );
     }
 
     // Returns true when user is loged in and email is verified
@@ -184,8 +233,6 @@ export class AuthService {
             );
     }
 
-    SetUserData(user: UserData) { }
-
     set user(user: UserData) {
         localStorage.setItem('user', JSON.stringify(user));
     }
@@ -197,7 +244,7 @@ export class AuthService {
     // Sign out
     SignOut() {
         // return this.afAuth.auth.signOut().then(() => {
-        localStorage.removeItem('user');
+        localStorage.clear();
         this.router.navigate(['login']);
         // });
     }

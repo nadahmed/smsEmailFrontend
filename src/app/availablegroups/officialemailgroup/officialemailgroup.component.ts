@@ -49,13 +49,14 @@ export class OfficialemailgroupComponent implements OnInit {
         this.emailService.getOfficialGroups()
             .subscribe(
                 (res: EmailResponse) => {
-                    console.log(res.data);
-                    res.data.forEach(val => {
-                        data.push({
-                            group: val.professionGroup,
-                            contacts: val.contacts.length,
+                    if (!!res.data.email) {
+                        res.data.email.forEach(val => {
+                            data.push({
+                                group: val.groupName,
+                                contacts: val.contacts.length,
+                            });
                         });
-                    });
+                    }
                 },
                 err => {
                     this.isBusy = false;

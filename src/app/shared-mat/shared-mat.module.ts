@@ -16,7 +16,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDividerModule } from '@angular/material';
+import { MatDividerModule, MatProgressBarModule, MatTabsModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -42,6 +43,11 @@ import { MatDividerModule } from '@angular/material';
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    MatTabsModule,
+    MatProgressBarModule,
+    FormsModule,
+    ReactiveFormsModule,
+
   ]
 })
 export class SharedMatModule { }

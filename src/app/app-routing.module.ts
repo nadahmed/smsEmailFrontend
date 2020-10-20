@@ -22,7 +22,7 @@ const routes: Routes = [
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./registration/registration.module').then(m => m.RegistrationModule),
         canActivate: [
-            // SecureInnerPagesGuard
+            SecureInnerPagesGuard
         ]
     },
     {

@@ -27,11 +27,11 @@ export class CustomersmsgroupComponent implements OnInit {
         this.smsService.getCustomerGroups()
             .subscribe(
                 (res: SMSResponse) => {
-                    console.log(res.data);
-                    if (!res.data.length) { return; }
-                    res.data.forEach(val => {
+                    // console.log(res.data);
+                    // if (!res.data.length) { return; }
+                    res.data.cell.forEach(val => {
                         data.push({
-                            group: val.professionGroup,
+                            group: val.groupName,
                             contacts: val.contacts.length,
                         });
                     });

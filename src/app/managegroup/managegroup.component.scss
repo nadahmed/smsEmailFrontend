@@ -1,10 +1,14 @@
 @import "src/variables.scss";
 
-.example-container {
+.my-container {
     width: 100%;
     height: 100vh;
   }
 
   .active {
     background: rgba(0, 0, 0, 0.04);
+  }
+
+  .mat-drawer{
+      height: 100vh;
   }

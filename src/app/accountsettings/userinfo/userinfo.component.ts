@@ -14,12 +14,14 @@ export class UserinfoComponent implements OnInit {
       Name: this.auth.user.name,
       Username: this.auth.user.userName,
       Email: this.auth.user.email,
+      Cellphone: this.auth.user.cell,
       'Verified Account': this.auth.user.isVerified ? 'Yes' : 'No',
   };
 
   tableLable1 = Object.keys(this.tableData1);
 
   tableData2 = {
+    Balance: '৳' + this.auth.user.balance,
     'Email unit cost': '৳' + this.auth.user.emailUnitCost,
     'SMS unit cost': '৳' + this.auth.user.smsUnitCost,
 };
